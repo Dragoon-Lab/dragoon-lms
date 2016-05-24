@@ -1,0 +1,30 @@
+Themes installed:
+1. Bootstrap for drupal 7.X:
+        Inside the settings, make the theme default
+
+
+
+__________________________________________________
+
+Modules installed:
+
+1. Empty Front page:
+        Clears the front page content, so that we can use it write custom content
+
+
+
+
+
+
+page.tpl.php (template)
+
+removed the whole drupal navigation bar under the main header section, replaced it with asu_header
+__________________________________________________
+In the main container, removing the site slogan
+code:
+<?php if (!empty($site_slogan)): ?>
+      <p class="lead"><?php print $site_slogan; ?></p>
+    <?php endif; ?>
+
+___________________________________________________
+
