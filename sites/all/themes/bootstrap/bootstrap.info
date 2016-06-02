@@ -152,6 +152,7 @@ settings[jquery_update_jquery_version] = 2.1
 ; --------------
 ; Necessary module CSS.
 
+stylesheets[all][] = 'css/style.css'
 ;exclude[css][] = 'modules/block/block.css'
 ;exclude[css][] = 'modules/node/node.css'
 ;exclude[css][] = 'modules/system/admin.css'

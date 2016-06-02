@@ -1,0 +1,40 @@
+.block-title{
+    padding: 3px;
+}
+
+#drag-main-sec{
+ width: 950px;
+    float: none;
+    margin: 0 auto;
+}
+.anchor-drag-hm-d2{
+    list-style: none;
+    margin-bottom: 30px;
+}
+.anchor-drag-hm-d2 li{
+    float: left;
+    margin-left: 70px;
+    margin-right: 100px;
+}
+
+.carousel-inner p{
+    color: #000000;
+    background-color: #ffff00;
+}
+
+.stud-drag-l1{
+    list-style: none;
+}
+.stud-drag-l1 li{
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.stud-drag-l1 .pt{
+ padding-top: 3px;
+}
+
+.menu nav li{
+    background-color: #000011;
+}

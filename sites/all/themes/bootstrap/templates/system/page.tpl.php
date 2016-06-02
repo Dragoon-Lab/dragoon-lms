@@ -99,7 +99,7 @@
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>
 
-    <section<?php print $content_column_class; ?> style="width: 903px;padding-left: 20px;>
+    <section<?php print $content_column_class; ?> id="drag-main-sec">
       <?php if (!empty($page['highlighted'])): ?>
         <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
       <?php endif; ?>
