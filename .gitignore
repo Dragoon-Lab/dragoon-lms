@@ -2,7 +2,6 @@
 sites/*/*settings*.php
 
 # Ignore paths that contain generated content.
-files/
 sites/*/private
 
 # Ignore default text files
