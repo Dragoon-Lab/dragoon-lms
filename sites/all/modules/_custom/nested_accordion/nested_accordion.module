@@ -1,0 +1,23 @@
+<?php
+	function getHTMLStructure(/* object */ $json, /* array */ $parameters){
+		$data = json_decode($json, true);
+		drupal_add_js(drupal_get_path('module', 'nested_accordion').'/static/accordion.js');
+		drupal_add_css(drupal_get_path('module', 'nested_accordion').'/static/accordion.css');
+		return substr(getString($data, '', $parameters), 0 , -13);
+	}
+
+	function getString(/* array */ $data, /* string */ $str = '', $parameters){
+		foreach($data as $key=>$value){
+            if(is_array($value)){
+                $str .= "<div class = 'accordion'>\n";
+                $str .= "<h2>".$key."</h2>\n";
+                $str .= "<div class = 'pane'>\n";
+                $str = getString($value, $str, $parameters);
+            } else {
+                $str .= "<p><a href = ".$parameters['href'].$value.">".$key."</a></p>\n";
+            }
+        }
+
+        $str .= "</div></div>\n";
+        return $str;
+	}

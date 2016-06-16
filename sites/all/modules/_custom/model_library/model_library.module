@@ -1,0 +1,27 @@
+<?php
+
+function model_library_block_info(){
+	$blocks = array();
+	$blocks['published_problems'] = array(
+		'info' => 'Creates block for published problems'
+	);
+
+	return $blocks;
+}
+
+function model_library_block_view($delta = ''){
+	$block = array();
+
+	switch($delta){
+		case "published_problems":
+			$block['subject'] = t('Model Library');
+			$parameters = array(
+				'href' => 'modal_window?p='
+			);
+			$json = file_get_contents($_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
+			$block['content'] = getHTMLStructure($json, $parameters);
+			break;
+	}
+
+	return $block;
+}
