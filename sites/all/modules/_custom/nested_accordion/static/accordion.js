@@ -1,4 +1,4 @@
-$(document).ready(function() {
+jQuery(document).ready(function($) {
     //Initialising Accordion
     /*$(".accordion").tabs(".pane", {
         tabs: '> h2',
