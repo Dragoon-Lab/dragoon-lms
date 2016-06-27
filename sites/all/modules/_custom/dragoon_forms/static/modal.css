@@ -1,0 +1,36 @@
+.modal_wrapper{
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px; /* Could be more or less, depending on screen size */
+    z-index: 1003;
+    position: fixed;
+    top:200px;
+    left:700px;
+}
+
+.overlay{
+	top: 0;
+	left: 0;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 1001;
+	background-color: #333;
+	opacity: 0.7;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

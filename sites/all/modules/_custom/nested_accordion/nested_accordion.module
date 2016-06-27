@@ -14,7 +14,20 @@
                 $str .= "<div class = 'pane'>\n";
                 $str = getString($value, $str, $parameters);
             } else {
-                $str .= "<p><a href = ".$parameters['href'].$value.">".$key."</a></p>\n";
+            	if(!array_key_exists('appendHref', $parameters) || $parameters['appendHref']){
+	                $str .= '<p><a href = "'.$parameters['href'].
+						(array_key_exists('addKey', $parameters) ? ('&'.$parameters['addKey'].'='.$key) : '').
+						(array_key_exists('addValue', $parameters) ? ('&'.$parameters['addValue'].'='.$value) : '').
+						(array_key_exists('otherHref', $parameters) ? ($parameters['otherHref']) : '').'"'.
+						(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
+						">".$key."</a></p>\n";
+				} else {
+					$str .= '<p><a href = '.$parameters['href'].' '.
+						(array_key_exists('addKey', $parameters) ? ($parameters['addKey'].'= "'.$key.'" ') : '').
+						(array_key_exists('addValue', $parameters) ? ($parameters['addValue'].'="'.$value.'"') : '').
+						(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
+						">".$key."</a></p>\n";
+				}
             }
         }
 
