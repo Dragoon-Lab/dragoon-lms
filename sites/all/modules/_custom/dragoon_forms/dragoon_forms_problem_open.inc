@@ -2,8 +2,10 @@
 function dragoon_forms_problem_form($form, &$form_state){
 	global $user;
 	$name = 'anonymous';
+	$rp = 'on';
 	if($user->uid){
 		$name = $user->name;
+		$rp = 'off';
 	}
 
 	$form['pname'] = array(
@@ -23,6 +25,7 @@ function dragoon_forms_problem_form($form, &$form_state){
 		),
 		'#title' => t('Select a mode: '),
 		'#required' => TRUE,
+		'#default_value' => 'STUDENT',
 	);
 
 	$form['a'] = array(
@@ -31,12 +34,13 @@ function dragoon_forms_problem_form($form, &$form_state){
 			'construction' => t('Construction'),
 			'execution' => t('Execution'),
 			'executionDemo' => t('Demo of Execution'),
-			'incremental' => t('Incremental Analysis'),
-			'incrementalDemo' => t('Demo of Incremental Analysis'),
-			'waveform' => t('Waveform Selection'),
+//			'incremental' => t('Incremental Analysis'),
+//			'incrementalDemo' => t('Demo of Incremental Analysis'),
+//			'waveform' => t('Waveform Selection'),
 		),
 		'#title' => t('Select an activity: '),
 		'#required' => TRUE,
+		'#default_value' => 'construction',
 	);
 
 	$form['p'] = array(
@@ -62,22 +66,24 @@ function dragoon_forms_problem_form($form, &$form_state){
 		'#type' => 'hidden',
 		'#value' => 'public-login',
 	);
+
+	$form['rp'] = array(
+		'#type' => 'hidden',
+		'#value' => $rp,
+	);
 	
 	$form['submit_button'] = array(
 		'#type' => 'submit',
 		'#value' => t('Open Problem'),
+		'#id' => 'submit_button',
 	);
 
 	return $form;
 }
 
+function dragoon_forms_problem_form_validate($form, &$form_state){
+	if($form_state['values']['m'] == ""){
 
-function dragoon_forms_problem_form_submit($form, &$form_state){
-	/*$url = url("http://localhost/code/index.php");
-	$data = http_build_query($form_state['values'], '', '&');
-	$headers = array('Content-Type' => 'application/x-www-form-urlencoded');
-
-	$response = drupal_http_request($url, array($headers, 'GET', $data));
-	*/
-	$form_state['redirect']	= 'models';
+	}
 }
+

@@ -34,9 +34,13 @@ function dragoon_forms_block_view($delta = ''){
 function dragoon_forms_form_alter(&$form, $form_state, $form_id){
 	switch($form_id){
 		case "dragoon_forms_problem_form":
-			$form['#action'] = 'models';
+			$form['#action'] = '#';
 			$form['#prefix'] = "<div id = 'dragoon_problem_wrapper' class = 'modal_wrapper' style ='display:none;'><span id = 'close_button' class = 'close'>x</span>";
 			$form['#suffix'] = "</div></div>";
+			$form['#attributes'] = array(
+				//'onsubmit' => 'return false;',
+				'id' => 'dragoon_problem_form',
+			);
 			break;
 	}
 }

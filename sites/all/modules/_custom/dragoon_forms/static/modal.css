@@ -2,11 +2,11 @@
 	background-color: #fefefe;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 600px; /* Could be more or less, depending on screen size */
+	width: 40em; /* Could be more or less, depending on screen size */
 	z-index: 1003;
 	position: fixed;
-	top:200px;
-	left:700px;
+	top:20%;
+	left:35%;
 }
 
 .overlay{

@@ -16,6 +16,7 @@ function model_library_block_view($delta = ''){
 		case "published_problems":
 			$block['subject'] = t('Model Library');
 			$parameters = array(
+				'id' => 'problem',
 				'href' => '#',
 				'appendHref' => false,
 				'addKey' => 'key',
