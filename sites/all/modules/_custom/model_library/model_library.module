@@ -5,16 +5,21 @@ function model_library_block_info(){
 	$blocks['published_problems'] = array(
 		'info' => 'Block for published problems'
 	);
-
-	return $blocks;
+    $blocks['non_class_models'] = array(
+      'info' => 'Block lists non class models'
+    );
+    $blocks['non_class_models_buttons'] = array(
+      'info' => 'Non Class Models Functional Buttons List'
+    );
+    return $blocks;
 }
 
-function model_library_block_view($delta = ''){
+function model_library_block_view($delta = ""){
 	$block = array();
+	switch ($delta){
 
-	switch($delta){
 		case "published_problems":
-			$block['subject'] = t('Model Library');
+            $block['subject'] = t('Model Library');
 			$parameters = array(
 				'id' => 'problem',
 				'href' => '#',
@@ -24,10 +29,34 @@ function model_library_block_view($delta = ''){
 //				'otherHref' => ' #drag-main-sec',
 				'otherTags' => 'class = "dragoon_problem"',
 			);
-			$json = file_get_contents($_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
+			$json = file_get_contents(drupal_get_path('module', 'model_library').'/public_problem_index.json');
 			$block['content'] = getHTMLStructure($json, $parameters);
 			break;
-	}
+        case "non_class_models":
+            global $user;
+            $block['subject'] = t('Non Class Models');
+            $parameters = array(
+                'href' => 'modal_window?p='
+            );
+            if(user_is_logged_in()) {
+                $json = loadNCModels($user->name);
+                $block['content'] = getHTMLStructure($json, $parameters);
+                $additional = '<div class="nc_func_but container non-class-buttons">
+                                <div class="row">
+                                    <ul class="col-md-12 col-sm-12">
+                                        <li><a href="#createFolder" class="btn btn-success btn-md">create folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">delete folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">create model</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">delete model</a></li>
+                                    </ul>
+                                </div>
+                            </div>';
+                $block['content'] = $block['content'].$additional;
+            }
+            else
+                $block['content'] = "Please Login to check your non class models";
+            break;
+    }
 
 	return $block;
 }

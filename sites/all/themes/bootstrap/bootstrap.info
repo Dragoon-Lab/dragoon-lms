@@ -147,6 +147,7 @@ settings[jquery_update_jquery_version] = 2.1
 ; JavaScript
 ; --------------
 ; exclude[js][] = 'modules/contextual/contextual.js'
+scripts[] = js/contact_tabs_js.js
 
 ; CSS
 ; --------------
@@ -215,3 +216,4 @@ core = "7.x"
 project = "bootstrap"
 datestamp = "1456870747"
 
+;scripts
