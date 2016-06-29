@@ -22,7 +22,7 @@ function model_library_block_view($delta = ''){
 				'addKey' => 'key',
 				'addValue'=> 'value',
 //				'otherHref' => ' #drag-main-sec',
-				'otherTags' => 'class = "dragoon_problem"',
+				'otherTags' => 'class = "dragoon_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
 			);
 			$json = file_get_contents($_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
 			$block['content'] = getHTMLStructure($json, $parameters);
