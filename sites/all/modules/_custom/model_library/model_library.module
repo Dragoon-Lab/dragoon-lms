@@ -8,9 +8,6 @@ function model_library_block_info(){
     $blocks['non_class_models'] = array(
       'info' => 'Block lists non class models'
     );
-    $blocks['non_class_models_buttons'] = array(
-      'info' => 'Non Class Models Functional Buttons List'
-    );
     return $blocks;
 }
 
@@ -36,21 +33,18 @@ function model_library_block_view($delta = ""){
             global $user;
             $block['subject'] = t('Non Class Models');
             $parameters = array(
-                'href' => 'modal_window?p='
+                'id' => 'problem',
+                'href' => '#',
+                'appendHref' => false,
+                'addKey' => 'key',
+                'addValue'=> 'value',
+//				'otherHref' => ' #drag-main-sec',
+                'otherTags' => 'class = "dragoon_problem"',
             );
             if(user_is_logged_in()) {
                 $json = loadNCModels($user->name);
                 $block['content'] = getHTMLStructure($json, $parameters);
-                $additional = '<div class="nc_func_but container non-class-buttons">
-                                <div class="row">
-                                    <ul class="col-md-12 col-sm-12">
-                                        <li><a href="#createFolder" class="btn btn-success btn-md">create folder</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">delete folder</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">create model</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md">delete model</a></li>
-                                    </ul>
-                                </div>
-                            </div>';
+                $additional = createAdditionalBlocks($block['content']);
                 $block['content'] = $block['content'].$additional;
             }
             else

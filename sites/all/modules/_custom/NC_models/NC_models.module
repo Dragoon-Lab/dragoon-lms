@@ -11,15 +11,14 @@
         }
         //private unshared folders
 
-        $query = "select sh_name from shared_folders where sh_owner='$user_name' and !sh_current_status";
+        $query = "select folder_id from folders where owner='$user_name' and !current_status";
         //return $query;
         $q_res = $mysqli->query($query);
         $string = array();
         while($res=$q_res->fetch_object()){
-            $f_name = $res->sh_name;
-            $group = $f_name."-".$user_name;
+            $group = $res->folder_id;
             //make a request to the dragoon server to list problems where group = sh_name+"-"+owner_name
-             $ret = sendGroup($group);
+            $ret = sendGroup($group);
             $ret = json_decode($ret);
             $temp = array(); $temp['ritesh']=$ret;
             $string["private"][$group]=$ret;
@@ -34,10 +33,10 @@
         }
 
         //shared folders
-        $shared_q = "select m.folder_name as folder_name ,s.sh_owner as sh_owner from shared_members m, shared_folders s where m.member_name='$user_name' and m.folder_name=s.sh_name";
+        $shared_q = "select folder_id from shared_members where member_name='$user_name'";
         $sh_q_res = $mysqli->query($shared_q);
         while($res_sh = $sh_q_res->fetch_object()){
-            $sh_grp=$res_sh->folder_name."-".$res_sh->sh_owner;
+            $sh_grp=$res_sh->folder_id;
             $ret = sendGroup($sh_grp);
             $ret = json_decode($ret);
             foreach($ret as $temp){
@@ -68,3 +67,129 @@
         return $result;
 
     }
+
+    function createAdditionalBlocks($dataTree){
+        drupal_add_library('system', 'ui.autocomplete');
+
+        drupal_add_js(drupal_get_path('module', 'NC_models').'/static/nonClassHandlers.js');
+        drupal_add_js(drupal_get_path('module', 'NC_models').'/static/autoComplete.js');
+        $return_add_blocks='<div class="nc_func_but container non-class-buttons">
+                                <div class="row">
+                                    <ul class="col-md-12 col-sm-12">
+                                        <li><a href="#createFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createFolderModal">create folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">delete folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">create model</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteModelModal">delete model</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Share model</a></li>
+                                       </ul>
+                                </div>
+                            </div>
+                            <div id="createFolderModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Create Folder</h4>
+                                </div>
+                                <div class="modal-body">
+                                <label for="folder_name">Folder Name:</label>
+                                    <input type="text" class="form-control" id="folder_name">
+                                    <input type="text" class="form-control" id="shared_users" style="display: none">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" id="cf_button">Create Folder</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+
+                                  </div>
+                            </div>
+                            <div id="deleteFolderModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Delete Folder</h4>
+                                </div>
+                                <div class="modal-body">'.$dataTree.'</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" >Delete Folder</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+
+                                  </div>
+                            </div>
+                            <div id="createModelModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Create Model</h4>
+                                </div>
+                                <div class="modal-body">'.$dataTree.'
+                                <br/>
+                                <label for="model_name">Model Name:</label>
+                                    <input type="text" class="form-control" id="model_name">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" >Create Model</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+
+                                  </div>
+                            </div>
+                            <div id="deleteModelModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Create Folder</h4>
+                                </div>
+                                <div class="modal-body">'.$dataTree.'</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" >Delete Model</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+
+                                  </div>
+                            </div>
+                            <div id="shareFolderModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Share Folder</h4>
+                                </div>
+                                <div class="modal-body">'.$dataTree.'
+                                <br/>
+                                <label for="sh_user_name">Enter User Name/email to share with:</label>
+                                    <input type="text" class="form-control" id="sh_user_name">
+                                    <div id="sh_autoc"></div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" >Share Model</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+
+                                  </div>
+                            </div>';
+
+
+        return $return_add_blocks;
+    }
+
