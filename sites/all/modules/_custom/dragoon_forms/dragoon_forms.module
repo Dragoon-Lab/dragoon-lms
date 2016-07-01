@@ -23,7 +23,7 @@ function dragoon_forms_block_view($delta = ''){
 		case "dragoon_problem":
 			module_load_include('inc', 'dragoon_forms', 'dragoon_forms_problem_open');
 			drupal_add_js(drupal_get_path('module', 'dragoon_forms').'/static/form_modal.js');
-			drupal_add_css(drupal_get_path('module', 'dragoon_forms').'/static/modal.css');
+			//drupal_add_css(drupal_get_path('module', 'dragoon_forms').'/static/modal.css');
 			$block_form['title'] = t("Start Problem");
 			$block_form['content'] = drupal_get_form('dragoon_forms_problem_form');
 	}
@@ -35,11 +35,14 @@ function dragoon_forms_form_alter(&$form, $form_state, $form_id){
 	switch($form_id){
 		case "dragoon_forms_problem_form":
 			$form['#action'] = '#';
-			$form['#prefix'] = "<div id = 'dragoon_problem_wrapper' class = 'modal_wrapper' style ='display:none;'><span id = 'close_button' class = 'close'>x</span>";
-			$form['#suffix'] = "</div></div>";
+			$form['#prefix'] = "<div id = 'dragoon_problem_wrapper' class = 'modal fade' role= 'dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
+			$form['#suffix'] = "</div></div></div></div></div>";
 			$form['#attributes'] = array(
 				//'onsubmit' => 'return false;',
 				'id' => 'dragoon_problem_form',
+			);
+			$form['submit_button']['#attributes'] = array(
+				'data-dismiss' => 'modal',
 			);
 			break;
 	}
