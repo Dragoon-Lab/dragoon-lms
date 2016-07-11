@@ -5,6 +5,7 @@ function create_class_form($form, &$form_state){
 		'#title' => t('Class Name'),
 		'#description' => t('Enter name of the class, try to keep it unique by entering year or other distinguishing text'),
 		'#required' => TRUE,
+		'#maxlength' => 50,
 	);
 
 	$form['submit_button'] = array(
@@ -26,11 +27,18 @@ function create_class_form_submit($form, &$form_state){
 			'name' => $form_state['values']['class_name'],
 			'section' => create_class_section($form_state['values']['class_name']),
 			'is_active' => TRUE,
-			'time' => now(),
 		))->execute();
 	drupal_set_message(t("Your class has been successfully created. The class code is ".$code));
 	$block = module_invoke('classes', 'classes_block_view', 'classes_created');
 	print render($block['content']);
+}
+
+function create_class_form_validate($form, &$form_state){
+	global $user;
+	$result = db_query('SELECT code FROM {classes} WHERE name = :name', array(':name' => $form_state['values']['class_name']));
+	if($result->rowCount() > 0){
+		form_set_error('class_name', t('Class name used should be unique.'));
+	}
 }
 
 function create_class_code(){
@@ -38,9 +46,9 @@ function create_class_code(){
 	$size = 6;
 	$code = '';
 	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	srand(time());
 	for($index = 0; $index < $size; $index++){
-		$seed = round(srand($seed)*4294967296); // this number is 2^32
-		$code .= substr($characters, round(srand($seed)*52+1), 1);
+		$code .= substr($characters, rand()%62, 1);
 	}
 
 	return $code;
@@ -56,5 +64,5 @@ function create_class_seed(){
 }
 
 function create_class_section($name){
-	return str_replace(" ", "", $name);
+	return str_replace(" ", "_", $name);
 }

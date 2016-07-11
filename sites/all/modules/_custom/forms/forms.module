@@ -67,6 +67,7 @@ function forms_form_alter(&$form, $form_state, $form_id){
 			break;
 		case "create_class":
 			$form['#submit'] = array("create_class_form_submit");
+			$form['#validate'] = array("create_class_form_validate");
 			break;
 		case "enroll_class":
 			$form['#validate'] = array("enroll_class_form_validate");

@@ -2,19 +2,20 @@
 
 function enroll_class_form($form, &$form_state){
 	$form['class_code'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Class Code'),
-        '#description' => t('Please enter the class code sent by your teacher.'),
-        '#required' => TRUE,
-    );  
+		'#type' => 'textfield',
+		'#title' => t('Class Code'),
+		'#description' => t('Please enter the class code sent by your teacher.'),
+		'#required' => TRUE,
+		'#maxlength' => 6,
+	);
 
-    $form['enroll_button'] = array(
-        '#type' => 'submit',
-        '#value' => 'Enroll',
+	$form['enroll_button'] = array(
+		'#type' => 'submit',
+		'#value' => 'Enroll',
 		'#submit' => array('enroll_class_form_submit'),
-    );
+	);
 
-    return $form;
+	return $form;
 }
 
 function enroll_class_form_validate($form, &$form_state){
@@ -23,17 +24,17 @@ function enroll_class_form_validate($form, &$form_state){
 		if($results->rowCount() == 0){
 			form_set_error('class_code', t('No class could be found with this code, please check the code you have entered'));
 		} else {
-		global $user;
-		$query = "SELECT ueid FROM {enrolled_users} WHERE code = :code AND uid = :uid";
-		$args = array(
-			':code' => $form_state['values']['class_code'], 
-			':uid' => $user->uid
-		);
-		$result = db_query($query, $args);
-		if($result->rowCount() > 0){
-			form_set_error('class_code', t('Can not enroll you in this class as you are already enrolled.'));
+			global $user;
+			$query = "SELECT ueid FROM {enrolled_users} WHERE code = :code AND uid = :uid";
+			$args = array(
+				':code' => $form_state['values']['class_code'],
+				':uid' => $user->uid
+			);
+			$result = db_query($query, $args);
+			if($result->rowCount() > 0){
+				form_set_error('class_code', t('Can not enroll you in this class as you are already enrolled.'));
+			}
 		}
-	}
 	}
 }
 

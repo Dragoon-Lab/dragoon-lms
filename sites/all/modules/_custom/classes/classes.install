@@ -8,7 +8,7 @@ function classes_schema(){
 			'name' => array(
 				'description' => 'class display name given by the teacher',
 				'type' => 'varchar',
-				'length' => 20,
+				'length' => 50,
 				'not null' => TRUE,
 				'default' => '',
 			),
@@ -30,7 +30,7 @@ function classes_schema(){
 			'section' => array(
 				'description' => 'section name for dragoon',
 				'type' => 'varchar',
-				'length' => 10,
+				'length' => 50,
 				'not null' => TRUE,
 				'default' => '',
 			),
