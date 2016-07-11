@@ -34,3 +34,4 @@ xmlrpc.php
 /themes
 
 .*.*.swp
+*.DS_Store
