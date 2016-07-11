@@ -1,0 +1,134 @@
+<?php
+	function loadNCModels($user_name, $action){
+        //prepare content as json
+        //preparing private content
+        //private content consists of folders which are unshared and models which are private
+        //unshared folders exist in lms db, we need to pull out these folders
+        $mysqli = new mysqli("localhost", "root", "", "Dragoon-Lms");
+        if ($mysqli->connect_errno) {
+            printf("Connect failed: %s\n", $mysqli->connect_error);
+            exit();
+        }
+        //private unshared folders
+
+        $query = "select folder_id,folder_name from folders where owner='$user_name' and !current_status";
+        //return $query;
+        $q_res = $mysqli->query($query);
+        $string = array();
+        while($res=$q_res->fetch_object()){
+            $group = $res->folder_id;
+            $grp_name = $res->folder_name;
+            //make a request to the dragoon server to list problems where group = sh_name+"-"+owner_name
+            $ret = sendGroup($group);
+            $ret = json_decode($ret);
+            foreach($ret as $temp)
+            $string["private"][$grp_name][$temp]=$temp;
+        }
+
+        //original private problems
+        $priv_group = $user_name."-private";
+        $ret  = sendGroup($priv_group);
+        $ret = json_decode($ret);
+        foreach($ret as $temp){
+            $string["private"][$temp] = $temp;
+        }
+
+        //shared folders
+        $status_query = '';
+        if($action){
+            //in case user wants only non class models which are shared and owned by him
+            $status_query = " AND member_relation=1";
+        }
+        $shared_q = "select folder_id from shared_members where member_name='$user_name'".$status_query;
+        $sh_q_res = $mysqli->query($shared_q);
+        while($res_sh = $sh_q_res->fetch_object()){
+            $sh_grp=$res_sh->folder_id;
+            $ret = sendGroup($sh_grp);
+            $ret = json_decode($ret);
+            foreach($ret as $temp){
+                $string["shared"][$sh_grp][$temp] = $temp;
+            }
+        }
+
+        return json_encode($string);
+    }
+
+    function sendGroup($g){
+        $url = 'http://localhost/LaitsV3/www/global.php';
+        $data = array('t' => 'reqNonClassProblems', 'g' => $g);
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) { /* Handle error */
+            echo "something failed";
+        }
+        return $result;
+
+    }
+
+    function createAdditionalBlocks($dataTree){
+        drupal_add_library('system', 'ui.autocomplete');
+
+       // drupal_add_js(drupal_get_path('module', 'NC_models').'/static/nonClassHandlers.js');
+        drupal_add_js(drupal_get_path('module', 'NC_models').'/static/autoComplete.js');
+        $return_add_blocks='<div class="nc_func_but container non-class-buttons">
+                                <div class="row">
+                                    <ul class="col-md-12 col-sm-12">
+                                        <li><a href="#createFolder" class="btn btn-success btn-md createFolderClass" data-toggle="modal" data-target="#createFolderModal">create folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">delete Items</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">create model</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Share model</a></li>
+                                       </ul>
+                                </div>
+                            </div>
+                            <div id="confirmDeleteModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Confirm Delete</h4>
+                                            </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" id="deleteConfirm">Yes! Delete</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" href="#deleteFolderModal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+        return $return_add_blocks;
+    }
+
+function loadUserFolders($user_name)
+{
+    //prepare all user folders
+    // return an array
+    $mysqli = new mysqli("localhost", "root", "", "Dragoon-Lms");
+    if ($mysqli->connect_errno) {
+        printf("Connect failed: %s\n", $mysqli->connect_error);
+        exit();
+    }
+    //private unshared folders
+
+    $query = "select folder_id,folder_name from folders where owner='$user_name'";
+    $q_res = $mysqli->query($query);
+    //create an array with default first element as user private folder with id
+    $user_folders = array();
+    $user_folders[$user_name . "-private"] = "My Private Folder (Default)";
+    while ($res = $q_res->fetch_object()) {
+        $group = $res->folder_id;
+        $grp_name = $res->folder_name;
+        $user_folders[$group] = $grp_name;
+    }
+    return $user_folders;
+}
