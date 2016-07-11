@@ -45,13 +45,13 @@ function dragoon_forms_block_view($delta = ''){
         case "delete_nonClass_folder":
             module_load_include('inc', 'dragoon_forms', 'dragoon_forms_nc_deleteFolder');
             drupal_add_js(drupal_get_path('module', 'dragoon_forms').'/static/nc_deleteFolder.js');
-            $block_form['title'] = t("Delete Folder");
+            $block_form['title'] = t("Delete Folders/Models");
             $block_form['content'] = drupal_get_form('dragoon_forms_ncDelFolder_form');
             break;
         case "create_nonClass_model":
             module_load_include('inc','dragoon_forms', 'dragoon_forms_nc_createModel');
             drupal_add_js(drupal_get_path('module', 'dragoon_forms').'/static/nc_createModel.js');
-            $block_form['title'] = t('Create Folder');
+            $block_form['title'] = t('Create Model');
             $block_form['content'] = drupal_get_form('dragoon_forms_ncCModel_form');
     }
 

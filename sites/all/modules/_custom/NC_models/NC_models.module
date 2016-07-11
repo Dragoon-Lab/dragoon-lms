@@ -84,7 +84,7 @@
                                         <li><a href="#createFolder" class="btn btn-success btn-md createFolderClass" data-toggle="modal" data-target="#createFolderModal">create folder</a></li>
                                         <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">delete Items</a></li>
                                         <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">create model</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Share model</a></li>
+                                        <!-- <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Share model</a></li> -->
                                        </ul>
                                 </div>
                             </div>
