@@ -39,10 +39,10 @@ function model_library_block_view($delta = ""){
                 'addKey' => 'key',
                 'addValue'=> 'value',
 //				'otherHref' => ' #drag-main-sec',
-                'otherTags' => 'class = "dragoon_problem"',
+                'otherTags' => 'class = "dragoon_problem"'
             );
             if(user_is_logged_in()) {
-                $json = loadNCModels($user->name);
+                $json = loadNCModels($user->name,0);
                 $block['content'] = getHTMLStructure($json, $parameters);
                 $additional = createAdditionalBlocks($block['content']);
                 $block['content'] = $block['content'].$additional;
