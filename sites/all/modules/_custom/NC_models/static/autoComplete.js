@@ -1,30 +1,20 @@
 (function ($) {
 
     $(document).ready(function() {
-        var availableTags = [
-            "ActionScript",
-            "AppleScript",
-            "Asp",
-            "BASIC",
-            "C",
-            "C++",
-            "Clojure",
-            "COBOL",
-            "ColdFusion",
-            "Erlang",
-            "Fortran",
-            "Groovy",
-            "Haskell",
-            "Java",
-            "JavaScript",
-            "Lisp",
-            "Perl",
-            "PHP",
-            "Python",
-            "Ruby",
-            "Scala",
-            "Scheme"
-        ];
+
+        var availableTags = [];
+        $.ajax({
+            type: "GET",
+            url: "sites/all/modules/_custom/NC_models/static/getUsers.php",
+            success: function(data) {
+                availableTags = data.split(",");
+                console.log(availableTags, typeof availableTags);
+            },
+            error: function(data){
+                availableTags = "something went wrong please try again";
+                console.log("something failed");
+            }
+        });
         function split( val ) {
             return val.split( /,\s*/ );
         }
@@ -32,7 +22,7 @@
             return split( term ).pop();
         }
 
-        $( "#sh_user_name" )
+        $( "#share_user_name" )
             // don't navigate away from the field on tab when selecting an item
             .bind( "keydown", function( event ) {
                 if ( event.keyCode === $.ui.keyCode.TAB &&
@@ -44,16 +34,6 @@
                 minLength: 0,
                 source: function( request, response ) {
                     // delegate back to autocomplete, but extract the last term
-                    $.ajax({
-                            url: "getUsers.php",
-                            dataType: "jsonp",
-                            data: {
-                                q: request.term
-                            },
-                            success: function( data ) {
-                                response( data );
-                            }
-                    });
                     response( $.ui.autocomplete.filter(
                         availableTags, extractLast( request.term ) ) );
                 },
@@ -72,7 +52,7 @@
                     this.value = terms.join( ", " );
                     return false;
                 },
-                appendTo: "#sh_autoc"
+                appendTo: "#user_list_display"
             });
 
     });

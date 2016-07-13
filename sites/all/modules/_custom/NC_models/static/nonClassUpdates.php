@@ -22,6 +22,7 @@
                 $query = "insert into folders(folder_id,folder_name,owner,folder_type,folder_class_id,current_status) VALUES ('$folder_id','$folder','$owner',$type,'$folder_class_id','$current_status')";
                 //run the query
                 $q_res = $mysqli->query($query);
+                return $q_res;
                 break;
             case "delete Folder":
                 $owner = $_REQUEST["owner"];
@@ -55,6 +56,26 @@
                 deleteModels($del_models,$del_folders);
 
                 break;
+            case "Share Folder":
+                $owner = $_REQUEST["owner"];
+                $folder = $_REQUEST["select_folder"];
+                $user_list = $_REQUEST["sh_user_name"];
+
+                //all inserts go into shared members table
+                //owner has to be given sharing member_relation 1
+
+                $owner_q = "insert into shared_members(member_name,folder_id,member_relation) values('$owner','$folder',1)";
+                $owner_q_res = $mysqli->query($owner_q);
+
+                //member queries
+                $users = explode("+",$user_list);
+                foreach($users as $member){
+                    $user_name = explode(",",$member);
+                    $user_name = $user_name[0];
+                    $mem_q= "insert into shared_members(member_name,folder_id,member_relation) values('$user_name','$folder',0)";
+                }
+                break;
+
         }
     }
 

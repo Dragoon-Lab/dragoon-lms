@@ -13,7 +13,7 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
     dragoon_forms_show_del_tree($data,$form, 'none');
     //following element separates out delete button
     $form['finish'] = array(
-        '#markup' => '</div>'
+        '#markup' => '</div></div>'
     );
 
     $form['owner'] = array(

@@ -83,7 +83,7 @@ function dragoon_forms_problem_form($form, &$form_state){
 
 function dragoon_forms_problem_form_validate($form, &$form_state){
 	if($form_state['values']['m'] == ""){
-
+        form_set_error('m',t('mode can not be emplty'));
 	}
 }
 

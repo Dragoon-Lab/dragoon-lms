@@ -17,10 +17,11 @@ function dragoon_forms_ncCModel_form($form, &$form_state){
         '#options' => $user_folders
     );
 
-    $form['pname'] = array(
+    $form['p'] = array(
         '#type' => 'textfield',
         '#title' => t('Problem'),
-        '#REQUIRED' => TRUE,
+        '#required' => TRUE,
+        '#maxlength' => 50,
     );
 
     $form['m'] = array(
@@ -43,16 +44,47 @@ function dragoon_forms_ncCModel_form($form, &$form_state){
         '#value' => $name."-private",
     );
 
+    $form['g'] = array(
+        '#type' => 'hidden',
+        '#value' => $name."-private",
+    );
+
     $form['rp'] = array(
         '#type' => 'hidden',
         '#value' => $rp,
     );
 
+    $form['sm'] = array(
+        '#type' => 'hidden',
+        '#value' => 'feedback',
+    );
+    $form['c'] = array(
+        '#type' => 'hidden',
+        '#value' => 'continue',
+    );
+
+    $form['is'] = array(
+        '#type' => 'hidden',
+        '#value' => 'algebraic',
+    );
     $form['submit_button'] = array(
         '#type' => 'submit',
         '#value' => t('Create Model'),
         '#id' => 'create_nc_model',
     );
+    $form['#validate'] = array('dragoon_forms_ncCModel_form_validate');
+
 
     return $form;
+}
+
+function dragoon_forms_ncCModel_form_validate($form, &$form_state){
+    $modelName = $form_state["values"]["p"];
+    if($modelName == ''){
+        form_set_error("p",t("Model name cannot be empty"));
+    }
+    else{
+        form_set_error("p",t('No error'));
+    }
+
 }

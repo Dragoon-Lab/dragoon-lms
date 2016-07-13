@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 
     var submitProblemsForm = function(){
         //In this case form has to be submitted asynchronously
-        $.post('sites/all/modules/_custom/NC_models/static/nonClassupdates.php', $('#dragoon_ncCFolder_form').serialize())
+        $.post('sites/all/modules/_custom/NC_models/static/nonClassUpdates.php', $('#dragoon_ncCFolder_form').serialize())
             .success(function(){
                 location.reload();
             });
@@ -38,11 +38,25 @@ jQuery(document).ready(function($) {
         key: "p&pname"
     }, showForm);
 
-    $('#create_nc_folder').click({
-        id: "createFolderModal",
-        submit: true,
-        func: submitProblemsForm,
-        formId: "dragoon_ncCFolder_form"
-    }, hideForm);
+    $('#create_nc_folder').click(function(){
+       //
+        $.ajax({
+            type: "POST",
+            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            data: $('#dragoon_ncCFolder_form').serialize(),
+            success: function(data) {
+                console.log(data);
+                location.reload();
+            },
+            error: function(data){
+
+                console.log("fail");
+            }
+        });
+
+
+    });
+
+
 
 });

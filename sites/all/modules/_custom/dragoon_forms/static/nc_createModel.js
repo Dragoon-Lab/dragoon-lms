@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
     };
 
     var submitCreateProblemsForm = function(){
-        console.log("trying to submit form");
+        console.log("trying to submit form",$('#dragoon_ncCModel_form').serialize());
         var form = document.forms['dragoon_ncCModel_form'];
         form.setAttribute("action", "https://dragoon.asu.edu/devel/index.php");
         form.setAttribute("target", "_blank");

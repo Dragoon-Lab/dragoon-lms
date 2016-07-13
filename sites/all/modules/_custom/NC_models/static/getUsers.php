@@ -22,4 +22,6 @@ while($res=$q_res->fetch_object()){
     array_push($string,$res->name."-".$res->init);
 }
 
-echo json_encode($string);
+foreach($string as $user){
+    echo $user.",";
+}
