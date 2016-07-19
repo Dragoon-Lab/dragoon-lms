@@ -139,6 +139,6 @@ function classes_install(){
 
 function classes_uninstall(){
 	db_query('
-		DROP TABLE classes, enrolled_users;
+		DROP TABLE enrolled_users, classes;
 	');
 }
