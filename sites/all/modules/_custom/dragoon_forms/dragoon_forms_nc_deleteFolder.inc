@@ -11,11 +11,13 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
     $data = json_decode($json, true);
 
     dragoon_forms_show_del_tree($data,$form, 'none');
-    //following element separates out delete button
-    $form['finish'] = array(
-        '#markup' => '</div></div>'
-    );
 
+    //following element separates out delete button
+    if(isset($data["shared"])){
+        $form['finish'] = array(
+            '#markup' => '</div>'
+        );
+    }
     $form['owner'] = array(
 		'#type' => 'hidden',
         '#value' => $user_name,
@@ -31,17 +33,18 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
 		'#id' => 'delete_nc_folder',
 	);
 
+    $form['cancel_button'] = array(
+        '#type' => 'button',
+        '#value' => t('Cancel'),
+    );
+
 	return $form;
 }
 
-function dragoon_forms_ncDelFolder_form_validate($form, &$form_state){
-	if($form_state['values']['folder_name']){
-        form_set_error('folder_name', t('An event may not end before it starts.'));
-	}
-}
 
 function dragoon_forms_show_del_tree($data, &$form, $parent){
     foreach ($data as $a => $b) {
+
         if (is_array($b)) {
             if (!($a == "private" || $a == "shared")) {
                 $form['fo'.'-'.$a .'-'. uniqid()] = array(
@@ -53,7 +56,7 @@ function dragoon_forms_show_del_tree($data, &$form, $parent){
                 );
             } else {
                 $form[$a .'-'. uniqid()] = array(
-                    '#prefix' => '<div class="accordion"><h2>',
+                    '#prefix' => '<div class="accordion"><h2 data-folder='.$a.'>',
                     '#markup' => t($a),
                     '#suffix' => '</h2><div class="pane">',
                     '#tree' =>true

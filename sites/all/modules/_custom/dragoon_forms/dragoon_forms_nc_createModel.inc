@@ -10,18 +10,21 @@ function dragoon_forms_ncCModel_form($form, &$form_state){
 
     //call a function which returns all potential folders user model can be created in
     $user_folders = loadUserFolders($name);
+    $json = loadNCModels($name,1);
+
 
     $form['select_folder'] = array(
         //pump folder options including the user personal folder
         '#type' => 'select',
-        '#options' => $user_folders
+        '#options' => $user_folders,
+        '#id' => 'create_model_folder_name',
+        '#title' => t('Choose Folder')
     );
 
     $form['p'] = array(
         '#type' => 'textfield',
-        '#title' => t('Problem'),
-        '#required' => TRUE,
-        '#maxlength' => 50,
+        '#title' => t('Model Name'),
+        '#id' => 'create_model_pname'
     );
 
     $form['m'] = array(
@@ -38,6 +41,7 @@ function dragoon_forms_ncCModel_form($form, &$form_state){
         '#type' => 'hidden',
         '#value' => $name,
     );
+
 
     $form['s'] = array(
         '#type' => 'hidden',
@@ -70,21 +74,16 @@ function dragoon_forms_ncCModel_form($form, &$form_state){
     $form['submit_button'] = array(
         '#type' => 'submit',
         '#value' => t('Create Model'),
-        '#id' => 'create_nc_model',
+        '#id' => 'create_nc_model'
     );
-    $form['#validate'] = array('dragoon_forms_ncCModel_form_validate');
-
-
+    $form['z'] = array(
+        //stores existing models
+        '#type' => 'hidden',
+        '#value' => $json,
+    );
+    $form['cancel_button'] = array(
+        '#type' => 'button',
+        '#value' => t('Cancel'),
+    );
     return $form;
-}
-
-function dragoon_forms_ncCModel_form_validate($form, &$form_state){
-    $modelName = $form_state["values"]["p"];
-    if($modelName == ''){
-        form_set_error("p",t("Model name cannot be empty"));
-    }
-    else{
-        form_set_error("p",t('No error'));
-    }
-
 }

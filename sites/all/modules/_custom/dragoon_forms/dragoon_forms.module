@@ -92,10 +92,9 @@ function dragoon_forms_form_alter(&$form, $form_state, $form_id){
                 //'onsubmit' => 'return false;',
                 'id' => 'dragoon_ncCFolder_form'
             );
-            $form['submit_button']['#attributes'] = array(
-                'data-dismiss' => 'modal'
+            $form['cancel_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
             );
-            $form['#validate'] = 'dragoon_forms_ncCFolder_form_validate';
             break;
         case "dragoon_forms_ncDelFolder_form":
             $form['#action'] = '#';
@@ -110,23 +109,20 @@ function dragoon_forms_form_alter(&$form, $form_state, $form_id){
                 'data-toggle'=>"modal",
                 'href'=> '#confirmDeleteModal',
             );
-            $form['#validate'] = 'dragoon_forms_DelFolder_form_validate';
+            $form['cancel_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
+            );
             break;
         case "dragoon_forms_ncCModel_form":
-            $form['#action'] = '#';
             $form['#prefix'] = "<div id='createModelModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
             $form['#suffix'] = "</div></div></div></div>";
             $form['#attributes'] = array(
-                //'onsubmit' => 'return false;',
-                'id' => 'dragoon_ncCModel_form'
+                'id' => 'dragoon_ncCModel_form',
             );
-            //$form['#submit']['#validate'][] = 'dragoon_forms_ncCModel_form_validate';
-            $form['submit_button']['#attributes'] = array(
-                'data-dismiss' => 'modal'
+            $form['cancel_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
             );
-            $form['#validate'][]='dragoon_forms_ncCModel_form_validate';
 
-            //$form['#validate'] = array('dragoon_forms_ncCModel_form_validate');
             break;
         case "dragoon_forms_nc_sharing":
             $form['#action'] = '#';
@@ -136,11 +132,7 @@ function dragoon_forms_form_alter(&$form, $form_state, $form_id){
                 //'onsubmit' => 'return false;',
                 'id' => 'dragoon_nc_manageSharing'
             );
-            $form['submit_button']['#attributes'] = array(
-                'data-dismiss' => 'modal'
-            );
-            $form['#validate'] = array('dragoon_forms_sharing_validate');
+            //$form['#validate'] = array('dragoon_forms_sharing_validate');
             break;
-
     }
 }

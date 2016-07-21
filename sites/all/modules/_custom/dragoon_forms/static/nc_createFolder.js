@@ -1,62 +1,67 @@
 
 
 jQuery(document).ready(function($) {
-    var showForm = function (/* object */ event) {
-        var id = '#' + event.data.id;
-        if (event.data.hasOwnProperty("update") && event.data.update) {
-            if (event.data.hasOwnProperty("value")) {
-                event.data.func(event);
+
+    $('#create_nc_folder').click(function(e){
+        e.preventDefault();
+        // make sure folder name is not empty and also the folder with same name exists
+        var folder_name = $('#create_folder_fname').val();
+        var owner=$('#dragoon_ncCFolder_form input[name=owner]').val();
+        console.log("form check parameters", folder_name, owner);
+        checkValidity(folder_name,owner);
+    });
+
+    function checkValidity(folder_name,owner){
+        //empty case
+        if(folder_name == ''){
+            //
+            console.log("problem name is empty");
+            $('#create_folder_fname').addClass('focusedtextselect');
+            $('#create_folder_fname').attr("placeholder","Can not be empty");
+            return 0;
+        }
+
+        //duplicate folder case
+
+        var folder_id = folder_name+"-"+owner;
+        var req_type = 'check Folder';
+        $.ajax({
+            type: "POST",
+            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            data: {'folder_id': folder_id, 'req_type': req_type},
+            success: function (data) {
+                if(data==1) {
+                    console.log(data);
+                    createFolder();
+                }
+                else {
+                    console.log(data);
+                    $('#create_folder_fname').addClass('focusedtextselect');
+                    $('#create_folder_fname').val('');
+                    $('#create_folder_fname').attr("placeholder","Folder with given name already exists, try a new one!");
+                }
+            },
+            error: function (data) {
+                console.log("fail");
             }
-        }
-    };
-    var updateProblemsForm = function(/* object */ event){
-        //Any future form event can be triggered
-        //Might be used after adding user sharing
-    };
+        });
+    }
 
-    var hideForm = function(/* object */ event){
-        console.log("inside hide Form");
-        var id = '#' + event.data.id;
-        if(event.data.hasOwnProperty("submit") && event.data.submit){
-            event.data.func();
-        }
-    };
-
-    var submitProblemsForm = function(){
-        //In this case form has to be submitted asynchronously
-        $.post('sites/all/modules/_custom/NC_models/static/nonClassUpdates.php', $('#dragoon_ncCFolder_form').serialize())
-            .success(function(){
-                location.reload();
-            });
-    };
-
-    $('.createFolderClass').click({
-        id: "createFolderModal",
-        update: true,
-        func: updateProblemsForm,
-        value: true,
-        key: "p&pname"
-    }, showForm);
-
-    $('#create_nc_folder').click(function(){
-       //
+    function createFolder(){
+        console.log("creating Folder");
         $.ajax({
             type: "POST",
             url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
             data: $('#dragoon_ncCFolder_form').serialize(),
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
                 location.reload();
             },
-            error: function(data){
-
+            error: function (data) {
                 console.log("fail");
             }
         });
 
-
-    });
-
-
+    }
 
 });
