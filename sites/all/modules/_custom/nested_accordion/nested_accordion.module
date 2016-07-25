@@ -24,12 +24,16 @@
 						(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
 						">".$key."</a></p>\n";
 				} else {
-					$str .= '<p><a id = "'.$parameters['id'].$GLOBALS['counter']++.'"
-						href = '.$parameters['href'].' '.
-						(array_key_exists('addKey', $parameters) ? ($parameters['addKey'].'= "'.$key.'" ') : '').
-						(array_key_exists('addValue', $parameters) ? ($parameters['addValue'].'="'.$value.'"') : '').
-						(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
-						">".$key."</a></p>\n";
+					if($key == "no data found" || $value == "no data found"){
+						$str .= '<p>'.$value.'</p>';
+					} else {
+						$str .= '<p><a id = "'.$parameters['id'].$GLOBALS['counter']++.'"
+							href = '.$parameters['href'].' '.
+							(array_key_exists('addKey', $parameters) ? ($parameters['addKey'].'= "'.$key.'" ') : '').
+							(array_key_exists('addValue', $parameters) ? ($parameters['addValue'].'="'.$value.'"') : '').
+							(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
+							">".$key."</a></p>\n";
+					}
 				}
             }
         }
