@@ -50,7 +50,7 @@ function forms_block_view($delta = ''){
 	return $block_form;
 }
 
-function forms_form_alter(&$form, $form_state, $form_id){
+function forms_form_alter(&$form, &$form_state, $form_id){
 	switch($form_id){
 		case "problem_form":
 			$form['#action'] = '#';
