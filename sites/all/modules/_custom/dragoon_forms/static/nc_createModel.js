@@ -59,7 +59,7 @@ jQuery(document).ready(function($) {
         form.setAttribute("action", "http://localhost/Laitsv3/www/index.php");
         form.setAttribute("target", "_blank");
         form.setAttribute("method", "POST");
-        form["g"] = $('#create_model_folder_name').val();
+        form["g"].value = $('#create_model_folder_name').val();
         form.submit();
         setTimeout(function(){
             location.reload();
