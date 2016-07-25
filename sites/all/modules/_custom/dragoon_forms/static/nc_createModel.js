@@ -56,10 +56,14 @@ jQuery(document).ready(function($) {
         var form = document.forms['dragoon_ncCModel_form'];
         $('#create_model_pname').removeClass("focusedtextselect");
         $('#createModelModal').modal('hide');
-        form.setAttribute("action", "https://dragoon.asu.edu/devel/index.php");
+        form.setAttribute("action", "http://localhost/Laitsv3/www/index.php");
         form.setAttribute("target", "_blank");
         form.setAttribute("method", "POST");
+        form["g"] = $('#create_model_folder_name').val();
         form.submit();
+        setTimeout(function(){
+            location.reload();
+        },2000);
     }
 
     var reportDupModels = function(model_name){

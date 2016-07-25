@@ -42,6 +42,7 @@ jQuery(document).ready(function($) {
                 }
             },
             error: function (data) {
+                console.log(data);
                 console.log("fail");
             }
         });

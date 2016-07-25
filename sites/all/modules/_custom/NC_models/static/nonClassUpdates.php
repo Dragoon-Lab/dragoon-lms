@@ -32,11 +32,11 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                 break;
             case "delete Folder":
                 $owner = $_REQUEST["owner"];
-                $del_folders =[];
+                $del_folders = array();
                 if(isset($_REQUEST["folders"])){
                     $del_folders = $_REQUEST["folders"];
                 }
-                $del_models = [];
+                $del_models = array();
                 if(isset($_REQUEST["models"])){
                     $del_models = $_REQUEST["models"];
                 }
@@ -100,9 +100,10 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
             case "check Folder":
                 $folder_id = $_REQUEST['folder_id'];
-                $check_q = "select * from folders where folder_id='$folder_id'";
-                $check_q_res = $mysqli->query($check_q);
-                $row_count = $check_q_res->num_rows;
+                $check_q = db_select('folders','f')->fields('f',array('folder_id'))->condition('folder_id',$folder_id)->execute();
+                //$check_q = "select * from folders where folder_id='$folder_id'";
+                $row_count = $check_q->rowCount();
+                //$row_count = $check_q_res->num_rows;
                 if($row_count>0)
                     echo "already exists";
                 else

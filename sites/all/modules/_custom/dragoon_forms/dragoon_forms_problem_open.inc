@@ -17,15 +17,17 @@ function dragoon_forms_problem_form($form, &$form_state){
 	$form['m'] = array(
 		'#type' => 'radios',
 		'#options' => array(
-//			'AUTHOR' => t('Author'),
+			'AUTHOR' => t('Author'),
 			'COACHED' => t('Coached (Maximum Feedback)'),
 			'STUDENT' => t('Immediate Feedback'),
 			'TEST' => t('Delayed Feedback'),
 			'EDITOR' => t('No Feedback'),
+
 		),
 		'#title' => t('Select a mode: '),
 		'#required' => TRUE,
 		'#default_value' => 'STUDENT',
+        '#id' => 'openProbMode'
 	);
 
 	$form['a'] = array(
