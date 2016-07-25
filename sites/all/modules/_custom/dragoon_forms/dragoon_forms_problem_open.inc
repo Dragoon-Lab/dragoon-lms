@@ -26,7 +26,7 @@ function dragoon_forms_problem_form($form, &$form_state){
 		),
 		'#title' => t('Select a mode: '),
 		'#required' => TRUE,
-		'#default_value' => 'STUDENT',
+		'#default_value' => 'COACHED',
         '#id' => 'openProbMode'
 	);
 
