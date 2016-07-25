@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
         //hide the author mode radio and by default check student mode/immediate feedback mode
         $('input[type=radio]#edit-m-author').closest('div').hide();
         //by default check the student mode
-        $('input[type=radio]#edit-m-student').prop('checked',true);
+        $('input[type=radio]#edit-m-coached').prop('checked',true);
 
         //model library problems should not have group "g" set, so remove the element from the form
         var form = document.forms['dragoon_problem_form'];
