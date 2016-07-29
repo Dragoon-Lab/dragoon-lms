@@ -36,7 +36,7 @@ function dragoon_forms_ncCFolder_form($form, &$form_state){
 
 	$form['submit_button'] = array(
 		'#type' => 'submit',
-		'#value' => t('Create Folder'),
+		'#value' => t('Create folder'),
 		'#id' => 'create_nc_folder',
 	);
     $form['cancel_button'] = array(

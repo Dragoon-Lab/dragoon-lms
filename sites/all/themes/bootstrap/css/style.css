@@ -62,3 +62,40 @@
 .focusedtextselect{
     border: solid 1px red;
 }
+.focusedtextsuccess{
+    border: solid 2px #008000;
+}
+.sharedUsersList ul{
+    list-style: none;
+}
+.sharedUsersList li{
+    padding: 2px;
+}
+
+.glyphShare{
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.eachSharedHolder td{
+    border-bottom: 1px solid #ebebeb;
+    padding: 8px 0;
+}
+
+.sharedHolderEmail{
+    opacity: 0.65;
+}
+
+.sharedUsersList{
+    padding-top: 8px;
+    padding-bottom: 15px;
+}
+.sharedUserContent{
+    width: 350px;
+}
+.new_user_sharing_block{
+    padding-bottom: 25px;
+}
+#shareAuser{
+    margin-top: 45px;
+}

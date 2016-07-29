@@ -5,7 +5,7 @@ function dragoon_forms_problem_form($form, &$form_state){
 	$rp = 'on';
 	if($user->uid){
 		$name = $user->name;
-		$rp = 'off';
+		$rp = false;
 	}
 
 	$form['pname'] = array(

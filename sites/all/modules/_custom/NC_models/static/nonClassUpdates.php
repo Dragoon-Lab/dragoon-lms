@@ -109,6 +109,68 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                 else
                     echo 1;
                 break;
+
+            case "deleteShareHolder":
+                $folder_id = $_REQUEST["folder_id"];
+                $user_name = $_REQUEST["user_id"];
+                $mul_cond = db_and()->condition('folder_id',$folder_id)->condition('member_name',$user_name);
+                $query = db_delete('shared_members')
+                        ->condition($mul_cond)->execute();
+                if($query)
+                    echo "success";
+                else
+                    echo "fail";
+                break;
+            case "validateSharedHolder":
+                $user_email = $_REQUEST["user_email"];
+                $folder_id = $_REQUEST["folder_id"];
+                $query = db_select('users','u')
+                        ->fields('u',array('name'))
+                        ->condition('mail',$user_email)
+                        ->execute();
+                $count = $query->rowCount();
+                $uname = $query->fetchAssoc();
+                if($count>0){
+                    $username = $uname['name'];
+                    $cond = db_and()->condition('member_name',$username)->condition('folder_id',$folder_id);
+                    $query2 = db_select('shared_members','sh')
+                            ->fields('sh',array('member_name'))
+                            ->condition($cond)->execute();
+                    $isExist = $query2->rowCount();
+                    if($isExist>0)
+                        echo "duplicate";
+                    else{
+                        $mem_q = db_insert('shared_members')
+                            ->fields(array(
+                                "member_name" => $username,
+                                "folder_id" => $folder_id,
+                                "member_relation" => 0
+                            ))->execute();
+                        if($mem_q)
+                            echo "success"."-".$username;
+                    }
+                }
+                else
+                    echo "fail";
+                break;
+
+            case "getUserList":
+                $folder_id = $_REQUEST["folder_id"];
+                $returnList = array();
+                $cond = db_and()->condition('folder_id',$folder_id)->condition('member_relation',0);
+                $query = db_select('shared_members','sh')
+                        ->fields('sh',array('member_name'))
+                        ->condition($cond)->execute();
+                while($users = $query->fetchAssoc()){
+                    $userName = $users['member_name'];
+                    $query2 = db_select('users','u')
+                              ->fields('u',array('mail'))
+                              ->condition('name',$userName)->execute();
+                    $usermail = $query2->fetchAssoc();
+                    $usermail = $usermail['mail'];
+                    echo $userName."-".$usermail.",";
+                }
+                break;
         }
     }
 

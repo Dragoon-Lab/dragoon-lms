@@ -29,7 +29,7 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
     );
 	$form['submit_button'] = array(
 		'#type' => 'submit',
-		'#value' => t('Delete Folder'),
+		'#value' => t('Delete folder'),
 		'#id' => 'delete_nc_folder',
 	);
 
