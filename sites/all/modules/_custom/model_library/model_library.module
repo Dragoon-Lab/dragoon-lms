@@ -5,16 +5,18 @@ function model_library_block_info(){
 	$blocks['published_problems'] = array(
 		'info' => 'Block for published problems'
 	);
-
-	return $blocks;
+    $blocks['non_class_models'] = array(
+      'info' => 'Block lists non class models'
+    );
+    return $blocks;
 }
 
-function model_library_block_view($delta = ''){
+function model_library_block_view($delta = ""){
 	$block = array();
+	switch ($delta){
 
-	switch($delta){
 		case "published_problems":
-			$block['subject'] = t('Model Library');
+            $block['subject'] = t('Model Library');
 			$parameters = array(
 				'id' => 'problem',
 				'href' => '#',
@@ -24,10 +26,32 @@ function model_library_block_view($delta = ''){
 //				'otherHref' => ' #drag-main-sec',
 				'otherTags' => 'class = "dragoon_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
 			);
-			$json = file_get_contents($_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
+			$json = file_get_contents(drupal_get_path('module', 'model_library').'/public_problem_index.json');
 			$block['content'] = getHTMLStructure($json, $parameters);
 			break;
-	}
+        case "non_class_models":
+            global $user;
+            $block['subject'] = t('Non Class Models');
+            $parameters = array(
+                'id' => 'problem',
+                'href' => '#',
+                'appendHref' => false,
+                'addKey' => 'key',
+                'addValue'=> 'value',
+//				'otherHref' => ' #drag-main-sec',
+                'otherTags' => 'class = "dragoon_nc_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
+            );
+            if(user_is_logged_in()) {
+                $json = loadNCModels($user->name,0);
+                drupal_add_js('var drupal_username = '. $user->name, 'inline');
+                $block['content'] = getHTMLStructure($json, $parameters);
+                $additional = createAdditionalBlocks($block['content']);
+                $block['content'] = $block['content'].$additional;
+            }
+            else
+                $block['content'] = "Please Login to check your non class models";
+            break;
+    }
 
 	return $block;
 }

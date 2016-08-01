@@ -50,3 +50,15 @@
 .views-field-title{
     display: none;
 }
+.nc_func_but li{
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.nc_func_but ul{
+    margin-top: 20px;
+    list-style: none;
+}
+.focusedtextselect{
+    border: solid 1px red;
+}

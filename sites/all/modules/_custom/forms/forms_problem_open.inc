@@ -22,10 +22,12 @@ function problem_form($form, &$form_state){
 			'STUDENT' => t('Immediate Feedback'),
 			'TEST' => t('Delayed Feedback'),
 			'EDITOR' => t('No Feedback'),
+
 		),
 		'#title' => t('Select a mode: '),
 		'#required' => TRUE,
-		'#default_value' => 'STUDENT',
+		'#default_value' => 'COACHED',
+        '#id' => 'openProbMode'
 	);
 
 	$form['a'] = array(
