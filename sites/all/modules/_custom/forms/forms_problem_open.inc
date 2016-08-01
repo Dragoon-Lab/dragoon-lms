@@ -17,6 +17,22 @@ function problem_form($form, &$form_state){
 	$form['m'] = array(
 		'#type' => 'radios',
 		'#options' => array(
+			'AUTHOR&a=construction' => t('Author'),
+			'COACHED&a=construction' => t('Construction - Feedback on everything'),
+			'STUDENT&a=construction' => t('Construction - Feedback on entries and graphs'),
+			'TEST&a=construction' => t('Construction - Feedback on graphs only'),
+			'EDITOR&a=construction' => t('Construction - No feedback'),
+			'STUDENT&a=execution' => t('Execution'),
+			'STUDENT&a=executionDemo' => t('Demo of Execution'),
+		),
+		'#title' => t('Select a method to start Dragoon problem'),
+		'#required' => TRUE,
+		'#default_value' => 'COACHED&a=construction',
+	);
+
+	/*$form['m'] = array(
+		'#type' => 'radios',
+		'#options' => array(
 			'AUTHOR' => t('Author'),
 			'COACHED' => t('Coached (Maximum Feedback)'),
 			'STUDENT' => t('Immediate Feedback'),
@@ -43,7 +59,7 @@ function problem_form($form, &$form_state){
 		'#title' => t('Select an activity: '),
 		'#required' => TRUE,
 		'#default_value' => 'construction',
-	);
+	);*/
 
 	$form['p'] = array(
 		'#type' => 'hidden',
