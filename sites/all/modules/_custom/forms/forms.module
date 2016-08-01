@@ -76,7 +76,7 @@ function forms_block_view($delta = ''){
             $block_form['content'] = drupal_get_form('forms_nc_create_model_form');
             break;
         case "manage_sharing":
-            module_load_include('inc', 'forms', 'forms_nc_manageSharing');
+            module_load_include('inc', 'forms', 'forms_nc_manage_sharing');
             drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_manage_sharing.js');
             drupal_add_js(drupal_get_path('module', 'NC_models').'/static/autoComplete.js');
             $block_form['title'] = t('Share Folders');
@@ -113,7 +113,7 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 				'class' => array('sachin'),
 			);
 			break;
-		case "dragoon_forms_ncDelFolder_form":
+		case "forms_nc_delete_folder_form":
             $form['#action'] = '#';
             $form['#prefix'] = "<div id='deleteFolderModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
             $form['#suffix'] = "</div></div></div></div>";
@@ -130,7 +130,7 @@ function forms_form_alter(&$form, &$form_state, $form_id){
                 'data-dismiss' => 'modal',
             );
             break;
-        case "dragoon_forms_ncCModel_form":
+        case "forms_nc_class_model_form":
             $form['#prefix'] = "<div id='createModelModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
             $form['#suffix'] = "</div></div></div></div>";
             $form['#attributes'] = array(
@@ -140,16 +140,13 @@ function forms_form_alter(&$form, &$form_state, $form_id){
                 'data-dismiss' => 'modal',
             );
             break;
-        case "dragoon_forms_nc_sharing":
+        case "forms_nc_sharing":
             $form['#action'] = '#';
             $form['#prefix'] = "<div id='shareFolderModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
             $form['#suffix'] = "</div></div></div></div>";
             $form['#attributes'] = array(
                 //'onsubmit' => 'return false;',
                 'id' => 'dragoon_nc_manageSharing'
-            );
-            $form['submit_button']['#attributes'] = array(
-                'data-dismiss' => 'modal',
             );
             //$form['#validate'] = array('dragoon_forms_sharing_validate');
             break;
