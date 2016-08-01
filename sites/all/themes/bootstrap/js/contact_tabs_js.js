@@ -8,7 +8,7 @@
     $(document).ready(function(){
 
 
-        $('#tab-1-0 a').click(function (e) {
+        $('#tab2showteam').click(function (e) {
             console.log("first tab clicked");
             e.preventDefault();
             $('a[href="' + $(this).attr('href') + '"]').tab('show');

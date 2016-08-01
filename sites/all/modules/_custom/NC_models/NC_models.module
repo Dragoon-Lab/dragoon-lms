@@ -80,10 +80,10 @@
         $return_add_blocks='<div class="nc_func_but container non-class-buttons">
                                 <div class="row">
                                     <ul class="col-md-12 col-sm-12">
-                                        <li><a href="#createFolder" class="btn btn-success btn-md createFolderClass" data-toggle="modal" data-target="#createFolderModal">create folder</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">delete Items</a></li>
-                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">create model</a></li>
-                                       <!-- <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Manage Sharing</a></li> -->
+                                        <li><a href="#createFolder" class="btn btn-success btn-md createFolderClass" data-toggle="modal" data-target="#createFolderModal">Create folder</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">Delete items</a></li>
+                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">Create model</a></li>
+                                       <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Manage sharing</a></li>
                                        </ul>
                                 </div>
                             </div>
@@ -104,7 +104,26 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="confirmRemoveShare" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Confirm Delete</h4>
+                                            </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" id="removeShareConfirmed">Yes! Delete</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>';
+
         return $return_add_blocks;
     }
 
@@ -126,6 +145,29 @@ function loadUserFolders($user_name)
         $user_folders[$group] = $grp_name;
     }
     return $user_folders;
+}
+
+function loadShareHolders($folder_name,$owner){
+    $query = db_select('shared_members','sh')
+        ->fields('sh',array('member_name'))
+        ->condition('folder_id',$folder_name."-".$owner)
+        ->condition('member_relation',0)
+        ->execute();
+    $shared_holders = '';
+    while($res = $query->fetchAssoc()){
+        $user = db_select('users','u')
+            ->fields('u',array('mail'))
+            ->condition('name',$res['member_name'])
+            ->execute();
+        $username = $user->fetchAssoc();
+        $element = "
+                    <tr class='eachSharedHolder'>
+                    <td><div class='sharedUserContent'><span>".$res['member_name']."</span><br><span class='sharedHolderEmail'>".$username['mail']."</span></div></td>
+                    <td><i class='glyphicon glyphicon-remove glyphShare' title='Unshare User' data-toggle='modal'></td>
+                    </tr>";
+        $shared_holders = $shared_holders.$element;
+    }
+    return $shared_holders;
 }
 
 

@@ -148,6 +148,9 @@ function forms_form_alter(&$form, &$form_state, $form_id){
                 //'onsubmit' => 'return false;',
                 'id' => 'dragoon_nc_manageSharing'
             );
+            $form['submit_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
+            );
             //$form['#validate'] = array('dragoon_forms_sharing_validate');
             break;
 	}
