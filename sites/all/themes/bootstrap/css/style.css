@@ -99,3 +99,6 @@
 #shareAuser{
     margin-top: 45px;
 }
+#confirmRemoveShare{
+    z-index: 9999;
+}
