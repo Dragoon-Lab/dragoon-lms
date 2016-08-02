@@ -62,7 +62,7 @@ function forms_show_del_tree($data, &$form, $parent){
                     '#tree' =>true
                 );
             }
-            show_del_tree($b, $form,$a);
+            forms_show_del_tree($b, $form,$a);
         } else {
 
             $ls = '';
