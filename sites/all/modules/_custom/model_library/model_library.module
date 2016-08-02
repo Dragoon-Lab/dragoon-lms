@@ -43,7 +43,6 @@ function model_library_block_view($delta = ""){
             );
             if(user_is_logged_in()) {
                 $json = loadNCModels($user->name,0);
-                drupal_add_js('var drupal_username = '. $user->name, 'inline');
                 $block['content'] = getHTMLStructure($json, $parameters);
                 $additional = createAdditionalBlocks($block['content']);
                 $block['content'] = $block['content'].$additional;

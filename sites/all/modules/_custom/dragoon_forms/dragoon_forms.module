@@ -60,7 +60,6 @@ function dragoon_forms_block_view($delta = ''){
         case "manage_sharing":
             module_load_include('inc','dragoon_forms', 'dragoon_forms_nc_manageSharing');
             drupal_add_js(drupal_get_path('module', 'dragoon_forms').'/static/nc_manageSharing.js');
-            drupal_add_js(drupal_get_path('module', 'NC_models').'/static/autoComplete.js');
             $block_form['title'] = t('Share Folders');
             $block_form['content'] = drupal_get_form('dragoon_forms_nc_sharing');
             break;

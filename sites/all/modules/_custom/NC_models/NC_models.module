@@ -4,7 +4,6 @@
         //preparing private content
         //private content consists of folders which are unshared and models which are private
         //unshared folders exist in lms db, we need to pull out these folders
-        drupal_add_js(drupal_get_path('module', 'NC_models').'/static/openNCProbs.js');
         //private unshared folders
 
         $query = db_select('folders','f');
@@ -74,7 +73,6 @@
     }
 
     function createAdditionalBlocks($dataTree){
-        drupal_add_library('system', 'ui.autocomplete');
 
        // drupal_add_js(drupal_get_path('module', 'NC_models').'/static/nonClassHandlers.js');
         $return_add_blocks='<div class="nc_func_but container non-class-buttons">
