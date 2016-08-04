@@ -5,7 +5,7 @@ function problem_form($form, &$form_state){
 	$rp = 'on';
 	if($user->uid){
 		$name = $user->name;
-		$rp = false;
+		$rp = 'off';
 	}
 
 	$form['pname'] = array(
