@@ -48,6 +48,25 @@
                 $string["shared"][$sh_grp][$temp] = $temp;
             }
         }
+
+
+        //owned folders(which are shared)
+        $query2 = db_select('folders','f');
+        $query2->fields('f',array('folder_id','folder_name'));
+        $query2->condition('owner',$user_name);
+        $query2->condition('current_status',1);
+        //$query = "select folder_id,folder_name from folders where owner='$user_name' and !current_status";
+        //return $query;
+        $result2 = $query2->execute();
+        while($res2=$result2->fetchAssoc()){
+            $group2 = $res2['folder_id'];
+            $grp_name2 = $res2['folder_name'];
+            //make a request to the dragoon server to list problems where group = sh_name+"-"+owner_name
+            $ret2 = sendGroup($group2);
+            $ret2 = json_decode($ret2);
+            foreach($ret2 as $temp2)
+                $string["shared"][$grp_name2][$temp2]=$temp2;
+        }
         //print_r($string);
         return json_encode($string);
     }

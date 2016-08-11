@@ -120,10 +120,25 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                     echo "success";
                 else
                     echo "fail";
+                //deleting all shared users  for a particular folder will make it private
+                //check the count of users who are shared a particular folder
+                $cond = db_and()->condition('folder_id',$folder_id)->condition('member_relation',0);
+                $final_del = db_select('shared_members','sh')
+                    ->fields('sh',array('member_name'))
+                    ->condition($cond)->execute();
+                if($final_del->rowCount()==0){
+                    $sh_q = db_update('folders')
+                        ->fields(array(
+                            'current_status' => 0,
+                        ))
+                        ->condition('folder_id',$folder_id)
+                        ->execute();
+                }
                 break;
             case "validateSharedHolder":
                 $user_email = $_REQUEST["user_email"];
                 $folder_id = $_REQUEST["folder_id"];
+
                 $query = db_select('users','u')
                         ->fields('u',array('name'))
                         ->condition('mail',$user_email)
@@ -140,6 +155,14 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                     if($isExist>0)
                         echo "duplicate";
                     else{
+                        //sharing status of the folder has to be updated
+                        $sh_q = db_update('folders')
+                                ->fields(array(
+                                    'current_status' => 1,
+                                ))
+                                ->condition('folder_id',$folder_id)
+                                ->execute();
+                        //then the users have to be shared the current folder
                         $mem_q = db_insert('shared_members')
                             ->fields(array(
                                 "member_name" => $username,
