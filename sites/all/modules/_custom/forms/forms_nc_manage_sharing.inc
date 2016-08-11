@@ -1,5 +1,5 @@
 <?php
-function dragoon_forms_nc_sharing($form, &$form_state){
+function forms_nc_sharing($form, &$form_state){
     global $user;
     $name = 'anonymous';
     $rp = 'on';

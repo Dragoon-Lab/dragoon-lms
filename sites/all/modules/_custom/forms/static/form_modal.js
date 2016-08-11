@@ -2,9 +2,9 @@ jQuery(document).ready(function($) {
 	var showForm = function(/* object */ event){
 		var id = '#' + event.data.id;
         //hide the author mode radio and by default check student mode/immediate feedback mode
-        $('input[type=radio]#edit-m-author').closest('div').hide();
+        $('input[type=radio]#edit-m-authoraconstruction').closest('div').hide();
         //by default check the student mode
-        $('input[type=radio]#edit-m-coached').prop('checked',true);
+        $('input[type=radio]#edit-m-coachedaconstruction').prop('checked',true);
 
         //model library problems should not have group "g" set, so remove the element from the form
         var form = document.forms['dragoon_problem_form'];
@@ -79,7 +79,7 @@ jQuery(document).ready(function($) {
         form["pname"].value = prob_name;
         form["p"].value = prob_name;
         form["s"].value = "non-class-models";
-        $('input[type=radio]#edit-m-author').closest('div').show();
+        $('input[type=radio]#edit-m-authoraconstruction').closest('div').show();
         // add "g" to the form as the public library models wont have a g in the form them selves, g indicates group
         //check if g is defined already and remove it from form before appending a new value
         if(form["g"] != undefined){

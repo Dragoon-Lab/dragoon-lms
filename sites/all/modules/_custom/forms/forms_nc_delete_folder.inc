@@ -1,5 +1,5 @@
 <?php
-function dragoon_forms_ncDelFolder_form($form, &$form_state){
+function forms_nc_delete_folder_form($form, &$form_state){
 	global $user;
 	$user_name = 'anonymous';
 	if($user->uid){
@@ -10,7 +10,7 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
     $json = loadNCModels($user_name,1);
     $data = json_decode($json, true);
 
-    dragoon_forms_show_del_tree($data,$form, 'none');
+    forms_show_del_tree($data,$form, 'none');
 
     //following element separates out delete button
     if(isset($data["shared"])){
@@ -42,7 +42,7 @@ function dragoon_forms_ncDelFolder_form($form, &$form_state){
 }
 
 
-function dragoon_forms_show_del_tree($data, &$form, $parent){
+function forms_show_del_tree($data, &$form, $parent){
     foreach ($data as $a => $b) {
 
         if (is_array($b)) {
@@ -62,7 +62,7 @@ function dragoon_forms_show_del_tree($data, &$form, $parent){
                     '#tree' =>true
                 );
             }
-            dragoon_forms_show_del_tree($b, $form,$a);
+            forms_show_del_tree($b, $form,$a);
         } else {
 
             $ls = '';

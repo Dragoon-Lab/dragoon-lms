@@ -1,5 +1,5 @@
 <?php
-function dragoon_forms_ncCFolder_form($form, &$form_state){
+function forms_nc_class_folder_form($form, &$form_state){
 	global $user;
 	$user_name = 'anonymous';
 	if($user->uid){

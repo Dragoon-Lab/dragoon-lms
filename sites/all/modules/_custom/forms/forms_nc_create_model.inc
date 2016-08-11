@@ -1,5 +1,5 @@
 <?php
-function dragoon_forms_ncCModel_form($form, &$form_state){
+function forms_nc_create_model_form($form, &$form_state){
     global $user;
     $name = 'anonymous';
     $rp = 'on';

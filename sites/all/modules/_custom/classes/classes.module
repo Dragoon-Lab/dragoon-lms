@@ -1,0 +1,76 @@
+<?php
+
+function classes_block_info(){
+	$blocks = array();
+	$blocks['created_classes'] = array(
+		'info' => 'Table for created classes',
+	);
+	$blocks['enrolled_classes'] = array(
+		'info' =>'Table for enrolled classes',
+	);
+
+	return $blocks;
+}
+
+function classes_block_view($delta = ''){
+	$block = array();
+	global $user;
+
+	switch($delta){
+		case 'created_classes':
+			$block['title'] = t('Created Classes');
+			$params = array($user->uid);
+			$block['content'] = get_classes_table_html($delta, $params);
+			break;
+		case 'enrolled_classes':
+			$block['title'] = t('Enrolled Classes');
+			$params = array($user->uid);
+			$block['content'] = get_classes_table_html($delta, $params);
+			break;
+	}
+
+	return $block;
+}
+
+function get_classes_table_html($delta = '', $params){
+	$query = '';
+	$args = array();
+	$title = array();
+	$copyCode = FALSE;
+	$returnEmpty = '';
+	switch($delta){
+		case 'created_classes':
+			$query = 'SELECT name, code FROM {classes} WHERE created_by = :uid';
+			$args = array(':uid' => $params[0]);
+			$titles = array("Class Name", "Join Code");
+			$returnEmpty = 'No class has been created by you';
+			$copyCode = TRUE;
+			break;
+		case 'enrolled_classes':
+			$query = 'SELECT c.name, u.code FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
+			$args = array(':uid' => $params[0]);
+			$titles = array("Class Name", "Join Code");
+			$returnEmpty = 'Please enroll in a class to see your classes here.';
+			break;
+	}
+
+	$results = db_query($query, $args);
+	if($results->rowCount() == 0){
+		return $returnEmpty;
+	}
+
+	$data = array();
+	$index = 0;
+	while($row = $results->fetchAssoc()){
+		$c = t($row['code']);
+		if($copyCode){
+			$c = '<a href = # title = "Copy to clipboard" style = "cursor: hand; cursor: pointer;">'.$c.'</a>';
+		}
+		$data[$index++] = array(
+			'<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>',
+			$c,
+		);
+	}
+	
+	return create_table_html($titles, $data);
+}

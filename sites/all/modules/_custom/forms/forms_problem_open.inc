@@ -1,5 +1,5 @@
 <?php
-function dragoon_forms_problem_form($form, &$form_state){
+function problem_form($form, &$form_state){
 	global $user;
 	$name = 'anonymous';
 	$rp = 'on';
@@ -15,6 +15,22 @@ function dragoon_forms_problem_form($form, &$form_state){
 	);
 
 	$form['m'] = array(
+		'#type' => 'radios',
+		'#options' => array(
+			'STUDENT&a=executionDemo' => t('Step through running the model'),
+			'STUDENT&a=execution' => t('Run the model manually'),
+			'COACHED&a=construction' => t('Reconstruct the model - Feedback on everything'),
+			'STUDENT&a=construction' => t('Reconstruct the model - Feedback on entries and graphs'),
+			'TEST&a=construction' => t('Reconstruct the model - Feedback on graphs only'),
+			'EDITOR&a=construction' => t('Reconstruct the model - No feedback'),
+			'AUTHOR&a=construction' => t('Edit the model'),
+		),
+		'#title' => t('Select a method to start Dragoon problem'),
+		'#required' => TRUE,
+		'#default_value' => 'COACHED&a=construction',
+	);
+
+	/*$form['m'] = array(
 		'#type' => 'radios',
 		'#options' => array(
 			'AUTHOR' => t('Author'),
@@ -43,7 +59,7 @@ function dragoon_forms_problem_form($form, &$form_state){
 		'#title' => t('Select an activity: '),
 		'#required' => TRUE,
 		'#default_value' => 'construction',
-	);
+	);*/
 
 	$form['p'] = array(
 		'#type' => 'hidden',
@@ -82,9 +98,3 @@ function dragoon_forms_problem_form($form, &$form_state){
 
 	return $form;
 }
-
-function dragoon_forms_problem_form_validate($form, &$form_state){
-	if($form_state['values']['m'] == ""){
-	}
-}
-
