@@ -95,6 +95,13 @@ jQuery(document).ready(function($) {
             return;
         }
         var form = document.forms['dragoon_nc_manageSharing'];
+        if(uemail == form["selfEmail"].value){
+            //console.log(form["selfEmail"].value);
+            $('#share_user_name').val('');
+            $('#share_user_name').addClass('focusedtextselect');
+            $('#share_user_name').attr("placeholder","can not share with yourself");
+            return;
+        }
         console.log(form["sh_user_name"].value,form["select_folder"].value);
         $.ajax({
             type: "POST",
@@ -185,4 +192,8 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    $('#shareDone').click(function(){
+        location.reload();
+    })
 });

@@ -46,9 +46,14 @@ function forms_nc_sharing($form, &$form_state){
         "#type" => "hidden",
         "#value" => $name
     );
+    $form['selfEmail'] = array(
+        '#type' => "hidden",
+        "#value" => $user->mail,
+    );
     $form['submit_button'] = array(
         '#type' => 'submit',
         '#value' => t('Done'),
+        '#id' => 'shareDone'
     );
 
     return $form;
