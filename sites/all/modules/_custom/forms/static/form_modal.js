@@ -71,8 +71,17 @@ jQuery(document).ready(function($) {
             console.log("gp name",group_name);
             if(group_name == "private")
                 group_name = user+"-private";
-            else
-                group_name = group_name + "-" + user;
+            else{
+                //group name might contain by keyword which indicates the actual owner
+                //if there is no by key word user himself is the owner
+                var group_owner = group_name.split('by');
+                if(group_owner.length>1){
+                    group_name = group_owner[0].trim()+"-"+group_owner[1].trim();
+                }
+                else{
+                    group_name = group_name + "-" + user;
+                }
+            }
         }
 
 

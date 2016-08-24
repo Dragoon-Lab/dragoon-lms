@@ -33,7 +33,9 @@ function forms_block_info(){
 	$block_forms['manage_sharing'] = array(
 		'info' => 'Enables sharing non class folders to the system users'
 	);
-
+    $block_forms['move_models'] = array(
+        'info' => 'Enables moving models between user folders'
+    );
 	return $block_forms;
 }
 
@@ -78,10 +80,15 @@ function forms_block_view($delta = ''){
 		case "manage_sharing":
 			module_load_include('inc', 'forms', 'forms_nc_manage_sharing');
 			drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_manage_sharing.js');
-			drupal_add_js(drupal_get_path('module', 'NC_models').'/static/autoComplete.js');
 			$block_form['title'] = t('Share Folders');
 			$block_form['content'] = drupal_get_form('forms_nc_sharing');
 			break;
+        case "move_models":
+            module_load_include('inc', 'forms', 'forms_nc_move_models');
+            drupal_add_js(drupal_get_path('module','forms').'/static/nc_move_models.js');
+            $block_form['title'] = t('Move Models');
+            $block_form['content'] = drupal_get_form('forms_nc_move_models');
+            break;
 	}
 
 	return $block_form;
@@ -161,5 +168,14 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 			);
 			//$form['#validate'] = array('dragoon_forms_sharing_validate');
 			break;
+        case "forms_nc_move_models":
+            $form['#action'] = '#';
+            $form['#prefix'] = "<div id='moveModelModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
+            $form['#suffix'] = "</div></div></div></div>";
+            $form['#attributes'] = array(
+                //'onsubmit' => 'return false;',
+                'id' => 'dragoon_nc_move_models'
+            );
+            break;
 	}
 }
