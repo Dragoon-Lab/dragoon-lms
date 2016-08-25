@@ -27,12 +27,13 @@ jQuery(document).ready(function($) {
 	};
 
 	var submitProblemsForm = function(){
+		var date = Math.round(new Date().getTime()/1000);
 		var form = document.forms['dragoon_problem_form'];
+		if(form.u && form.u.value.indexOf("anon") >= 0)
+			form.u.value = "anon-"+ date.toString();
 		form.setAttribute("action", "https://dragoon.asu.edu/devel/index.php");
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
-
-        console.log(form);
 
         form.submit();
 	};
