@@ -2,9 +2,11 @@
 function forms_nc_sharing($form, &$form_state){
     global $user;
     $name = 'anonymous';
+    $user_mail = 'anonymous';
     $rp = 'on';
     if($user->uid){
         $name = $user->name;
+        $user_mail = $user->mail;
         $rp = 'off';
     }
 
@@ -48,7 +50,7 @@ function forms_nc_sharing($form, &$form_state){
     );
     $form['selfEmail'] = array(
         '#type' => "hidden",
-        "#value" => $user->mail,
+        "#value" => $user_mail
     );
     $form['submit_button'] = array(
         '#type' => 'submit',
