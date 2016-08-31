@@ -10,7 +10,7 @@ function forms_nc_move_models($form, &$form_state){
 
     //call a function which returns all potential folders user model can be created in
     $user_folders = loadUserFolders($name);
-    $user_folders2 = loadUserFolders2($name);
+    $user_folders2 = json_encode(loadUserFolders2($name));
     $form['source_folder'] = array(
         //pump folder options including the user personal folder
         '#type' => 'select',
@@ -19,13 +19,17 @@ function forms_nc_move_models($form, &$form_state){
         '#title' => t('Choose Folder')
     );
     //make an alternative source folder for copy option
-    $form['source_folder2'] = array(
+    $form['source_folder_data'] = array(
         //pump folder options including the user personal folder
-        '#type' => 'select',
-        '#options' => $user_folders2,
-        '#id' => 'select_source_folder2',
-        '#title' => t('Choose Folder')
+        '#type' => 'hidden',
+        '#value' => json_encode($user_folders),
     );
+    $form['source_folder_data2'] = array(
+        //pump folder options including the user personal folder
+        '#type' => 'hidden',
+        '#value' => $user_folders2,
+    );
+
 
     $form['source_model'] = array(
         //pump folder options including the user personal folder

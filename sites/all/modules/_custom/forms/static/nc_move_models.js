@@ -3,27 +3,35 @@ jQuery(document).ready(function($) {
     var model_select = $('#select_source_model');
     var dest_select = $('#select_destination_folder');
     var src_select = $('#select_source_folder');
-
+    var move_button = $('#move_model');
+    var copy_button = $('#copy_model');
     $('.modAction').on("click",function(){
        console.log($(this).html());
+        var form = document.forms['dragoon_nc_move_models'];
        if($(this).html()=="Copy Models"){
-           //updated folder list has to be populated
-           //first remove the folder list from source
-           //model_select = $('#select_source_model2');
-           $('#select_source_folder').hide();
-           $('#select_source_folder2').show();
-           src_select = $('#select_source_folder2');
-           //src_select.show();
+           move_button.hide();
+           copy_button.show();
+           src_select.find('option').remove();
+           var new_folders2 = form["source_folder_data2"].value;
+           new_folders2 = jQuery.parseJSON(new_folders2);
+           for(var key in new_folders2){
+               var temp_option2 = new Option(new_folders2[key],key);
+               src_select.append($(temp_option2));
+           }
        }
-       else{
-            console.log("move");
-           $('#select_source_folder2').hide();
-           $('#select_source_folder').show();
-           src_select = $('#select_source_folder');
-
-
+        else{
+           copy_button.hide();
+           move_button.show();
+           src_select.find('option').remove();
+           var new_folders = form["source_folder_data"].value;
+           new_folders = jQuery.parseJSON(new_folders);
+           for(var key in new_folders){
+               var temp_option = new Option(new_folders[key],key);
+               src_select.append($(temp_option));
+           }
        }
-        console.log("src select",src_select);
+       //call adjustModels initially to load models corresponding to the folders
+       adjustModels();
     });
 
 
@@ -40,7 +48,9 @@ jQuery(document).ready(function($) {
                 "g" : current_folder
             },
             success: function (data) {
+                console.log("success");
                 var model_data = jQuery.parseJSON(data);
+                console.log(model_data)
                 if(model_data["error"] !== undefined){
                     var option1 = new Option("No modes found in current folder", "None");
                     var option2 = new Option("Select a model to move or copy","None");
@@ -112,23 +122,20 @@ jQuery(document).ready(function($) {
         });
     };
 
-    //call adjustModels initially to load models corresponding to the folders
-    adjustModels();
     //event 1 : change in source folder value
     src_select.on("change",function(){
         console.log("changed");
         adjustModels();
     });
-
     //event2 : Copy/Move Models via button clicks
-    $('#move_model').on("click", function(e){
+    move_button.on("click", function(e){
         e.preventDefault();
         $('#confirmModelCopy').modal('show');
         $('#confirmModelCopy .modal-body').html('<p>Are you sure you want to move model <b style="color: #000011">'+model_select.val()+'</b> from <b style="color: #000011">'+ src_select.val()+ '</b> to <b style="color: #000011">'+ dest_select.val() +'</b> ?</p>');
         $('#copyModelConfirmed').on("click", function(){ modelAction("moveModel"); });
     });
 
-    $('#copy_model').on("click", function(e){
+    copy_button.on("click", function(e){
         e.preventDefault();
         $('#confirmModelCopy').modal('show');
         $('#confirmModelCopy .modal-body').html('<p>Are you sure you want to copy model <b style="color: #000011">'+model_select.val()+'</b> from <b style="color: #000011">'+ src_select.val()+ '</b> to <b style="color: #000011">'+ dest_select.val() +'</b> ?</p>');
