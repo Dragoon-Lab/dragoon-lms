@@ -1,6 +1,6 @@
 <?php
-//define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
-define('DRUPAL_ROOT', '/home/laits/public_html/');
+define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
+//define('DRUPAL_ROOT', '/home/laits/public_html/');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
@@ -199,8 +199,8 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
     }
 
     function deleteModels($del_models,$del_folders){
-        //$url = 'http://localhost/LaitsV3/www/global.php';
-        $url = 'https://dragoon.asu.edu/lms/global.php';
+        $url = 'http://localhost/LaitsV3/www/global.php';
+        //$url = 'https://dragoon.asu.edu/lms/global.php';
         $data = array('t' => 'deleteNonClassProblems', 'dm' => $del_models, 'df' => $del_folders);
         $options = array(
             'http' => array(

@@ -1,149 +1,77 @@
 jQuery(document).ready(function($) {
 
-    $('#share_nc_model').click(function () {
-        console.log($('#dragoon_nc_manageSharing').serialize());
+    var model_select = $('#select_source_model');
+    var dest_select = $('#select_destination_folder');
+    var src_select = $('#select_source_folder');
+
+    $('.modAction').on("click",function(){
+       console.log($(this).html());
+       if($(this).html()=="Copy Models"){
+           //updated folder list has to be populated
+           //first remove the folder list from source
+           //model_select = $('#select_source_model2');
+           $('#select_source_folder').hide();
+           $('#select_source_folder2').show();
+           src_select = $('#select_source_folder2');
+           //src_select.show();
+       }
+       else{
+            console.log("move");
+           $('#select_source_folder2').hide();
+           $('#select_source_folder').show();
+           src_select = $('#select_source_folder');
+
+
+       }
+        console.log("src select",src_select);
+    });
+
+
+    //function 1 Adjust Models function loads models to select models section based on the current folder
+    var adjustModels = function(){
+        var current_folder = src_select.val();
+        console.log("current folder",current_folder);
+        //make a call to Dragoon API to get models for the current folder
         $.ajax({
             type: "POST",
-            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
-            data: $('#dragoon_nc_manageSharing').serialize(),
-            success: function (data) {
-                console.log(data);
-                //location.reload();
-            },
-            error: function (data) {
-
-                console.log("fail");
-            }
-        });
-
-    });
-
-    //this event-function handles removing an user from shared list of a folder
-    $('.glyphShare').on("click",function () {
-        var current_glyph = this;
-        $('#confirmRemoveShare').modal('show');
-
-        $('#removeShareConfirmed').click(function () {
-            $(current_glyph).closest('tr').remove();
-            //send an ajax request to complete delete share holder
-            var form = document.forms['dragoon_nc_manageSharing'];
-            //console.log(form["select_folder"].value,$(current_glyph).closest('tr').find('td span:first').text());
-
-            $.ajax({
-                type: "POST",
-                url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
-                data: {
-                    "req_type": "deleteShareHolder",
-                    "folder_id": form["select_folder"].value,
-                    "user_id": $(current_glyph.closest('tr')).find('td span:first').text()
-                },
-                success: function (data) {
-                    console.log(data);
-                    //location.reload();
-                },
-                error: function (data) {
-
-                    console.log("fail");
-                }
-
-            });
-
-        });
-
-    });
-
-    $("#shareHoldersList").on("click","i.glyphShare",function(){
-        var current_glyph = this;
-        $('#confirmRemoveShare').modal('show');
-
-        $('#removeShareConfirmed').click(function () {
-            $(current_glyph).closest('tr').remove();
-            //send an ajax request to complete delete share holder
-            var form = document.forms['dragoon_nc_manageSharing'];
-            //console.log(form["select_folder"].value,$(current_glyph).closest('tr').find('td span:first').text());
-
-            $.ajax({
-                type: "POST",
-                url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
-                data: {
-                    "req_type": "deleteShareHolder",
-                    "folder_id": form["select_folder"].value,
-                    "user_id": $(current_glyph.closest('tr')).find('td span:first').text()
-                },
-                success: function (data) {
-                    console.log(data);
-                    //location.reload();
-                },
-                error: function (data) {
-
-                    console.log("fail");
-                }
-
-            });
-
-        });
-    });
-
-    //sharing a user to a folder
-    $('#shareAuser').on("click",function(e){
-        e.preventDefault();
-        var uemail = $('#share_user_name').val();
-        //console.log("uemail is",uemail);
-        if(uemail == ''){
-            $('#share_user_name').addClass('focusedtextselect');
-            $('#share_user_name').attr("placeholder","email can not be empty");
-            return;
-        }
-        var form = document.forms['dragoon_nc_manageSharing'];
-        if(uemail == form["selfEmail"].value){
-            //console.log(form["selfEmail"].value);
-            $('#share_user_name').val('');
-            $('#share_user_name').addClass('focusedtextselect');
-            $('#share_user_name').attr("placeholder","can not share with yourself");
-            return;
-        }
-        console.log(form["sh_user_name"].value,form["select_folder"].value);
-        $.ajax({
-            type: "POST",
-            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            url: "http://localhost/LaitsV3/www/global.php",
             data: {
-                "req_type": "validateSharedHolder",
-                "user_email": form["sh_user_name"].value,
-                "folder_id": form["select_folder"].value
+                "t": "reqNonClassProblems",
+                "g" : current_folder
             },
             success: function (data) {
-                console.log("data is",data);
-                if(data == "fail"){
-                    console.log("invalid email address");
-                    $('#share_user_name').val('');
-                    $('#share_user_name').removeClass('focusedtextsuccess');
-                    $('#share_user_name').addClass('focusedtextselect');
-                    $('#share_user_name').attr("placeholder","invalid email address");
-                    return;
-                }
-                else if(data == "duplicate"){
-                    console.log(data);
-                    $('#share_user_name').val('');
-                    $('#share_user_name').removeClass('focusedtextsuccess');
-                    $('#share_user_name').addClass('focusedtextselect');
-                    $('#share_user_name').attr("placeholder","this user is already in the shared list");
-                    return;
+                var model_data = jQuery.parseJSON(data);
+                if(model_data["error"] !== undefined){
+                    var option1 = new Option("No modes found in current folder", "None");
+                    var option2 = new Option("Select a model to move or copy","None");
+                    model_select.append($(option1));
+                    dest_select.append($(option2));
+                    model_select.val("None");
+                    dest_select.val("None");
+                    model_select.attr("disabled",true);
+                    dest_select.attr("disabled",true);
+                    buttonHandler(true);
                 }
                 else{
-                    var uname = data.split("-");
-                    uname = uname[1];
-                    console.log(data);
-                    $('#share_user_name').val('');
-                    $('#share_user_name').removeClass('focusedtextselect');
-                    $('#share_user_name').addClass('focusedtextsuccess');
-                    $('#share_user_name').attr("placeholder","shared succesfully !");
-                    //now place this user in the users list
-                    var newTr = "<tr class='eachSharedHolder'>"+
-                                "<td><div class='sharedUserContent'><span>"+uname+"</span><br><span class='sharedHolderEmail'>"+uemail+"</span></div></td>"+
-                                "<td><i class='glyphicon glyphicon-remove glyphShare' title='Unshare User' data-toggle='modal'></td>"+
-                                "</tr>";
-                    $('#shareHoldersList').append(newTr);
-
+                    model_select.attr("disabled",false);
+                    model_select.find('option').each(function(){ $(this).remove();});
+                    for(var key in model_data){
+                        var temp_option = new Option(key,model_data[key]);
+                        model_select.append($(temp_option));
+                    }
+                    //if a model is available to copy/move to a destination
+                    //Enable the select destination box removing the source folder from list
+                    dest_select.attr("disabled",false);
+                    //remove all current options
+                    dest_select.find('option').remove();
+                    //add all options from source except the current one
+                    src_select.find('option').each(function(){
+                        if($(this).val() !== src_select.val()) {
+                            var temp_option = $(this).clone();
+                            dest_select.append(temp_option);
+                        }
+                    });
+                    buttonHandler(false);
                 }
             },
             error: function (data) {
@@ -151,49 +79,59 @@ jQuery(document).ready(function($) {
             }
 
         });
-    });
 
-    $('#folder_list').on("change",function(){
-        $('#share_user_name').removeClass('focusedtextselect');
-        $('#share_user_name').removeClass('focusedtextsuccess');
-        $('#share_user_name').removeAttr('placeholder');
-        var current_folder = $(this).val();
-        //console.log(current_folder);
-        $('#shareHoldersList').html('');
+    };
+    //function 2 buttonHandler either disables or enables the move/copy buttons based on the select boxes
+    var buttonHandler = function(status){
+        $('#move_model').attr("disabled",status);
+        $('#copy_model').attr("disabled",status);
+       // $('#move_model').attr("title")
+    };
+    //function 3 callServer calls server requesting to move or copy a model
+    var modelAction = function(action){
+        var form = document.forms['dragoon_nc_move_models'];
+        var user = form["u"].value;
+        console.log();
         $.ajax({
             type: "POST",
-            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            url: "http://localhost/LaitsV3/www/global.php",
             data: {
-                "req_type": "getUserList",
-                "folder_id": current_folder
+                "t": "modelAction",
+                "action": action,
+                "src": src_select.val(),
+                "mod": model_select.val(),
+                "dest": dest_select.val(),
+                "user": user
             },
             success: function (data) {
-                var userData = data.split(",");
-                console.log(userData);
-                for(var i=0;i<userData.length;i++)
-                {
-                    var newUser = userData[i];
-                    if(newUser != "") {
-                        var udet = newUser.split("-");
-                        var uname = udet[0];
-                        var uemail = udet[1];
-                        console.log(uname, uemail);
-                        var newTr = "<tr class='eachSharedHolder'>" +
-                            "<td><div class='sharedUserContent'><span>" + uname + "</span><br><span class='sharedHolderEmail'>" + uemail + "</span></div></td>" +
-                            "<td><i class='glyphicon glyphicon-remove glyphShare' title='Unshare User' data-toggle='modal'></td>" +
-                            "</tr>";
-                        $('#shareHoldersList').append(newTr);
-
-                    }
-                }
+                console.log("moved", data);
             },
-            error: function(data){
-                console.log(data);
+            error: function (data) {
+                console.log("move failed", data);
             }
         });
+    };
+
+    //call adjustModels initially to load models corresponding to the folders
+    adjustModels();
+    //event 1 : change in source folder value
+    src_select.on("change",function(){
+        console.log("changed");
+        adjustModels();
     });
 
-    $('#shareDone').click(function(){
-        location.reload();
-    })
+    //event2 : Copy/Move Models via button clicks
+    $('#move_model').on("click", function(e){
+        e.preventDefault();
+        $('#confirmModelCopy').modal('show');
+        $('#confirmModelCopy .modal-body').html('<p>Are you sure you want to move model <b style="color: #000011">'+model_select.val()+'</b> from <b style="color: #000011">'+ src_select.val()+ '</b> to <b style="color: #000011">'+ dest_select.val() +'</b> ?</p>');
+        $('#copyModelConfirmed').on("click", function(){ modelAction("moveModel"); });
+    });
+
+    $('#copy_model').on("click", function(e){
+        e.preventDefault();
+        $('#confirmModelCopy').modal('show');
+        $('#confirmModelCopy .modal-body').html('<p>Are you sure you want to copy model <b style="color: #000011">'+model_select.val()+'</b> from <b style="color: #000011">'+ src_select.val()+ '</b> to <b style="color: #000011">'+ dest_select.val() +'</b> ?</p>');
+        $('#copyModelConfirmed').on("click", function(){ modelAction("copyModel"); });
+    });
 });

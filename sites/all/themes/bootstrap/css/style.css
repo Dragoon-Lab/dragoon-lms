@@ -102,3 +102,6 @@
 #confirmRemoveShare{
     z-index: 9999;
 }
+#confirmModelCopy{
+    z-index: 9999;
+}

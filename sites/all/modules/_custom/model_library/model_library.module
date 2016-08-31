@@ -26,8 +26,9 @@ function model_library_block_view($delta = ""){
 //				'otherHref' => ' #drag-main-sec',
 				'otherTags' => 'class = "dragoon_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
 			);
-			$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/lms/public_problem_index.json');
-			$block['content'] = getHTMLStructure($json, $parameters);
+			//$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/lms/public_problem_index.json');
+            $json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/dragoon-lms/sites/all/modules/_custom/model_library/public_problem_index.json');
+            $block['content'] = getHTMLStructure($json, $parameters);
 			break;
         case "non_class_models":
             global $user;
