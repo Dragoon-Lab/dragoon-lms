@@ -176,6 +176,9 @@ function forms_form_alter(&$form, &$form_state, $form_id){
                 //'onsubmit' => 'return false;',
                 'id' => 'dragoon_nc_move_models'
             );
+            $form['cancel_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
+            );
             break;
 	}
 }

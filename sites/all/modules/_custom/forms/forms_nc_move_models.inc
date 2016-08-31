@@ -60,7 +60,7 @@ function forms_nc_move_models($form, &$form_state){
     $form['move_button'] = array(
         '#type' => 'button',
         '#value' => t('Move model'),
-        '#id' => 'move_model'
+        '#id' => 'move_model',
     );
 
     $form['cancel_button'] = array(

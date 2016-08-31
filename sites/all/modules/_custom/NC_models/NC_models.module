@@ -156,7 +156,7 @@
                                             <p>Are you sure you want to copy/move?</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal" id="copyModelConfirmed">Yes! Move</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" id="copyModelConfirmed">Yes</button>
                                             <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal">Cancel</button>
                                         </div>
                                     </div>

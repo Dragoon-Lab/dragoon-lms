@@ -5,10 +5,11 @@ jQuery(document).ready(function($) {
     var src_select = $('#select_source_folder');
     var move_button = $('#move_model');
     var copy_button = $('#copy_model');
+
     $('.modAction').on("click",function(){
        console.log($(this).html());
         var form = document.forms['dragoon_nc_move_models'];
-       if($(this).html()=="Copy Models"){
+        if($(this).html()=="Copy Models"){
            move_button.hide();
            copy_button.show();
            src_select.find('option').remove();
@@ -18,7 +19,7 @@ jQuery(document).ready(function($) {
                var temp_option2 = new Option(new_folders2[key],key);
                src_select.append($(temp_option2));
            }
-       }
+        }
         else{
            copy_button.hide();
            move_button.show();
@@ -29,16 +30,16 @@ jQuery(document).ready(function($) {
                var temp_option = new Option(new_folders[key],key);
                src_select.append($(temp_option));
            }
-       }
-       //call adjustModels initially to load models corresponding to the folders
-       adjustModels();
+        }
+        //call adjustModels initially to load models corresponding to the folders
+        adjustModels();
     });
 
 
     //function 1 Adjust Models function loads models to select models section based on the current folder
     var adjustModels = function(){
         var current_folder = src_select.val();
-        console.log("current folder",current_folder);
+        //console.log("current folder",current_folder);
         //make a call to Dragoon API to get models for the current folder
         $.ajax({
             type: "POST",
@@ -115,6 +116,7 @@ jQuery(document).ready(function($) {
             },
             success: function (data) {
                 console.log("moved", data);
+                location.reload();
             },
             error: function (data) {
                 console.log("move failed", data);
