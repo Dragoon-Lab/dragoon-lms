@@ -27,12 +27,13 @@ jQuery(document).ready(function($) {
 	};
 
 	var submitProblemsForm = function(){
+		var date = Math.round(new Date().getTime()/1000);
 		var form = document.forms['dragoon_problem_form'];
+		if(form.u && form.u.value.indexOf("anon") >= 0)
+			form.u.value = "anon-"+ date.toString();
 		form.setAttribute("action", "https://dragoon.asu.edu/devel/index.php");
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
-
-        console.log(form);
 
         form.submit();
 	};
@@ -71,8 +72,17 @@ jQuery(document).ready(function($) {
             console.log("gp name",group_name);
             if(group_name == "private")
                 group_name = user+"-private";
-            else
-                group_name = group_name + "-" + user;
+            else{
+                //group name might contain by keyword which indicates the actual owner
+                //if there is no by key word user himself is the owner
+                var group_owner = group_name.split('by');
+                if(group_owner.length>1){
+                    group_name = group_owner[0].trim()+"-"+group_owner[1].trim();
+                }
+                else{
+                    group_name = group_name + "-" + user;
+                }
+            }
         }
 
 

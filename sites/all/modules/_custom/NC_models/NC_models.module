@@ -41,11 +41,12 @@
         //$shared_q = "select folder_id from shared_members where member_name='$user_name'".$status_query;
         $sh_q_res = $shared_q->execute();
         while($res_sh = $sh_q_res->fetchAssoc()){
-            $sh_grp=$res_sh['folder_id'];
-            $ret = sendGroup($sh_grp);
+            $sh_grp = explode("-",$res_sh['folder_id']);
+            $sh_grp_name = $sh_grp[0];
+            $ret = sendGroup($res_sh['folder_id']);
             $ret = json_decode($ret);
             foreach($ret as $temp){
-                $string["shared"][$sh_grp][$temp] = $temp;
+                $string["shared"][$sh_grp_name . " by " . $sh_grp[1]][$temp] = $temp;
             }
         }
 
@@ -72,7 +73,8 @@
     }
 
     function sendGroup($g){
-        $url = 'http://localhost/LaitsV3/www/global.php';
+        //$url = 'http://localhost/LaitsV3/www/global.php';
+        $url = 'https://dragoon.asu.edu/lms/global.php';
         $data = array('t' => 'reqNonClassProblems', 'g' => $g);
 
         $options = array(
@@ -101,6 +103,7 @@
                                         <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#deleteFolderModal">Delete items</a></li>
                                         <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#createModelModal">Create model</a></li>
                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Manage sharing</a></li>
+                                       <!--<li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#moveModelModal">Move Models</a></li>-->
                                        </ul>
                                 </div>
                             </div>

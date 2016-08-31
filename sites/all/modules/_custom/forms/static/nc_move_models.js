@@ -90,17 +90,15 @@ jQuery(document).ready(function($) {
         var uemail = $('#share_user_name').val();
         //console.log("uemail is",uemail);
         if(uemail == ''){
-            console.log("email empty");
             $('#share_user_name').addClass('focusedtextselect');
             $('#share_user_name').attr("placeholder","email can not be empty");
             return;
         }
         var form = document.forms['dragoon_nc_manageSharing'];
         if(uemail == form["selfEmail"].value){
-            console.log("self email",form["selfEmail"].value);
-            $('#share_user_name').attr("placeholder","");
+            //console.log(form["selfEmail"].value);
             $('#share_user_name').val('');
-            //$('#share_user_name').addClass('focusedtextselect');
+            $('#share_user_name').addClass('focusedtextselect');
             $('#share_user_name').attr("placeholder","can not share with yourself");
             return;
         }
