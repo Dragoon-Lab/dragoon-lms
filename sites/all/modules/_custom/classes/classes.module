@@ -18,9 +18,18 @@ function classes_block_view($delta = ''){
 
 	switch($delta){
 		case 'created_classes':
-			$block['title'] = t('Created Classes');
-			$params = array($user->uid);
-			$block['content'] = get_classes_table_html($delta, $params);
+			global $user;
+			if($user->uid){
+				$user_fields = user_load($user->uid);
+				$teacher_field = $user_fields->field_you_are_a_['und']['0']['value'];
+				if($teacher_field == "Teacher"){
+					$block['title'] = t('Created Classes');
+					$params = array($user->uid);
+					$block['content'] = get_classes_table_html($delta, $params);
+				} else {
+					$block['content'] = "";
+				}
+			}
 			break;
 		case 'enrolled_classes':
 			$block['title'] = t('Enrolled Classes');

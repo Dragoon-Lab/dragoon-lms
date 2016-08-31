@@ -35,15 +35,27 @@ function create_class_form_submit($form, &$form_state){
 
 function create_class_form_validate($form, &$form_state){
 	global $user;
-	$result = db_query('SELECT code FROM {classes} WHERE name = :name', array(':name' => $form_state['values']['class_name']));
+	$data = array(
+		':name' => $form_state['values']['class_name'],
+		':section' => create_class_section($form_state['values']['class_name'])
+	);
+
+	$result = "";
+	if(strpos($form_state['values']['class_name'], "_")){
+		$data[':name2'] = create_class_name($form_state['values']['class_name']);
+		$result = db_query('SELECT code FROM {classes} WHERE name = :name OR name = :name2 OR section = :section', $data);
+	} else {
+		$result = db_query('SELECT code FROM {classes} WHERE name = :name OR section = :section', $data);
+	}
+
 	if($result->rowCount() > 0){
-		form_set_error('class_name', t('Class name used should be unique.'));
+		form_set_error('class_name', t('Class name is already in use.'));
 	}
 }
 
 function create_class_code(){
 	$seed = &drupal_static('create_class_seed');
-	$size = 6;
+	$size = 4;
 	$code = '';
 	$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 	srand(time());
@@ -65,4 +77,8 @@ function create_class_seed(){
 
 function create_class_section($name){
 	return str_replace(" ", "_", $name);
+}
+
+function create_class_name($name){
+	return str_replace("_", " ", $name);
 }

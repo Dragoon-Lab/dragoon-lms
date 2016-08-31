@@ -48,9 +48,18 @@ function forms_block_view($delta = ''){
 			$block_form['content'] = drupal_get_form('problem_form');
 			break;
 		case "create_class":
-			module_load_include('inc', 'forms', 'forms_create_class');
-			$block_form['title'] = t("Create a class");
-			$block_form['content'] = drupal_get_form("create_class_form");
+			global $user;
+			if($user->uid){
+				$user_fields = user_load($user->uid);
+				$teacher_field = $user_fields->field_you_are_a_['und']['0']['value'];
+				if($teacher_field == "Teacher"){
+					module_load_include('inc', 'forms', 'forms_create_class');
+					$block_form['title'] = t("Create a class");
+					$block_form['content'] = drupal_get_form("create_class_form");
+				} else {
+					$block_form['content'] = "";
+				}
+			}
 			break;
 		case "enroll_class":
 			module_load_include('inc', 'forms', 'forms_enroll_class');
