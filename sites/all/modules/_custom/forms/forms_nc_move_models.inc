@@ -10,77 +10,59 @@ function forms_nc_move_models($form, &$form_state){
 
     //call a function which returns all potential folders user model can be created in
     $user_folders = loadUserFolders($name);
-    $json = loadNCModels($name,1);
-
-
-    $form['select_folder'] = array(
+    $user_folders2 = json_encode(loadUserFolders2($name));
+    $form['source_folder'] = array(
         //pump folder options including the user personal folder
         '#type' => 'select',
         '#options' => $user_folders,
-        '#id' => 'create_model_folder_name',
+        '#id' => 'select_source_folder',
         '#title' => t('Choose Folder')
     );
-
-    $form['p'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Model Name'),
-        '#id' => 'create_model_pname'
+    //make an alternative source folder for copy option
+    $form['source_folder_data'] = array(
+        //pump folder options including the user personal folder
+        '#type' => 'hidden',
+        '#value' => json_encode($user_folders),
+    );
+    $form['source_folder_data2'] = array(
+        //pump folder options including the user personal folder
+        '#type' => 'hidden',
+        '#value' => $user_folders2,
     );
 
-    $form['m'] = array(
-        '#type' => 'hidden',
-        '#value' => 'AUTHOR'
-    );
 
-    $form['a'] = array(
-        '#type' => 'hidden',
-        '#value' => 'construction'
+    $form['source_model'] = array(
+        //pump folder options including the user personal folder
+        '#type' => 'select',
+        '#options' => array('Loading Models...'),
+        '#id' => 'select_source_model',
+        '#title' => t('Choose Model')
+    );
+    $form['destination_folder'] = array(
+        //pump folder options including the user personal folder
+        '#type' =>  'select',
+        '#options' => $user_folders,
+        '#id' => 'select_destination_folder',
+        '#title' => t('Choose Destination Folder')
     );
 
     $form['u'] = array(
         '#type' => 'hidden',
         '#value' => $name,
+        '#id' => 'current_user_name'
     );
 
-
-    $form['s'] = array(
-        '#type' => 'hidden',
-        '#value' => "non-class-models",
+    $form['copy_button'] = array(
+        '#type' => 'button',
+        '#value' => t('Copy model'),
+        '#id' => 'copy_model'
+    );
+    $form['move_button'] = array(
+        '#type' => 'button',
+        '#value' => t('Move model'),
+        '#id' => 'move_model',
     );
 
-    $form['g'] = array(
-        '#type' => 'hidden',
-        '#value' => $name."-private",
-    );
-
-    $form['rp'] = array(
-        '#type' => 'hidden',
-        '#value' => $rp,
-    );
-
-    $form['sm'] = array(
-        '#type' => 'hidden',
-        '#value' => 'feedback',
-    );
-    $form['c'] = array(
-        '#type' => 'hidden',
-        '#value' => 'continue',
-    );
-
-    $form['is'] = array(
-        '#type' => 'hidden',
-        '#value' => 'algebraic',
-    );
-    $form['submit_button'] = array(
-        '#type' => 'submit',
-        '#value' => t('Create Model'),
-        '#id' => 'create_nc_model'
-    );
-    $form['z'] = array(
-        //stores existing models
-        '#type' => 'hidden',
-        '#value' => $json,
-    );
     $form['cancel_button'] = array(
         '#type' => 'button',
         '#value' => t('Cancel'),

@@ -42,7 +42,6 @@ function forms_nc_create_model_form($form, &$form_state){
         '#value' => $name,
     );
 
-
     $form['s'] = array(
         '#type' => 'hidden',
         '#value' => "non-class-models",

@@ -102,3 +102,10 @@
 #confirmRemoveShare{
     z-index: 9999;
 }
+#confirmModelCopy{
+    z-index: 9999;
+}
+#copy_model, #move_model{
+    color: #ffffff;
+    background-color: #5cb85c;
+}
