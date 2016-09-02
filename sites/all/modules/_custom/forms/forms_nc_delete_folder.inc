@@ -70,7 +70,7 @@ function forms_show_del_tree($data, &$form, $parent){
             if ($las_elem == $b) {
                 $ls = '</div></div>';
             }
-            if(trim($a) !== trim("no data found ")) {
+            if(trim($a) !== trim("No models ")) {
                 $form['mo'.'-'.$a .'-'. uniqid().'-'.$parent] = array(
                     '#prefix' => '<p>',
                     '#type' => 'checkbox',

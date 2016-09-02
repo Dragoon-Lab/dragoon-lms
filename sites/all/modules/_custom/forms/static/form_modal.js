@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
         var form = document.forms['dragoon_problem_form'];
         var user = form["u"].value;
         var prob_name = $(this).text();
-        if(prob_name != "no data found"){
+        if(prob_name != "No models"){
             var group_name = $(this).closest('.accordion').find('h2:first').text();
             console.log("gp name",group_name);
             if(group_name == "private")
