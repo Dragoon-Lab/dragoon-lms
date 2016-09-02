@@ -24,7 +24,7 @@
 						(array_key_exists('otherTags', $parameters) ? (' '.$parameters['otherTags']): "").
 						">".$key."</a></p>\n";
 				} else {
-					if($key == "no data found" || $value == "no data found"){
+					if($key == "No models" || $value == "No models"){
 						$str .= '<p>'.$value.'</p>';
 					} else {
 						$str .= '<p><a id = "'.$parameters['id'].$GLOBALS['counter']++.'"
