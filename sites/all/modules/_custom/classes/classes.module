@@ -29,9 +29,6 @@ function classes_block_view($delta = ''){
 					$params = array($user->uid);
 					$block['content'] = array(
 						'#markup' => get_classes_table_html($delta, $params),
-						'#attached' => array(
-							'js' => array($classes_path.'/static/clipboard.js')
-						)
 					);
 				} else {
 					$block['content'] = "";
@@ -78,10 +75,9 @@ function get_classes_table_html($delta = '', $params){
 	$data = array();
 	$index = 0;
 	while($row = $results->fetchAssoc()){
-		$c = t($row['code']);
+		$c = "<span>".t($row['code'])."</span>";
 		$a = '';
 		if($copyCode){
-			$c = '<span title = "Copy to clipboard" class = "copy-to-clipboard" id = "code'.$index.'" style = "cursor: hand; cursor: pointer;">'.$c.'</span>';
 			//give href to teacher class page
 			$a = '<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
 		} else {
