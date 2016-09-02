@@ -28,7 +28,7 @@ function create_class_form_submit($form, &$form_state){
 			'section' => create_class_section($form_state['values']['class_name']),
 			'is_active' => TRUE,
 		))->execute();
-	drupal_set_message(t("Your class has been successfully created. The class code is ".$code));
+	drupal_set_message(t("Your class has been successfully created. The class join code is ".$code));
 	$block = module_invoke('classes', 'classes_block_view', 'classes_created');
 	print render($block['content']);
 }

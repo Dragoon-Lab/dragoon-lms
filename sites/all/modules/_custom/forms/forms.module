@@ -53,7 +53,8 @@ function forms_block_view($delta = ''){
 			global $user;
 			if($user->uid){
 				$user_fields = user_load($user->uid);
-				$teacher_field = $user_fields->field_you_are_a_['und']['0']['value'];
+				$teacher_field = array_key_exists('und', $user_fields->field_you_are_a_) ?
+						$user_fields->field_you_are_a_['und'][0]['value'] : "Student";
 				if($teacher_field == "Teacher"){
 					module_load_include('inc', 'forms', 'forms_create_class');
 					$block_form['title'] = t("Create a class");

@@ -21,11 +21,18 @@ function classes_block_view($delta = ''){
 			global $user;
 			if($user->uid){
 				$user_fields = user_load($user->uid);
-				$teacher_field = $user_fields->field_you_are_a_['und']['0']['value'];
+				$classes_path = drupal_get_path('module', 'classes');
+				$teacher_field = array_key_exists('und', $user_fields->field_you_are_a_) ?
+						$user_fields->field_you_are_a_['und'][0]['value'] : "Student";
 				if($teacher_field == "Teacher"){
-					$block['title'] = t('Created Classes');
+					$block['title'] = t('My Classes');
 					$params = array($user->uid);
-					$block['content'] = get_classes_table_html($delta, $params);
+					$block['content'] = array(
+						'#markup' => get_classes_table_html($delta, $params),
+						'#attached' => array(
+							'js' => array($classes_path.'/static/clipboard.js')
+						)
+					);
 				} else {
 					$block['content'] = "";
 				}
@@ -51,14 +58,14 @@ function get_classes_table_html($delta = '', $params){
 		case 'created_classes':
 			$query = 'SELECT name, code FROM {classes} WHERE created_by = :uid';
 			$args = array(':uid' => $params[0]);
-			$titles = array("Class Name", "Join Code");
+			$titles = array("Class Name", "Class Join Code");
 			$returnEmpty = 'No class has been created by you';
 			$copyCode = TRUE;
 			break;
 		case 'enrolled_classes':
 			$query = 'SELECT c.name, u.code FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
 			$args = array(':uid' => $params[0]);
-			$titles = array("Class Name", "Join Code");
+			$titles = array("Class Name", "Class Join Code");
 			$returnEmpty = 'Please enroll in a class to see your classes here.';
 			break;
 	}
@@ -72,13 +79,16 @@ function get_classes_table_html($delta = '', $params){
 	$index = 0;
 	while($row = $results->fetchAssoc()){
 		$c = t($row['code']);
+		$a = '';
 		if($copyCode){
-			$c = '<a href = # title = "Copy to clipboard" style = "cursor: hand; cursor: pointer;">'.$c.'</a>';
+			$c = '<span title = "Copy to clipboard" class = "copy-to-clipboard" id = "code'.$index.'" style = "cursor: hand; cursor: pointer;">'.$c.'</span>';
+			//give href to teacher class page
+			$a = '<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
+		} else {
+			//give href to student class page
+			$a = '<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
 		}
-		$data[$index++] = array(
-			'<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>',
-			$c,
-		);
+		$data[$index++] = array($a, $c);
 	}
 	
 	return create_table_html($titles, $data);
