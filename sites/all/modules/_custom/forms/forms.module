@@ -192,3 +192,7 @@ function forms_form_alter(&$form, &$form_state, $form_id){
             break;
 	}
 }
+
+function forms_user_login(&$edit, $action){
+	$edit['redirect'] = $GLOBALS['base_url'];
+}
