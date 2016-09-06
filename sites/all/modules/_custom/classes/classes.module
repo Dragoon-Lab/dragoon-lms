@@ -25,7 +25,7 @@ function classes_block_view($delta = ''){
 				$teacher_field = array_key_exists('und', $user_fields->field_you_are_a_) ?
 						$user_fields->field_you_are_a_['und'][0]['value'] : "Student";
 				if($teacher_field == "Teacher"){
-					$block['title'] = t('My Classes');
+					$block['title'] = t('Created Classes');
 					$params = array($user->uid);
 					$block['content'] = array(
 						'#markup' => get_classes_table_html($delta, $params),
