@@ -37,8 +37,13 @@ function classes_block_view($delta = ''){
 			break;
 		case 'enrolled_classes':
 			$block['title'] = t('Enrolled Classes');
-			$params = array($user->uid);
-			$block['content'] = get_classes_table_html($delta, $params);
+			if($user->uid){
+				$params = array($user->uid);
+				$block['content'] = get_classes_table_html($delta, $params);
+			} else {
+				$query = drupal_get_destination();
+				drupal_goto('user/login');
+			}
 			break;
 	}
 
