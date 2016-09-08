@@ -79,10 +79,10 @@ function get_classes_table_html($delta = '', $params){
 		$a = '';
 		if($copyCode){
 			//give href to teacher class page
-			$a = '<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
+			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
 		} else {
 			//give href to student class page
-			$a = '<a href = # title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
+			$a = t($row['name']);
 		}
 		$data[$index++] = array($a, $c);
 	}
