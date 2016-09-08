@@ -3,7 +3,7 @@
 function class_assignments_menu(){
 	$items = array();
 	
-	$items['class/%code'] = array(
+	$items['class/%class_assignments_code'] = array(
 		'page callback' => 'class_assignments_render_page',
 		'page arguments' => array(1),
 		'access arguments' => array('access content'),
@@ -16,11 +16,16 @@ function class_assignments_menu(){
 function class_assignments_render_page($code){
 	$query = 'SELECT * FROM classes WHERE code = :code';
 	$result = db_query($query, array(':code' => $code));
+	$text = "The problem link will then be added to that class's page.  You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.";
 
 	if($result->rowCount() == 0){
 		return t('No class found');
 	} else {
 		$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
-		return '<h2>'.t($row['name']).'</h2>';
+		return '<h2>'.t($row['name']).'</h2><div>'.$text.'</div>';
 	}
+}
+
+function class_assignments_code_load($code){
+	return $code;
 }
