@@ -208,16 +208,15 @@ function loadUserFolders2($user_name)
     $query2->fields('sh',array('folder_id'));
     $query2->condition('member_name',$user_name);
     $query2->condition('member_relation',0);
-    $q_res2 = $query->execute();
+    $q_res2 = $query2->execute();
     while($res2 = $q_res2->fetchAssoc()){
         $group2 = $res2['folder_id'];
-        if(!$user_folders[$group2]){
+        if(!isset($user_folders[$group2])){
             $folder_name = explode("-",$group2);
             $folder_name = $folder_name[0];
             $user_folders[$group2] = $folder_name;
         }
     }
-
     return $user_folders;
 }
 
