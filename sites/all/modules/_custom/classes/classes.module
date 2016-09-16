@@ -20,11 +20,8 @@ function classes_block_view($delta = ''){
 		case 'created_classes':
 			global $user;
 			if($user->uid){
-				$user_fields = user_load($user->uid);
 				$classes_path = drupal_get_path('module', 'classes');
-				$teacher_field = array_key_exists('und', $user_fields->field_you_are_a_) ?
-						$user_fields->field_you_are_a_['und'][0]['value'] : "Student";
-				if($teacher_field == "Teacher"){
+				if (in_array('teacher', $user->roles)) {
 					$block['title'] = t('Created Classes');
 					$params = array($user->uid);
 					$block['content'] = array(
