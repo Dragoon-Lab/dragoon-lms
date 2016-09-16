@@ -129,7 +129,7 @@ function class_assignments_handle_assignment($code){
                 }
             }
         }
-        $echo = "you do not have access to this assignment, please contact teacher". $class_code. $class_code;
+        $echo = "you do not have access to this assignment, please contact teacher";
         return $echo;
     }
 
