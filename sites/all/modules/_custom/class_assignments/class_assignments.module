@@ -74,23 +74,25 @@ function class_assignments_handle_assignment($code){
                 $mode = $props["m"];
                 $activ = $props["a"];
                 $sm = $props["sm"];
-                $rp = $props["rp"];
-                $c = $props["c"];
                 $sec = $props["s"];
                 $is = $props["is"];
-                $grp = $props["g"];
+                $addGroup = "";
+                if(isset($props["g"])){
+                    $grp = $props["g"];
+                    $addGroup = "<input type='hidden' name='g' value='$grp'>";
+                }
 
-                $echo = "<div id='messageReader'>Creating Assignment</div><form id='nonAuthData'>
+
+                $echo = "<div id='messageReader'>Creating Assignment</div>
+                            <form id='nonAuthData'>
                                 <input type='hidden' name='u' value='$user->name'>
                                 <input type='hidden' name='p' value='$prob'>
                                 <input type='hidden' name='a' value='$activ'>
                                 <input type='hidden' name='m' value='$mode'>
                                 <input type='hidden' name='sm' value='$sm'>
                                 <input type='hidden' name='s' value='$sec'>
-                                <input type='hidden' name='c' value='$c'>
-                                <input type='hidden' name='rp' value='$rp'>
-                                <input type='hidden' name='is' value='$is'>
-                                <input type='hidden' name='g' value='$grp'>
+                                <input type='hidden' name='is' value='$is'>".
+                                $addGroup."
                             </form>";
 
                 if($props["m"] != "AUTHOR"){
