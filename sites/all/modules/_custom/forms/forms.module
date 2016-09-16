@@ -52,10 +52,7 @@ function forms_block_view($delta = ''){
 		case "create_class":
 			global $user;
 			if($user->uid){
-				$user_fields = user_load($user->uid);
-				$teacher_field = array_key_exists('und', $user_fields->field_you_are_a_) ?
-						$user_fields->field_you_are_a_['und'][0]['value'] : "Student";
-				if($teacher_field == "Teacher"){
+				if (in_array('teacher', $user->roles)) {
 					module_load_include('inc', 'forms', 'forms_create_class');
 					$block_form['title'] = t("Create a class");
 					$block_form['content'] = drupal_get_form("create_class_form");
