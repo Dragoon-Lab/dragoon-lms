@@ -54,7 +54,6 @@ function class_assignments_render_page($code){
 }
 
 function class_assignments_handle_assignment($code){
-
 	//if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
 	global $user;
 	if ($user->uid == 0){
@@ -151,7 +150,6 @@ function class_assignments_handle_assignment($code){
 		$echo = "you do not have access to this assignment, please contact teacher". $class_code. $class_code;
 		return $echo;
 	}
-
 }
 
 function class_assignments_code_load($code){
