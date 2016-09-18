@@ -36,11 +36,15 @@ function forms_block_info(){
     $block_forms['move_models'] = array(
         'info' => 'Enables moving models between user folders'
     );
+	$block_forms['create_assignment'] = array(
+		'info' => 'Creates an assignment for a teacher'
+	);
 	return $block_forms;
 }
 
 function forms_block_view($delta = ''){
 	$block_form = array();
+	$path = drupal_get_path('module', 'forms');
 	switch($delta){
 		case "dragoon_problem":
 			module_load_include('inc', 'forms', 'forms_problem_open');
@@ -99,6 +103,19 @@ function forms_block_view($delta = ''){
             $block_form['title'] = t('Copy/Move Models');
             $block_form['content'] = drupal_get_form('forms_nc_move_models');
             break;
+		case "create_assignment":
+			module_load_include('inc', 'forms', 'forms_create_assignments');
+			$block_form['subject'] = t('Create Assignment Link');
+			$form = drupal_get_form('create_assignment_form');
+			$block_form['content'] = array(
+				'#markup' => drupal_render($form),
+				'#attached' => array(
+					'js' => array($path.'/static/create_assignment.js')
+				),
+				'#prefix' => "<div id = 'dragoon_problem_wrapper' class = 'modal fade' role= 'dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>",
+				'#suffix' => "</div></div></div></div>",
+			);
+			break;
 	}
 
 	return $block_form;
@@ -190,6 +207,18 @@ function forms_form_alter(&$form, &$form_state, $form_id){
                 'data-dismiss' => 'modal',
             );
             break;
+		case "create_assignment_form":
+			$form['#actions'] = "#";
+			$form['#attributes'] = array(
+				//'onsubmit' => 'return false;',
+				'id' => 'create_assignment_form',
+			);
+			$form['#submit'] = array("create_assignment_form_submit");
+			$form['submit_button']['#attributes'] = array(
+				'data-dismiss' => 'modal',
+				'class' => array('btn btn-success form-submit'),
+			);
+			break;
 	}
 }
 

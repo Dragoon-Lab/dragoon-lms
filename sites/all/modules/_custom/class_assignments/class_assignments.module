@@ -3,136 +3,234 @@
 function class_assignments_menu(){
 	$items = array();
 	
-	$items['class/%class_assignments_code'] = array(
+	$items['class/%class_code'] = array(
 		'page callback' => 'class_assignments_render_page',
 		'page arguments' => array(1),
 		'access arguments' => array('access content'),
 		'type' => MENU_CALLBACK,
 	);
 
-    $items['assignments/%class_assignments_code'] = array(
-        'page callback' => 'class_assignments_handle_assignment',
-        'page arguments' => array(1),
-        'access arguments' => array('access content'),
-        'type' => MENU_CALLBACK
-    );
+	$items['assignments/%class_assignments_code'] = array(
+		'page callback' => 'class_assignments_handle_assignment',
+		'page arguments' => array(1),
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK
+	);
 	return $items;
 }
 
 function class_assignments_render_page($code){
-	$query = 'SELECT * FROM classes WHERE code = :code';
-	$result = db_query($query, array(':code' => $code));
-	$text = "The problem link will then be added to that class's page.  You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.";
+	global $user;
+	if(!$user->uid){
+		drupal_goto('user/login');
+	}
+	module_load_include('inc', 'class_assignments', 'class_assignments_blocks');
+
+	$query = 'SELECT * FROM classes WHERE code = :code AND created_by = :uid';
+	$result = db_query($query, array(':code' => $code, ':uid' => $user->uid));
 
 	if($result->rowCount() == 0){
 		return t('No class found');
-	} else {
-		$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
-		return '<h2>'.t($row['name']).'</h2><div>'.$text.'</div>';
 	}
+
+	$text = get_class_assignment_description();
+	/*$assignment_links_html = get_block_html(array(
+		'module' => 'class_assignments',
+		'delta' => 'assignment_links'
+	));
+	/*$model_library_html = get_block_html(array(
+		'module' => 'model_library',
+		'delta' => 'published_problems'
+	));
+	$non_class_models_html = get_block_html(array(
+		'module' => 'model_library',
+		'delta' => 'non_class_models'
+	));*/
+	$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
+	$fields = 	"<input type = 'hidden' id = 'section' value = '".$row["section"]."'></input>
+				<input type = 'hidden' id = 'userName' value = '$user->name'></input>
+				<input type = 'hidden' id = 'code' value = '".$row['code']."'></input>";
+	return '<h2>'.t($row['name']).'</h2>'.$text.$fields;
 }
 
 function class_assignments_handle_assignment($code){
 
-    //if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
-    global $user;
-    if ($user->uid == 0){
-         return l("Sign in","user/login",array('query' => drupal_get_destination()));
-    }
-    else {
+	//if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
+	global $user;
+	if ($user->uid == 0){
+		 return l("Sign in","user/login",array('query' => drupal_get_destination()));
+	}
+	else {
 
-        //Now that the user has logged in, we perform assignment handling in 3 cases
+		//Now that the user has logged in, we perform assignment handling in 3 cases
 
-        //case 1 : check if the section of the assignment belongs to the user
-        $assignment_id = $code;
+		//case 1 : check if the section of the assignment belongs to the user
+		$assignment_id = $code;
 
-        //get class code for the assignment id
-        $get_cc_q = db_select('assignments','a')
-            ->fields('a',array('class_code','problem_properties'))
-            ->condition('assignment_id',$assignment_id)
-            ->execute();
-        $cc_d = $get_cc_q->fetchAssoc();
-        $class_code = $cc_d['class_code'];
+		//get class code for the assignment id
+		$get_cc_q = db_select('assignments','a')
+			->fields('a',array('class_code','problem_properties'))
+			->condition('assignment_id',$assignment_id)
+			->execute();
+		$cc_d = $get_cc_q->fetchAssoc();
+		$class_code = $cc_d['class_code'];
 
-        //cross check with user class codes
-        $user_id = $user->uid;
-        $ret_cc_q = db_select('enrolled_users','e')
-            ->fields('e',array('code'))
-            ->condition('uid',$user_id)
-            ->execute();
-        while($cc_list=$ret_cc_q->fetchAssoc()){
-            if($cc_list['code'] == $class_code){
+		//cross check with user class codes
+		$user_id = $user->uid;
+		$ret_cc_q = db_select('enrolled_users','e')
+			->fields('e',array('code'))
+			->condition('uid',$user_id)
+			->execute();
+		while($cc_list=$ret_cc_q->fetchAssoc()){
+			if($cc_list['code'] == $class_code){
 
-                //case 2 assignment belongs to a user class
-                //so, now fetch the assignment
-                //case 2 checks the mode of the problem opened
-                //if a non author mode forwards to dragoon tutor
-                drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
+				//case 2 assignment belongs to a user class
+				//so, now fetch the assignment
+				//case 2 checks the mode of the problem opened
+				//if a non author mode forwards to dragoon tutor
+				drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
 
-                $props = json_decode($cc_d['problem_properties'],true);
-                $prob = $props["p"];
-                $mode = $props["m"];
-                $activ = $props["a"];
-                $sm = $props["sm"];
-                $rp = $props["rp"];
-                $c = $props["c"];
-                $sec = $props["s"];
-                $is = $props["is"];
-                $grp = $props["g"];
+				$props = json_decode($cc_d['problem_properties'],true);
+				$prob = $props["p"];
+				$mode = $props["m"];
+				$activ = $props["a"];
+				$sm = $props["sm"];
+				$rp = $props["rp"];
+				$c = $props["c"];
+				$sec = $props["s"];
+				$is = $props["is"];
+				$grp = $props["g"];
 
-                $echo = "<div id='messageReader'>Creating Assignment</div><form id='nonAuthData'>
-                                <input type='hidden' name='u' value='$user->name'>
-                                <input type='hidden' name='p' value='$prob'>
-                                <input type='hidden' name='a' value='$activ'>
-                                <input type='hidden' name='m' value='$mode'>
-                                <input type='hidden' name='sm' value='$sm'>
-                                <input type='hidden' name='s' value='$sec'>
-                                <input type='hidden' name='c' value='$c'>
-                                <input type='hidden' name='rp' value='$rp'>
-                                <input type='hidden' name='is' value='$is'>
-                                <input type='hidden' name='g' value='$grp'>
-                            </form>";
+				$echo = "<div id='messageReader'>Creating Assignment</div><form id='nonAuthData'>
+								<input type='hidden' name='u' value='$user->name'>
+								<input type='hidden' name='p' value='$prob'>
+								<input type='hidden' name='a' value='$activ'>
+								<input type='hidden' name='m' value='$mode'>
+								<input type='hidden' name='sm' value='$sm'>
+								<input type='hidden' name='s' value='$sec'>
+								<input type='hidden' name='c' value='$c'>
+								<input type='hidden' name='rp' value='$rp'>
+								<input type='hidden' name='is' value='$is'>
+								<input type='hidden' name='g' value='$grp'>
+							</form>";
 
-                if($props["m"] != "AUTHOR"){
-                    //redirect to dragoon
-                    //add an additional property of user name
-                    $echo = $echo."<div id='cardReader' style='display: none;'>nonAuthor</div>";
-                    return $echo;
-                }
-                else{
-                    $echo = $echo."<div id='cardReader' style='display: none;'>Author</div>";
+				if($props["m"] != "AUTHOR"){
+					//redirect to dragoon
+					//add an additional property of user name
+					$echo = $echo."<div id='cardReader' style='display: none;'>nonAuthor</div>";
+					return $echo;
+				}
+				else{
+					$echo = $echo."<div id='cardReader' style='display: none;'>Author</div>";
 
-                    //attach the folder modal
-                    $userFoldersList  = loadUserFolders2($user->name);
-                    $options = "";
-                    foreach($userFoldersList as $fid => $fname){
-                        $options = $options. "<option value='".$fid."'>".$fname."</option>";
-                    }
-                    $echo = $echo.'<div id="userOpenAuthorProb" class="modal fade" role="dialog">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                     <h4 class="modal-title">Select a folder to save your assignment model</h4>
-                                                </div>
-                                                <div class = "modal-body">
-                                                    <select id="authorDest" name="authorAssignSave" class="form-control">'.$options.'</select>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Assignment</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>';
-                    return $echo;
-                }
-            }
-        }
-        $echo = "you do not have access to this assignment, please contact teacher". $class_code. $class_code;
-        return $echo;
-    }
+					//attach the folder modal
+					$userFoldersList  = loadUserFolders2($user->name);
+					$options = "";
+					foreach($userFoldersList as $fid => $fname){
+						$options = $options. "<option value='".$fid."'>".$fname."</option>";
+					}
+					$echo = $echo.'<div id="userOpenAuthorProb" class="modal fade" role="dialog">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													 <h4 class="modal-title">Select a folder to save your assignment model</h4>
+												</div>
+												<div class = "modal-body">
+													<select id="authorDest" name="authorAssignSave" class="form-control">'.$options.'</select>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Assignment</button>
+												</div>
+											</div>
+										</div>
+									</div>';
+					return $echo;
+				}
+			}
+		}
+		$echo = "you do not have access to this assignment, please contact teacher". $class_code. $class_code;
+		return $echo;
+	}
 
 }
 
 function class_assignments_code_load($code){
 	return $code;
+}
+
+function class_code_load($code){
+	return $code;
+}
+
+function get_class_assignment_description(){
+	return '';
+}
+
+function get_block_HTML($params){
+	$block = block_load($params['module'], $params['delta']);
+	$output = _block_get_renderable_array(_block_render_blocks(array($block)));
+
+	return '<div class = "blocks '.$params['delta'].'">'.drupal_render($output).'</div>';
+}
+
+function class_assignments_block_info(){
+	$blocks = array();
+	$blocks['assignment_links'] = array(
+		'info' => 'Table of assignments created by the teacher'
+	);
+
+	$blocks['assignment_text'] = array(
+		'info' => 'Text to help teachers create assignments'
+	);
+
+	return $blocks;
+}
+
+function class_assignments_block_view($delta = ''){
+	$block = array();
+	global $user;
+
+	switch($delta){
+		case 'assignment_links':
+			$params = array(
+				'uid' => $user->uid,
+				'code' => arg(1),
+				'titles' => array('Problem', 'Assignment Links')
+			);
+			$block['title'] = t('Created Assignment Links');
+			$block['content'] = array(
+				'#markup' => get_assignments_table($params)
+			);
+			break;
+		case 'assignment_text':
+			$block['content'] = get_text();
+	}
+
+	return $block;
+}
+
+function get_assignments_table($params){
+	$query = 'SELECT c.code, a.assignment_id, a.problem FROM classes AS c JOIN assignments AS a ON c.code = a.class_code WHERE c.created_by = :uid AND c.code = :code ORDER BY a.time ASC';
+	$args = array(
+		':uid' => $params['uid'],
+		':code' => $params['code']
+	);
+	$results = db_query($query, $args);
+
+	if($results->rowCount() == 0)
+		return "There are no assignmets for this class";
+
+	$data = array();
+	$index = 0;
+	while($row = $results->fetchAssoc()){
+		$p = $row['problem'];
+		$l = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].url('assignments/'.$row['assignment_id']);
+		$data[$index++] = array($p, $l);
+	}
+
+	return create_table_html($params['titles'], $data);
+}
+
+function get_text(){
+	return "<p>To create a new problem, find the model you want to use in the menu below and click on it.  Fill out the form that appears and the problem link will then be added to that class's page.</p><p>You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.</p><p>To view the students work:<ol><li>If the problem mode was 'edit the model', ask the student to put it in a shared folder for you to view.</li><li>Otherwise, you can view their progress by clicking the 'dashboard' button.";
 }
