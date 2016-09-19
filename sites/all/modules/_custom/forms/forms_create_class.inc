@@ -5,7 +5,7 @@ function create_class_form($form, &$form_state){
 		'#title' => t('Class Name'),
 		'#description' => t('Enter name of the class, try to keep it unique by entering year or other distinguishing text'),
 		'#required' => TRUE,
-		'#maxlength' => 50,
+		'#maxlength' => 46,
 	);
 
 	$form['submit_button'] = array(
@@ -55,7 +55,7 @@ function create_class_form_validate($form, &$form_state){
 }
 
 function create_class_section($name){
-	return str_replace(" ", "_", $name);
+	return 'lms-'str_replace(" ", "_", $name);
 }
 
 function create_class_name($name){
