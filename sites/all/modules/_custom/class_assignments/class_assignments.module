@@ -54,104 +54,104 @@ function class_assignments_render_page($code){
 }
 
 function class_assignments_handle_assignment($code){
-    //if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
-    global $user;
-    if ($user->uid == 0){
-         return l("Please Sign in","user/login",array('query' => drupal_get_destination()));
-    }
-    else {
+	//if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
+	global $user;
+	if ($user->uid == 0){
+		 return l("Please Sign in","user/login",array('query' => drupal_get_destination()));
+	}
+	else {
 
-        //Now that the user has logged in, we perform assignment handling in 3 cases
+		//Now that the user has logged in, we perform assignment handling in 3 cases
 
-        //case 1 : check if the section of the assignment belongs to the user
-        $assignment_id = $code;
+		//case 1 : check if the section of the assignment belongs to the user
+		$assignment_id = $code;
 
-        //get class code for the assignment id
-        $get_cc_q = db_select('assignments','a')
-            ->fields('a',array('class_code','problem_properties'))
-            ->condition('assignment_id',$assignment_id)
-            ->execute();
-        $cc_d = $get_cc_q->fetchAssoc();
-        $class_code = $cc_d['class_code'];
+		//get class code for the assignment id
+		$get_cc_q = db_select('assignments','a')
+			->fields('a',array('class_code','problem_properties'))
+			->condition('assignment_id',$assignment_id)
+			->execute();
+		$cc_d = $get_cc_q->fetchAssoc();
+		$class_code = $cc_d['class_code'];
 
-        //cross check with user class codes
-        $user_id = $user->uid;
-        $ret_cc_q = db_select('enrolled_users','e')
-            ->fields('e',array('code'))
-            ->condition('uid',$user_id)
-            ->execute();
-        while($cc_list=$ret_cc_q->fetchAssoc()){
-            if($cc_list['code'] == $class_code){
+		//cross check with user class codes
+		$user_id = $user->uid;
+		$ret_cc_q = db_select('enrolled_users','e')
+			->fields('e',array('code'))
+			->condition('uid',$user_id)
+			->execute();
+		while($cc_list=$ret_cc_q->fetchAssoc()){
+			if($cc_list['code'] == $class_code){
 
-                //case 2 assignment belongs to a user class
-                //so, now fetch the assignment
-                //case 2 checks the mode of the problem opened
-                //if a non author mode forwards to dragoon tutor
-                drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
+				//case 2 assignment belongs to a user class
+				//so, now fetch the assignment
+				//case 2 checks the mode of the problem opened
+				//if a non author mode forwards to dragoon tutor
+				drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
 
-                $props = json_decode($cc_d['problem_properties'],true);
-                $prob = $props["p"];
-                $mode = $props["m"];
-                $activ = $props["a"];
-                $sm = $props["sm"];
-                $sec = $props["s"];
-                $is = $props["is"];
-                $addGroup = "";
-                if(isset($props["g"])){
-                    $grp = $props["g"];
-                    $addGroup = "<input type='hidden' name='g' value='$grp'>";
-                }
+				$props = json_decode($cc_d['problem_properties'],true);
+				$prob = $props["p"];
+				$mode = $props["m"];
+				$activ = $props["a"];
+				$sm = $props["sm"];
+				$sec = $props["s"];
+				$is = $props["is"];
+				$addGroup = "";
+				if(isset($props["g"])){
+					$grp = $props["g"];
+					$addGroup = "<input type='hidden' name='g' value='$grp'>";
+				}
 
 
-                $echo = "<div id='messageReader'>Creating Assignment</div>
-                            <form id='nonAuthData'>
-                                <input type='hidden' name='u' value='$user->name'>
-                                <input type='hidden' name='p' value='$prob'>
-                                <input type='hidden' name='a' value='$activ'>
-                                <input type='hidden' name='m' value='$mode'>
-                                <input type='hidden' name='sm' value='$sm'>
-                                <input type='hidden' name='s' value='$sec'>
-                                <input type='hidden' name='is' value='$is'>".
-                                $addGroup."
-                            </form>";
+				$echo = "<div id='messageReader'>Creating Assignment</div>
+							<form id='nonAuthData'>
+								<input type='hidden' name='u' value='$user->name'>
+								<input type='hidden' name='p' value='$prob'>
+								<input type='hidden' name='a' value='$activ'>
+								<input type='hidden' name='m' value='$mode'>
+								<input type='hidden' name='sm' value='$sm'>
+								<input type='hidden' name='s' value='$sec'>
+								<input type='hidden' name='is' value='$is'>".
+								$addGroup."
+							</form>";
 
-                if($props["m"] != "AUTHOR"){
-                    //redirect to dragoon
-                    //add an additional property of user name
-                    $echo = $echo."<div id='cardReader' style='display: none;'>nonAuthor</div>";
-                    return $echo;
-                }
-                else{
-                    $echo = $echo."<div id='cardReader' style='display: none;'>Author</div>";
+				if($props["m"] != "AUTHOR"){
+					//redirect to dragoon
+					//add an additional property of user name
+					$echo = $echo."<div id='cardReader' style='display: none;'>nonAuthor</div>";
+					return $echo;
+				}
+				else{
+					$echo = $echo."<div id='cardReader' style='display: none;'>Author</div>";
 
-                    //attach the folder modal
-                    $userFoldersList  = loadUserFolders2($user->name);
-                    $options = "";
-                    foreach($userFoldersList as $fid => $fname){
-                        $options = $options. "<option value='".$fid."'>".$fname."</option>";
-                    }
-                    $echo = $echo.'<div id="userOpenAuthorProb" class="modal fade" role="dialog">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                     <h4 class="modal-title">Select a folder to save your assignment model</h4>
-                                                </div>
-                                                <div class = "modal-body">
-                                                    <select id="authorDest" name="authorAssignSave" class="form-control">'.$options.'</select>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Assignment</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>';
-                    return $echo;
-                }
-            }
-        }
-        $echo = "You do not have access to this assignment. Please make sure you are enrolled in this class. If you are not, please contact your teacher for the class join code.";
-        return $echo;
-    }
+					//attach the folder modal
+					$userFoldersList  = loadUserFolders2($user->name);
+					$options = "";
+					foreach($userFoldersList as $fid => $fname){
+						$options = $options. "<option value='".$fid."'>".$fname."</option>";
+					}
+					$echo = $echo.'<div id="userOpenAuthorProb" class="modal fade" role="dialog">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													 <h4 class="modal-title">Select a folder to save your assignment model</h4>
+												</div>
+												<div class = "modal-body">
+													<select id="authorDest" name="authorAssignSave" class="form-control">'.$options.'</select>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Assignment</button>
+												</div>
+											</div>
+										</div>
+									</div>';
+					return $echo;
+				}
+			}
+		}
+		$echo = "You do not have access to this assignment. Please make sure you are enrolled in this class. If you are not, please contact your teacher for the class join code.";
+		return $echo;
+	}
 }
 
 function class_assignments_code_load($code){
