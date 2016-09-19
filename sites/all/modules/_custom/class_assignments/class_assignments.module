@@ -193,7 +193,7 @@ function class_assignments_block_view($delta = ''){
 			$params = array(
 				'uid' => $user->uid,
 				'code' => arg(1),
-				'titles' => array('Problem', 'Assignment Links')
+				'titles' => array('Assignment Name', 'Problem', 'Assignment Links')
 			);
 			$block['title'] = t('Created Assignment Links');
 			$block['content'] = array(
@@ -208,7 +208,7 @@ function class_assignments_block_view($delta = ''){
 }
 
 function get_assignments_table($params){
-	$query = 'SELECT c.code, a.assignment_id, a.problem FROM classes AS c JOIN assignments AS a ON c.code = a.class_code WHERE c.created_by = :uid AND c.code = :code ORDER BY a.time ASC';
+	$query = 'SELECT c.code, a.assignment_id, a.assignment_name, a.problem FROM classes AS c JOIN assignments AS a ON c.code = a.class_code WHERE c.created_by = :uid AND c.code = :code ORDER BY a.time ASC';
 	$args = array(
 		':uid' => $params['uid'],
 		':code' => $params['code']
@@ -221,9 +221,10 @@ function get_assignments_table($params){
 	$data = array();
 	$index = 0;
 	while($row = $results->fetchAssoc()){
+		$a = $row['assignment_name'];
 		$p = $row['problem'];
 		$l = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].url('assignments/'.$row['assignment_id']);
-		$data[$index++] = array($p, $l);
+		$data[$index++] = array($a, $p, $l);
 	}
 
 	return create_table_html($params['titles'], $data);
