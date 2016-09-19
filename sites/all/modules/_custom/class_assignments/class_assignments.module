@@ -218,7 +218,7 @@ function get_assignments_table($params){
 	$results = db_query($query, $args);
 
 	if($results->rowCount() == 0)
-		return "There are no assignmets for this class";
+		return "There are no problems for this class";
 
 	$data = array();
 	$index = 0;
@@ -233,5 +233,5 @@ function get_assignments_table($params){
 }
 
 function get_text(){
-	return "<p>To create a new problem, find the model you want to use in the menu below and click on it.  Fill out the form that appears and the problem link will then be added to that class's page.</p><p>You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.</p><p>To view the students work:<ol><li>If the problem mode was 'edit the model', ask the student to put it in a shared folder for you to view.</li><li>Otherwise, you can view their progress by clicking the 'dashboard' button.";
+	return "<p>To create a new problem, find the model you want to use in the menu below and click on it.  Fill out the form that appears and the problem link will then be added to that class's page.</p><p>You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the problem.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.</p><p>To view the students work:<ol><li>If the problem mode was 'edit the model', ask the student to put it in a shared folder for you to view.</li><li>Otherwise, you can view their progress by clicking the 'dashboard' button.";
 }
