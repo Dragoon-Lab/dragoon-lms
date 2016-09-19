@@ -25,5 +25,5 @@ jQuery(document).ready(function($) {
         form.submit();
     });
 
-    $('#messageReader').html('Assignment opened in new tab. For reopening please reload or refer to the teacher given link');
+    $('#messageReader').html('Your problem has been opened in new tab. If no new tab appeared, disable popup blocking for this website and try again. To open the problem again, refresh this page or visit the link again.');
 });
