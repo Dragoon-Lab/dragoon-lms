@@ -37,13 +37,16 @@
 
 	var createSession = function(p, s){
 		var u = $("#userName").val();
+		//var url = "http://localhost/code/global.php";
+		var url = "https://dragoon.asu.edu/devel/global.php";
 		$.ajax({
 			type: "POST",
-			url: "",
+			url: url,
 			data: {
 				'u': u,
 				'p': p,
-				's': s
+				's': s,
+				't': "copyNCModelToSection"
 			},
 			async: false,
 			success: function(data){
