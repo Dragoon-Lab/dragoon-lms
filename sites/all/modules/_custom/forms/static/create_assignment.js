@@ -11,7 +11,8 @@
 	var submitForm = function(){
 		var form = document.forms['create_assignment_form'];
 		if(form.create_session.value){
-			var result = createSession(form.p.value, form.s.value);
+			var g = form.g && form.g.value ? form.g.value : "";
+			var result = createSession(form.p.value, form.s.value, g);
 			form.create_session.value += result;
 		}
 
@@ -24,7 +25,7 @@
 		var id = "#" + event.target.id;
 		form.problem.value = $(id).attr('key');
 		form.pname.value = $(id).attr('key');
-		
+
 		form.p.value =$(id).attr('value');
 		form.cc.value = $('#code').val();
 		if($(event.target).attr("class").indexOf("nc") > -1){
@@ -35,7 +36,7 @@
 		}
 	};
 
-	var createSession = function(p, s){
+	var createSession = function(p, s, g){
 		var u = $("#userName").val();
 		//var url = "http://localhost/code/global.php";
 		var url = "https://dragoon.asu.edu/devel/global.php";
@@ -46,6 +47,7 @@
 				'u': u,
 				'p': p,
 				's': s,
+				'g': g,
 				't': "copyNCModelToSection"
 			},
 			async: false,
