@@ -195,7 +195,7 @@ function class_assignments_block_view($delta = ''){
 			$params = array(
 				'uid' => $user->uid,
 				'code' => arg(1),
-				'titles' => array('Assignment Name', 'Problem', 'Assignment Links')
+				'titles' => array('Assignment Name', 'Model', 'Assignment Links')
 			);
 			$block['title'] = t('Created Assignment Links');
 			$block['content'] = array(
