@@ -37,7 +37,7 @@ function class_assignments_handle_assignment($code){
     //if the user is not logged in forward show the login link and once he logs in bring the user to the particular assignment
     global $user;
     if ($user->uid == 0){
-         return l("Sign in","user/login",array('query' => drupal_get_destination()));
+         return l("Please Sign in","user/login",array('query' => drupal_get_destination()));
     }
     else {
 
@@ -129,7 +129,7 @@ function class_assignments_handle_assignment($code){
                 }
             }
         }
-        $echo = "you do not have access to this assignment, please contact teacher";
+        $echo = "You do not have access to this assignment. Please make sure you are enrolled in this class. If you are not, please contact your teacher for the class join code.";
         return $echo;
     }
 

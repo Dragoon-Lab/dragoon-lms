@@ -32,7 +32,7 @@ function model_library_block_view($delta = ""){
 			break;
         case "non_class_models":
             global $user;
-            $block['subject'] = t('Non Class Models');
+            $block['subject'] = t('Custom Models');
             $parameters = array(
                 'id' => 'problem',
                 'href' => '#',
