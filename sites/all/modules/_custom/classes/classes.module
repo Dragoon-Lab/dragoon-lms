@@ -83,7 +83,7 @@ function get_classes_table_html($delta = '', $params){
 		if($copyCode){
 			//give href to teacher class page
 			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
-			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-dasboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
+			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-dashboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
 		} else {
 			//give href to student class page
 			$a = t($row['name']);
