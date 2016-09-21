@@ -55,14 +55,14 @@ function get_classes_table_html($delta = '', $params){
 	$returnEmpty = '';
 	switch($delta){
 		case 'created_classes':
-			$query = 'SELECT name, code FROM {classes} WHERE created_by = :uid';
+			$query = 'SELECT name, code, section FROM {classes} WHERE created_by = :uid';
 			$args = array(':uid' => $params[0]);
 			$titles = array("Class Name", "Class Join Code");
 			$returnEmpty = 'No class has been created by you';
 			$copyCode = TRUE;
 			break;
 		case 'enrolled_classes':
-			$query = 'SELECT c.name, u.code FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
+			$query = 'SELECT c.name, u.code, c.section FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
 			$args = array(':uid' => $params[0]);
 			$titles = array("Class Name", "Class Join Code");
 			$returnEmpty = 'Please enroll in a class to see your classes here.';
@@ -79,12 +79,15 @@ function get_classes_table_html($delta = '', $params){
 	while($row = $results->fetchAssoc()){
 		$c = "<span>".t($row['code'])."</span>";
 		$a = '';
+		$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
 		if($copyCode){
 			//give href to teacher class page
-			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer">'.t($row['name']).'</a>';
+			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
+			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-dasboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
 		} else {
 			//give href to student class page
 			$a = t($row['name']);
+			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-leader&s='.$row['section'].'" title = "Check Your Progress" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
 		}
 		$data[$index++] = array($a, $c);
 	}
