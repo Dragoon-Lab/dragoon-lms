@@ -19,38 +19,38 @@ function class_assignments_menu(){
 	return $items;
 }
 
-function class_assignments_render_page($code){
+function class_assignments_render_page($class){
 	global $user;
 	if(!$user->uid){
 		drupal_goto('user/login');
 	}
-	module_load_include('inc', 'class_assignments', 'class_assignments_blocks');
-
-	$query = 'SELECT * FROM classes WHERE code = :code AND created_by = :uid';
-	$result = db_query($query, array(':code' => $code, ':uid' => $user->uid));
-
-	if($result->rowCount() == 0){
-		return t('No class found');
+	//module_load_include('inc', 'class_assignments', 'class_assignments_blocks');
+	//echo json_encode($class);
+	if(empty($class)){
+		return '<h3>'.t('No class found').'</h3>';
 	}
 
-	$text = get_class_assignment_description();
-	/*$assignment_links_html = get_block_html(array(
+	$text = get_text($class['section']);
+
+	$assignment_links_html = get_block_html(array(
 		'module' => 'class_assignments',
 		'delta' => 'assignment_links'
 	));
-	/*$model_library_html = get_block_html(array(
+	$model_library_html = get_block_html(array(
 		'module' => 'model_library',
 		'delta' => 'published_problems'
 	));
 	$non_class_models_html = get_block_html(array(
 		'module' => 'model_library',
 		'delta' => 'non_class_models'
-	));*/
-	$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
+	));
+	//$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
 	$fields = 	"<input type = 'hidden' id = 'section' value = '".$row["section"]."'></input>
 				<input type = 'hidden' id = 'userName' value = '$user->name'></input>
 				<input type = 'hidden' id = 'code' value = '".$row['code']."'></input>";
-	return '<h2>'.t($row['name']).'</h2>'.$text.$fields;
+	$html = '<h2>'.t($class['name']).'</h2>'.$fields.$text;
+	$html .= $assignment_links_html.$model_library_html.$non_class_models_html;
+	return $html;
 }
 
 function class_assignments_handle_assignment($code){
@@ -159,7 +159,12 @@ function class_assignments_code_load($code){
 }
 
 function class_code_load($code){
-	return $code;
+	global $user;
+
+	$query = 'SELECT * FROM classes WHERE code = :code AND created_by = :uid';
+	$result = db_query($query, array(':code' => $code, ':uid' => $user->uid));
+
+	 return $result->fetchAssoc();
 }
 
 function get_class_assignment_description(){
@@ -170,17 +175,13 @@ function get_block_HTML($params){
 	$block = block_load($params['module'], $params['delta']);
 	$output = _block_get_renderable_array(_block_render_blocks(array($block)));
 
-	return '<div class = "blocks '.$params['delta'].'">'.drupal_render($output).'</div>';
+	return '<section id = "block-'.$params['module'].'-'.$params['delta'].'" class = "blocks blocks-'.$params['delta'].' contextual-links-region">'.drupal_render($output).'</section>';
 }
 
 function class_assignments_block_info(){
 	$blocks = array();
 	$blocks['assignment_links'] = array(
 		'info' => 'Table of assignments created by the teacher'
-	);
-
-	$blocks['assignment_text'] = array(
-		'info' => 'Text to help teachers create assignments'
 	);
 
 	return $blocks;
@@ -202,8 +203,6 @@ function class_assignments_block_view($delta = ''){
 				'#markup' => get_assignments_table($params)
 			);
 			break;
-		case 'assignment_text':
-			$block['content'] = get_text();
 	}
 
 	return $block;
@@ -232,6 +231,8 @@ function get_assignments_table($params){
 	return create_table_html($params['titles'], $data);
 }
 
-function get_text(){
-	return "<p>To create a new problem, find the model you want to use in the menu below and click on it.  Fill out the form that appears and the problem link will then be added to that class's page.</p><p>You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.</p><p>To view the students work:<ol><li>If the problem mode was 'edit the model', ask the student to put it in a shared folder for you to view.</li><li>Otherwise, you can view their progress by clicking the 'dashboard' button.";
+function get_text($section){
+	$url = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME']."/lms/log/dashboard.php?t=lms-dashboard&s=".$section;
+	$html = "<p>To create a new problem, find the model you want to use in the menu below and click on it.  Fill out the form that appears and the problem link will then be added to that class's page.</p><p>You can copy the link and send it to your students using your preferred channel of communication, and they can click it to begin the assignment.  Note: this website does not send the link to the students.  You must send it to them or they will not see it.</p><p>To view the students work:<ol><li>If the problem mode was 'edit the model', ask the student to put it in a shared folder for you to view.</li><li>Otherwise, you can view their progress by clicking the 'dashboard' button.</li></ol></p><div class = 'right'><a href = '$url' title = \"Check Student's Progress\" target = '_blank'><input class = 'btn btn-success btn-md' type = 'submit' value = 'Open Dashboard'/></a></div><div class = 'clear'></div>";
+	return $html;
 }

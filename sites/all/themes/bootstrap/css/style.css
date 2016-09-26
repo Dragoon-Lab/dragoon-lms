@@ -109,3 +109,8 @@
     color: #ffffff;
     background-color: #5cb85c;
 }
+.green{background-color: #5cb85c;}
+.right{float: right;}
+.left{float: left;}
+.clear{clear: both;}
+.block-title{margin-top:20px !important;}
