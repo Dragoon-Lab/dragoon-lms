@@ -7,7 +7,6 @@
 (function ($) {
     $(document).ready(function(){
 
-
         $('#tab2showteam').click(function (e) {
             console.log("first tab clicked");
             e.preventDefault();
@@ -31,6 +30,20 @@
             }
 
         }
+        //this functionality is not related to tabs
+        //we temporarily fit a place for this code which replaces the asu username with drupal username
+        var is_logged_in = $('#asu_hdr_sso').text() == "Sign Out";
+
+        if(is_logged_in){
+            console.log("should update asu user name with dragoon user name",drupal_username);
+            //find the division where asu username is being displayed, remove that li and add a drupal username li
+            var check_for_logout = $('#asu_login_module li:first a').html();
+            if(check_for_logout != "Sign Out")
+                $('#asu_login_module li:first').html(drupal_username);
+                console.log("new menu",$('#asu_universal_nav_new').html());
+        }
+
+
 
     });
 })(jQuery);
