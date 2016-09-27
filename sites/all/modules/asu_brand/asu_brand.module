@@ -49,7 +49,7 @@ function asu_brand_init() {
 
     //add drupal username as part of js for use in other places of js like in contact tabs
     global $user;
-    if($user->name)
+    if(isset($user->name))
         $js .= 'var drupal_username = "'. $user->name .'"';
 
     drupal_add_js($js, array('type' => 'inline', 'scope' => 'header', 'group' => JS_THEME, 'weight' => -10));
