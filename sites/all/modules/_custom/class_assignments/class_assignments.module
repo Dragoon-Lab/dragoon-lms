@@ -97,13 +97,13 @@ function class_assignments_handle_assignment($code){
 				$sec = $props["s"];
 				$is = $props["is"];
 				$addGroup = "";
-				if(isset($props["g"])){
+				if(isset($props["g"]) && $props["g"] != ""){
 					$grp = $props["g"];
 					$addGroup = "<input type='hidden' name='g' value='$grp'>";
 				}
 
 
-				$echo = "<div id='messageReader'>Creating Assignment</div>
+				$echo = "<div id='messageReader'>Creating Problem</div>
 							<form id='nonAuthData'>
 								<input type='hidden' name='u' value='$user->name'>
 								<input type='hidden' name='p' value='$prob'>
@@ -134,13 +134,13 @@ function class_assignments_handle_assignment($code){
 										<div class="modal-dialog">
 											<div class="modal-content">
 												<div class="modal-header">
-													 <h4 class="modal-title">Select a folder to save your assignment model</h4>
+													 <h4 class="modal-title">Select a folder to save your problem model</h4>
 												</div>
 												<div class = "modal-body">
 													<select id="authorDest" name="authorAssignSave" class="form-control">'.$options.'</select>
 												</div>
 												<div class="modal-footer">
-													<button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Assignment</button>
+													<button type="button" class="btn btn-success" data-dismiss="modal" id="openAuthorAssign">Open Problem</button>
 												</div>
 											</div>
 										</div>
@@ -149,7 +149,7 @@ function class_assignments_handle_assignment($code){
 				}
 			}
 		}
-		$echo = "You do not have access to this assignment. Please make sure you are enrolled in this class. If you are not, please contact your teacher for the class join code.";
+		$echo = "You do not have access to this problem. Please make sure you are enrolled in this class. If you are not, please contact your teacher for the class join code.";
 		return $echo;
 	}
 }
@@ -196,9 +196,9 @@ function class_assignments_block_view($delta = ''){
 			$params = array(
 				'uid' => $user->uid,
 				'code' => arg(1),
-				'titles' => array('Assignment Name', 'Model', 'Assignment Links')
+				'titles' => array('Problem Name', 'Model', 'Problem Links')
 			);
-			$block['title'] = t('Created Assignment Links');
+			$block['title'] = t('Created Problem Links');
 			$block['content'] = array(
 				'#markup' => get_assignments_table($params)
 			);
@@ -217,7 +217,7 @@ function get_assignments_table($params){
 	$results = db_query($query, $args);
 
 	if($results->rowCount() == 0)
-		return "There are no assignmets for this class";
+		return "There are no problems for this class";
 
 	$data = array();
 	$index = 0;
