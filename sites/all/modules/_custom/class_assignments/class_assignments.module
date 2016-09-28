@@ -45,9 +45,9 @@ function class_assignments_render_page($class){
 		'delta' => 'non_class_models'
 	));
 	//$row = $result->fetchAssoc(); //doing it here because there should be one class only with one code due to uniqueness of class code
-	$fields = 	"<input type = 'hidden' id = 'section' value = '".$row["section"]."'></input>
+	$fields = 	"<input type = 'hidden' id = 'section' value = '".$class["section"]."'></input>
 				<input type = 'hidden' id = 'userName' value = '$user->name'></input>
-				<input type = 'hidden' id = 'code' value = '".$row['code']."'></input>";
+				<input type = 'hidden' id = 'code' value = '".$class['code']."'></input>";
 	$html = '<h2>'.t($class['name']).'</h2>'.$fields.$text;
 	$html .= $assignment_links_html.$model_library_html.$non_class_models_html;
 	return $html;
