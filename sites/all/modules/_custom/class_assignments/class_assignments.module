@@ -164,7 +164,11 @@ function class_code_load($code){
 	$query = 'SELECT * FROM classes WHERE code = :code AND created_by = :uid';
 	$result = db_query($query, array(':code' => $code, ':uid' => $user->uid));
 
-	 return $result->fetchAssoc();
+	while($row = $result->fetchAssoc()){
+		if($row['code'] == $code){
+			return $row;
+		}
+	}
 }
 
 function get_class_assignment_description(){
@@ -222,10 +226,12 @@ function get_assignments_table($params){
 	$data = array();
 	$index = 0;
 	while($row = $results->fetchAssoc()){
-		$a = $row['assignment_name'];
-		$p = $row['problem'];
-		$l = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].url('assignments/'.$row['assignment_id']);
-		$data[$index++] = array($a, $p, $l);
+		if($row['code'] == $params['code']){
+			$a = $row['assignment_name'];
+			$p = $row['problem'];
+			$l = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].url('assignments/'.$row['assignment_id']);
+			$data[$index++] = array($a, $p, $l);
+		}
 	}
 
 	return create_table_html($params['titles'], $data);

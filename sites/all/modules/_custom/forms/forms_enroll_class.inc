@@ -20,19 +20,31 @@ function enroll_class_form($form, &$form_state){
 
 function enroll_class_form_validate($form, &$form_state){
 	if($form_state['values']['class_code'] != ''){
-		$results = db_query('SELECT name FROM {classes} WHERE code = :code', array(":code" => $form_state['values']['class_code']));
+		$results = db_query("SELECT code, name FROM {classes} WHERE code = :code", array(':code' => $form_state['values']['class_code']));
 		if($results->rowCount() == 0){
 			form_set_error('class_code', t('No class could be found with this class join code.'));
 		} else {
-			global $user;
-			$query = "SELECT ueid FROM {enrolled_users} WHERE code = :code AND uid = :uid";
-			$args = array(
-				':code' => $form_state['values']['class_code'],
-				':uid' => $user->uid
-			);
-			$result = db_query($query, $args);
-			if($result->rowCount() > 0){
-				form_set_error('class_code', t('Can not enroll you in this class as you are already enrolled.'));
+			$flag = false;
+
+			//checking case sensitiveness of the code as mysql returns case insensitive results for all column values
+			while($row = $results->fetchAssoc()){
+				if($row['code'] == $form_state['values']['class_code']){
+					$flag = true;
+				}
+			}
+			if($flag){
+				global $user;
+				$query = "SELECT ueid FROM {enrolled_users} WHERE code = :code AND uid = :uid";
+				$args = array(
+					':code' => $form_state['values']['class_code'],
+					':uid' => $user->uid
+				);
+				$result = db_query($query, $args);
+				if($result->rowCount() > 0){
+					form_set_error('class_code', t('Can not enroll you in this class as you are already enrolled.'));
+				}
+			} else {
+				form_set_error('class_code', t('No class could be found with this class join code.'));
 			}
 		}
 	}

@@ -20,7 +20,18 @@ function create_class_form($form, &$form_state){
 function create_class_form_submit($form, &$form_state){
 	global $user;
 	module_load_include('inc', 'forms', 'forms_utils');
-	$code = get_code();
+	$flag = true;
+	$code = "";
+
+	//checking uniqueness of the class code due to case insensitive values in mysql
+	while($flag){
+		$code = get_code();
+		$query = 'SELECT * FROM classes WHERE code = :code';
+		$result = db_query($query, array(':code' => $code));
+		if($result->rowCount() == 0)
+			$flag = false;
+	}
+
 	db_insert('classes')
 		-> fields(array(
 			'created_by' => $user->uid,
