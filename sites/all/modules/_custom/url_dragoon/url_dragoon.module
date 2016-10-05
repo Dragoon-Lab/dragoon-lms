@@ -4,7 +4,7 @@ function url_dragoon_menu(){
 	$items = array();
 
 	$items['admin/config/search/dragoonURL'] = array(
-		'title' => t('Set URL access for Dragoon'),
+		'title' => t('URL access for Dragoon'),
 		'description' => 'Page to set the custom string of the Dragoon URL',
 		'page callback' => 'drupal_get_form',
 		'page arguments' => array('url_dragoon_admin_page'),
