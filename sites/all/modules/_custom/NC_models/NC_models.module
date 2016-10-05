@@ -73,7 +73,7 @@
     }
 
     function sendGroup($g){
-        $url = 'http://localhost/LaitsV3/www/global.php';
+        $url = get_path()['url'].'global.php';
         //$url = 'https://dragoon.asu.edu/lms/global.php';
         $data = array('t' => 'reqNonClassProblems', 'g' => $g);
 

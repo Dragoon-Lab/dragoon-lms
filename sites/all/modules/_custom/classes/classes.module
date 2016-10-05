@@ -79,15 +79,16 @@ function get_classes_table_html($delta = '', $params){
 	while($row = $results->fetchAssoc()){
 		$c = "<span>".t($row['code'])."</span>";
 		$a = '';
-		$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
+		//$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
+		$serverURL = get_path()['url'];
 		if($copyCode){
 			//give href to teacher class page
 			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
-			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-dashboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
+			$c = '<a href = "'.$serverURL.'log/dashboard.php?t=lms-dashboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
 		} else {
 			//give href to student class page
 			$a = t($row['name']);
-			$c = '<a href = "'.$serverURL.'/lms/log/dashboard.php?t=lms-leader&s='.$row['section'].'" title = "Check Your Progress" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
+			$c = '<a href = "'.$serverURL.'log/dashboard.php?t=lms-leader&s='.$row['section'].'" title = "Check Your Progress" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
 		}
 		$data[$index++] = array($a, $c);
 	}

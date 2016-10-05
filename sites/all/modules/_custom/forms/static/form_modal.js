@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 		var form = document.forms['dragoon_problem_form'];
 		if(form.u && form.u.value.indexOf("anon") >= 0)
 			form.u.value = "anon-"+ date.toString();
-		form.setAttribute("action", "https://dragoon.asu.edu/devel/index.php");
+		form.setAttribute("action", $("#dragoon_url").val()+"index.php");
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
 

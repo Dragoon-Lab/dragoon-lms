@@ -39,7 +39,7 @@
 	var createSession = function(p, s, g){
 		var u = $("#userName").val();
 		//var url = "http://localhost/code/global.php";
-		var url = "https://dragoon.asu.edu/devel/global.php";
+		var url = $("#dragoon_url").val()+"global.php";
 		$.ajax({
 			type: "POST",
 			url: url,
