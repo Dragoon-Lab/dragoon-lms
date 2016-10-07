@@ -19,6 +19,10 @@ function class_assignments_menu(){
 	return $items;
 }
 
+function class_assignments_init(){
+	drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
+}
+
 function class_assignments_render_page($class){
 	global $user;
 	if(!$user->uid){
@@ -87,7 +91,6 @@ function class_assignments_handle_assignment($code){
 				//so, now fetch the assignment
 				//case 2 checks the mode of the problem opened
 				//if a non author mode forwards to dragoon tutor
-				drupal_add_js(drupal_get_path('module', 'class_assignments').'/static/assign_handle.js');
 
 				$props = json_decode($cc_d['problem_properties'],true);
 				$prob = $props["p"];
@@ -194,6 +197,7 @@ function class_assignments_block_info(){
 function class_assignments_block_view($delta = ''){
 	$block = array();
 	global $user;
+	$path = drupal_get_path('modules', 'table');
 
 	switch($delta){
 		case 'assignment_links':
@@ -204,7 +208,10 @@ function class_assignments_block_view($delta = ''){
 			);
 			$block['title'] = t('Created Problem Links');
 			$block['content'] = array(
-				'#markup' => get_assignments_table($params)
+				'#markup' => get_assignments_table($params),
+				'#attached' => array(
+					'css' => array($path.'/static/table.css')
+				)
 			);
 			break;
 	}

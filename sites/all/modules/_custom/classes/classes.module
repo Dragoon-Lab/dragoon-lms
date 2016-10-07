@@ -15,6 +15,7 @@ function classes_block_info(){
 function classes_block_view($delta = ''){
 	$block = array();
 	global $user;
+	$path = drupal_get_path('module', 'table');
 
 	switch($delta){
 		case 'created_classes':
@@ -26,6 +27,9 @@ function classes_block_view($delta = ''){
 					$params = array($user->uid);
 					$block['content'] = array(
 						'#markup' => get_classes_table_html($delta, $params),
+						'#attached' => array(
+							'css' => array($path.'/static/table.css')
+						)
 					);
 				} else {
 					$block['content'] = "";
@@ -36,7 +40,12 @@ function classes_block_view($delta = ''){
 			$block['title'] = t('Enrolled Classes');
 			if($user->uid){
 				$params = array($user->uid);
-				$block['content'] = get_classes_table_html($delta, $params);
+				$block['content'] = array(
+					'#markup' => get_classes_table_html($delta, $params),
+					'#attached' => array(
+						'css' => array($path.'/static/table.css')
+					)
+				);
 			} else {
 				$query = drupal_get_destination();
 				drupal_goto('user/login');
