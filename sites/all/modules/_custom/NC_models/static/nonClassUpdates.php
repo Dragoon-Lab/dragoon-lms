@@ -1,6 +1,6 @@
 <?php
-//define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
-define('DRUPAL_ROOT', '/home/laits/public_html/');
+define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
+//define('DRUPAL_ROOT', '/home/laits/public_html/');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
@@ -194,6 +194,28 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                     $usermail = $usermail['mail'];
                     echo $userName."-".$usermail.",";
                 }
+                break;
+            case "renameFolder":
+                $old_folder_id = $_REQUEST["old_folder_id"];
+                $new_folder_id = $_REQUEST["new_folder_id"];
+                $new_folder_name = $_REQUEST["new_folder_name"];
+
+                $query =  db_update('folders')
+                    ->fields(array(
+                        'folder_id' => $new_folder_id,
+                        'folder_name' => $new_folder_name,
+                    ))
+                    ->condition('folder_id',$old_folder_id)
+                    ->execute();
+
+                $query2 =  db_update('shared_members')
+                    ->fields(array(
+                        'folder_id' => $old_folder_id,
+                    ))
+                    ->condition('folder_id',$new_folder_id)
+                    ->execute();
+                if($query && $query2)
+                    echo "success";
                 break;
         }
     }
