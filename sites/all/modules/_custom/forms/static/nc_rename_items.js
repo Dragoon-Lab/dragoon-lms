@@ -62,8 +62,7 @@ jQuery(document).ready(function($) {
         //make a call to Dragoon API to get models for the current folder
         $.ajax({
             type: "POST",
-            url: "http://localhost/LaitsV3/www/global.php",
-            //url: "https://dragoon.asu.edu/lms/global.php",
+            url: $("#dragoon_url").val()+"global.php",
             data: {
                 "t": "reqNonClassProblems",
                 "g": current_folder
@@ -162,8 +161,7 @@ jQuery(document).ready(function($) {
 
         $.ajax({
             type: "POST",
-            url: "http://localhost/LaitsV3/www/global.php",
-            //url: "https://dragoon.asu.edu/lms/global.php",
+            url: $("#dragoon_url").val()+"global.php",
             data: input,
             success: function (data) {
                 console.log("renamed", data);
@@ -173,7 +171,5 @@ jQuery(document).ready(function($) {
                 console.log("rename failed", data);
             }
         });
-    };{
-
-    }
+    };
 });
