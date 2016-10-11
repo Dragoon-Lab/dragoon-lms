@@ -5,7 +5,8 @@ jQuery(document).ready(function($) {
     var action = $('#cardReader').text();
     var form = document.forms['nonAuthData'];
 	if(form){
-		form.setAttribute("action", "http://localhost/Laitsv3/www/index.php");
+        var url = $("#dragoon_url").val()+"index.php";
+        form.setAttribute("action", url);
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
 		if(action == "nonAuthor"){

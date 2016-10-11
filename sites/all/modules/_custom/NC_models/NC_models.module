@@ -74,7 +74,6 @@
 
     function sendGroup($g){
         $url = get_path()['url'].'global.php';
-        //$url = 'https://dragoon.asu.edu/lms/global.php';
         $data = array('t' => 'reqNonClassProblems', 'g' => $g);
 
         $options = array(
