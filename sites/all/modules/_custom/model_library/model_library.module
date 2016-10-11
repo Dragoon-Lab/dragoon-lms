@@ -6,15 +6,17 @@ function model_library_block_info(){
 		'info' => 'Block for published problems'
 	);
     $blocks['non_class_models'] = array(
-      'info' => 'Block lists non class models'
+      'info' => 'Block lists non class models',
+	  'cache' => 'DRUPAL_CACHE_PER_USER'
     );
     return $blocks;
 }
 
 function model_library_block_view($delta = ""){
 	$block = array();
-	switch ($delta){
+	$path = drupal_get_path('module', 'nested_accordion');
 
+	switch ($delta){
 		case "published_problems":
             $block['subject'] = t('Model Library');
 			$parameters = array(
@@ -26,9 +28,16 @@ function model_library_block_view($delta = ""){
 //				'otherHref' => ' #drag-main-sec',
 				'otherTags' => 'class = "dragoon_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
 			);
-			$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/devel/public_problem_index.json');
-            //$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
-            $block['content'] = getHTMLStructure($json, $parameters);
+			$dragoon_path = get_path();
+			$json = file_get_contents($dragoon_path['url'].'public_problem_index.json');
+			//$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
+			$block['content'] = array(
+				'#markup' => getHTMLStructure($json, $parameters),
+				'#attached' => array(
+					'js' => array($path.'/static/accordion.js'),
+					'css' => array($path.'/static/accordion.css')
+				)
+			);
 			break;
         case "non_class_models":
             global $user;
@@ -44,11 +53,17 @@ function model_library_block_view($delta = ""){
             );
             if(user_is_logged_in()) {
                 $json = loadNCModels($user->name,0);
-                $block['content'] = getHTMLStructure($json, $parameters);
+                $content = getHTMLStructure($json, $parameters);
 				if(arg(0) != "class"){
-                	$additional = createAdditionalBlocks($block['content']);
-                	$block['content'] = $block['content'].$additional;
+					$content .= createAdditionalBlocks($content);
 				}
+				$block['content'] = array(
+					'#markup' => $content,
+					'#attached' => array(
+						'js' => array($path.'/static/accordion.js'),
+						'css' => array($path.'/static/accordion.css')
+					)
+				);
             }
             else
                 $block['content'] = "Please Login to check your non class models";

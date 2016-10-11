@@ -1,7 +1,7 @@
 <?php
 
 function create_table_html($titles, $data){
-	drupal_add_css(drupal_get_path('module', 'table').'/static/table.css');
+//	drupal_add_css(drupal_get_path('module', 'table').'/static/table.css');
 	$count = count($titles);
 	$width = 100/$count;
 	$str = '<table class = "formatted_table"><tr>';

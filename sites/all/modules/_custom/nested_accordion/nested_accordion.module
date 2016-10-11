@@ -2,8 +2,8 @@
 	function getHTMLStructure(/* object */ $json, /* array */ $parameters){
 		$GLOBALS['counter'] = 1;
 		$data = json_decode($json, true);
-		drupal_add_js(drupal_get_path('module', 'nested_accordion').'/static/accordion.js');
-		drupal_add_css(drupal_get_path('module', 'nested_accordion').'/static/accordion.css');
+		//drupal_add_js(drupal_get_path('module', 'nested_accordion').'/static/accordion.js');
+		//drupal_add_css(drupal_get_path('module', 'nested_accordion').'/static/accordion.css');
 		return substr(getString($data, '', $parameters), 0 , -13);
 	}
 

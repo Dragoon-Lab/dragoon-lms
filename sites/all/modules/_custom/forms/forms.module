@@ -48,10 +48,20 @@ function forms_block_view($delta = ''){
 	switch($delta){
 		case "dragoon_problem":
 			module_load_include('inc', 'forms', 'forms_problem_open');
-			drupal_add_js(drupal_get_path('module', 'forms').'/static/form_modal.js');
+			//$path = (drupal_get_path('module', 'forms'););
 			//drupal_add_css(drupal_get_path('module', 'forms').'/static/modal.css');
+			$form = drupal_get_form('problem_form');
 			$block_form['title'] = t("Start Problem");
-			$block_form['content'] = drupal_get_form('problem_form');
+			$block_form['content'] = array(
+				'#markup' => drupal_render($form),
+				'#attached' => array(
+					'js' => array(
+						$path.'/static/form_modal.js'
+					)
+				),
+				'#prefix' => "<div id = 'dragoon_problem_wrapper' class = 'modal fade' role= 'dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>",
+				'#suffix' => "</div></div></div></div></div>"
+			);
 			break;
 		case "create_class":
 			global $user;
@@ -122,8 +132,6 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 	switch($form_id){
 		case "problem_form":
 			$form['#action'] = '#';
-			$form['#prefix'] = "<div id = 'dragoon_problem_wrapper' class = 'modal fade' role= 'dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
-			$form['#suffix'] = "</div></div></div></div></div>";
 			$form['#attributes'] = array(
 				//'onsubmit' => 'return false;',
 				'id' => 'dragoon_problem_form',
@@ -140,9 +148,6 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 		case "enroll_class":
 			$form['#validate'] = array("enroll_class_form_validate");
 			$form['#submit'] = array("enroll_class_form_submit");
-			$form['enroll_button']['#attributes'] = array(
-				'class' => array('sachin'),
-			);
 			break;
         case "forms_nc_class_folder_form":
             $form['#prefix'] = "<div id='createFolderModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";

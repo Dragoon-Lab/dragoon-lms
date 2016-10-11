@@ -43,8 +43,7 @@ jQuery(document).ready(function($) {
         //make a call to Dragoon API to get models for the current folder
         $.ajax({
             type: "POST",
-            //url: "http://localhost/LaitsV3/www/global.php",
-            url: "https://dragoon.asu.edu/lms/global.php",
+            url: $("#dragoon_url").val()+"global.php",
             data: {
                 "t": "reqNonClassProblems",
                 "g" : current_folder
@@ -106,8 +105,7 @@ jQuery(document).ready(function($) {
         console.log();
         $.ajax({
             type: "POST",
-            //url: "http://localhost/LaitsV3/www/global.php",
-            url: "https://dragoon.asu.edu/lms/global.php",
+            url: $("#dragoon_url").val()+"global.php",
             data: {
                 "t": "modelAction",
                 "action": action,

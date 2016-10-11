@@ -56,8 +56,8 @@ jQuery(document).ready(function($) {
         var form = document.forms['dragoon_ncCModel_form'];
         $('#create_model_pname').removeClass("focusedtextselect");
         $('#createModelModal').modal('hide');
-        //form.setAttribute("action", "http://localhost/Laitsv3/www/index.php");
-        form.setAttribute("action", "https://dragoon.asu.edu/lms/index.php");
+        var url = $("#dragoon_url").val()+"index.php";
+        form.setAttribute("action", url);
         form.setAttribute("target", "_blank");
         form.setAttribute("method", "POST");
         form["g"].value = $('#create_model_folder_name').val();

@@ -13,6 +13,9 @@ function enroll_class_form($form, &$form_state){
 		'#type' => 'submit',
 		'#value' => 'Enroll',
 		'#submit' => array('enroll_class_form_submit'),
+		'#attributes' => array(
+			'class' => array('btn btn-success form-submit')
+		)
 	);
 
 	return $form;
