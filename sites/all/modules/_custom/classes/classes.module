@@ -89,7 +89,8 @@ function get_classes_table_html($delta = '', $params){
 		$c = "<span>".t($row['code'])."</span>";
 		$a = '';
 		//$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
-		$serverURL = get_path()['url'];
+		$serverURL = get_path();
+		$serverURL = $serverURL['url'];
 		if($copyCode){
 			//give href to teacher class page
 			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
