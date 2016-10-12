@@ -82,33 +82,79 @@ function forms_block_view($delta = ''){
 			break;
 		case "create_non_class_folder":
 			module_load_include('inc', 'forms', 'forms_nc_create_folder');
-			drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_create_folder.js');
-			$block_form['title'] = t("Create Folder");
-			$block_form['content'] = drupal_get_form('forms_nc_class_folder_form');
+			//drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_create_folder.js');
+			//$block_form['content'] = drupal_get_form('forms_nc_class_folder_form');
+            $form = drupal_get_form('forms_nc_class_folder_form');
+            $block_form['title'] = t("Create Folder");
+            $block_form['content'] = array(
+                '#markup' => drupal_render($form),
+                '#attached' => array(
+                    'js' => array(
+                        $path.'/static/nc_create_folder.js'
+                    )
+                ),
+            );
 			break;
 		case "delete_non_class_folder":
 			module_load_include('inc', 'forms', 'forms_nc_delete_folder');
-			drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_delete_folder.js');
+			//drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_delete_folder.js');
+            $form = drupal_get_form('forms_nc_delete_folder_form');
 			$block_form['title'] = t("Delete Folders/Models");
-			$block_form['content'] = drupal_get_form('forms_nc_delete_folder_form');
-			break;
+			//$block_form['content'] = drupal_get_form('forms_nc_delete_folder_form');
+            $block_form['content'] = array(
+                '#markup' => drupal_render($form),
+                '#attached' => array(
+                    'js' => array(
+                        $path.'/static/nc_delete_folder.js'
+                    )
+                ),
+            );
+            break;
 		case "create_non_class_model":
 			module_load_include('inc','forms', 'forms_nc_create_model');
-			drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_create_model.js');
-			$block_form['title'] = t('Create Model');
-			$block_form['content'] = drupal_get_form('forms_nc_create_model_form');
-			break;
+			//drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_create_model.js');
+            $form = drupal_get_form('forms_nc_create_model_form');
+            $block_form['title'] = t('Create Model');
+			//$block_form['content'] = drupal_get_form('forms_nc_create_model_form');
+            $block_form['content'] = array(
+                '#markup' => drupal_render($form),
+                '#attached' => array(
+                    'js' => array(
+                        $path.'/static/nc_create_model.js'
+                    )
+                ),
+            );
+            break;
 		case "manage_sharing":
 			module_load_include('inc', 'forms', 'forms_nc_manage_sharing');
-			drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_manage_sharing.js');
-			$block_form['title'] = t('Share Folders');
-			$block_form['content'] = drupal_get_form('forms_nc_sharing');
-			break;
+			//drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_manage_sharing.js');
+            $form = drupal_get_form('forms_nc_sharing');
+            $block_form['title'] = t('Share Folders');
+			//$block_form['content'] = drupal_get_form('forms_nc_sharing');
+            $block_form['content'] = array(
+                '#markup' => drupal_render($form),
+                '#title'=> t('Share Folders'),
+                '#attached' => array(
+                    'js' => array(
+                        $path.'/static/nc_manage_sharing.js'
+                    )
+                ),
+            );
+            break;
         case "move_models":
             module_load_include('inc', 'forms', 'forms_nc_move_models');
-            drupal_add_js(drupal_get_path('module','forms').'/static/nc_move_models.js');
+            //drupal_add_js(drupal_get_path('module','forms').'/static/nc_move_models.js');
+            $form = drupal_get_form('forms_nc_move_models');
             $block_form['title'] = t('Copy/Move Models');
-            $block_form['content'] = drupal_get_form('forms_nc_move_models');
+            //$block_form['content'] = drupal_get_form('forms_nc_move_models');
+            $block_form['content'] = array(
+                '#markup' => drupal_render($form),
+                '#attached' => array(
+                    'js' => array(
+                        $path.'/static/nc_move_models.js'
+                    )
+                ),
+            );
             break;
 		case "create_assignment":
 			module_load_include('inc', 'forms', 'forms_create_assignments');
