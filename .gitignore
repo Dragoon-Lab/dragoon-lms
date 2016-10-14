@@ -35,3 +35,5 @@ xmlrpc.php
 
 .*.*.swp
 *.DS_Store
+sites/default/files/css/*
+sites/default/files/js/*
