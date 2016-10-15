@@ -6,8 +6,8 @@ function model_library_block_info(){
 		'info' => 'Block for published problems'
 	);
     $blocks['non_class_models'] = array(
-      'info' => 'Block lists non class models',
-	  'cache' => 'DRUPAL_CACHE_PER_USER'
+		'info' => 'Block lists non class models',
+		'cache' => DRUPAL_CACHE_PER_USER
     );
     return $blocks;
 }

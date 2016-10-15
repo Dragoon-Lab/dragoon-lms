@@ -4,9 +4,11 @@ function classes_block_info(){
 	$blocks = array();
 	$blocks['created_classes'] = array(
 		'info' => 'Table for created classes',
+		'cache' => DRUPAL_CACHE_PER_USER
 	);
 	$blocks['enrolled_classes'] = array(
 		'info' =>'Table for enrolled classes',
+		'cache' => DRUPAL_CACHE_PER_USER
 	);
 
 	return $blocks;

@@ -188,7 +188,8 @@ function get_block_HTML($params){
 function class_assignments_block_info(){
 	$blocks = array();
 	$blocks['assignment_links'] = array(
-		'info' => 'Table of assignments created by the teacher'
+		'info' => 'Table of assignments created by the teacher',
+		'cache' => DRUPAL_CACHE_PER_USER
 	);
 
 	return $blocks;
