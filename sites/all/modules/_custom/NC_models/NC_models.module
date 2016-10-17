@@ -40,6 +40,7 @@
             $shared_q->condition('member_relation',1);
         //$shared_q = "select folder_id from shared_members where member_name='$user_name'".$status_query;
         $sh_q_res = $shared_q->execute();
+        $local_shared_store = "";
         while($res_sh = $sh_q_res->fetchAssoc()){
             $sh_grp = explode("-",$res_sh['folder_id']);
             $sh_grp_name = $sh_grp[0];
@@ -47,6 +48,7 @@
             $ret = json_decode($ret);
             foreach($ret as $temp){
                 $string["shared"][$sh_grp_name . " by " . $sh_grp[1]][$temp] = $temp;
+                $local_shared_store = $local_shared_store.$sh_grp_name . " by " . $sh_grp[1]."=".$sh_grp_name."-".$sh_grp[1]."&";
             }
         }
 
@@ -65,10 +67,13 @@
             //make a request to the dragoon server to list problems where group = sh_name+"-"+owner_name
             $ret2 = sendGroup($group2);
             $ret2 = json_decode($ret2);
-            foreach($ret2 as $temp2)
+            foreach($ret2 as $temp2){
                 $string["shared"][$grp_name2][$temp2]=$temp2;
+                $local_shared_store = $local_shared_store.$grp_name2."=".$grp_name2."-".$user_name."&";
+            }
         }
         //print_r($string);
+        echo '<input type = "hidden" id = "local_shared_store" value = "'.$local_shared_store.'"\>';
         return json_encode($string);
     }
 
