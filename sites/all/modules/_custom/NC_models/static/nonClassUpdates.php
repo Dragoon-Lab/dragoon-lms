@@ -1,6 +1,6 @@
 <?php
 //define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
-define('DRUPAL_ROOT', '/home/laits/public_html/');
+define('DRUPAL_ROOT', get_bootstrap_path());
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
