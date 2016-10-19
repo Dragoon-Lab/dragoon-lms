@@ -110,6 +110,7 @@
                                        <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#shareFolderModal">Manage sharing</a></li>
                                        <li><a href="#deleteFolder" class="btn btn-success btn-md modAction" data-toggle="modal" data-target="#moveModelModal">Move Models</a></li>
                                        <li><a href="#deleteFolder" class="btn btn-success btn-md modAction" data-toggle="modal" data-target="#moveModelModal">Copy Models</a></li>
+                                       <li><a href="#deleteFolder" class="btn btn-success btn-md" data-toggle="modal" data-target="#renameItemsModal">Rename items</a></li>
                                        </ul>
                                 </div>
                             </div>

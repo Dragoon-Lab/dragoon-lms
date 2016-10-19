@@ -39,6 +39,9 @@ function forms_block_info(){
 	$block_forms['create_assignment'] = array(
 		'info' => 'Creates an assignment for a teacher'
 	);
+    $block_forms['rename_items'] = array(
+        'info' => 'renames a model or a folder'
+    );
 	return $block_forms;
 }
 
@@ -179,7 +182,13 @@ function forms_block_view($delta = ''){
 				'#suffix' => "</div></div></div></div>",
 			);
 			break;
-	}
+        case "rename_items":
+            module_load_include('inc','forms','forms_nc_rename_items');
+            drupal_add_js(drupal_get_path('module', 'forms').'/static/nc_rename_items.js');
+            $block_form['title'] = t('Rename Model or a Folder');
+            $block_form['content'] = drupal_get_form('forms_nc_rename_items');
+            break;
+    }
 
 	return $block_form;
 }
@@ -263,6 +272,18 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 				'class' => array('btn btn-success form-submit'),
 			);
 			break;
+        case "forms_nc_rename_items":
+            $form['#action'] = '#';
+            $form['#prefix'] = "<div id='renameItemsModal' class='modal fade' role='dialog'><div class='modal-dialog'><div class='modal-content'><div class = 'modal-body'><span class = 'close' data-dismiss = 'modal'>x</span>";
+            $form['#suffix'] = "</div></div></div></div>";
+            $form['#attributes'] = array(
+                //'onsubmit' => 'return false;',
+                'id' => 'dragoon_nc_rename_items'
+            );
+            $form['cancel_button']['#attributes'] = array(
+                'data-dismiss' => 'modal',
+            );
+            break;
 	}
 }
 
