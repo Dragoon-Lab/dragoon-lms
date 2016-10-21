@@ -41,9 +41,7 @@ function url_dragoon_block_view($delta = ''){
 function create_html(){
 	$input_html = "<input type = 'hidden' id = '%s' value = '%s'></input>";
 	$path = get_path();
-	$drupal_path = get_bootstrap_path();
-	return sprintf($input_html, 'dragoon_url', $path['url'])."<br/>".sprintf($input_html, 'dragoon_path', $path['path'])
-			."<br/>".sprintf($input_html,'bootstrap_path',$drupal_path);
+	return sprintf($input_html, 'dragoon_url', $path['url'])."<br/>".sprintf($input_html, 'dragoon_path', $path['path']);
 }
 
 function url_dragoon_admin_page(){
@@ -54,14 +52,6 @@ function url_dragoon_admin_page(){
 		'#title' => 'Path to access Dragoon',
 		'#description' => t('Do not include the starting and trailing back-slash'),
 		'#default_value' => variable_get('url_dragoon_path'),
-		'#size' => 50,
-	);
-
-	$form['url_bootstrap_path'] = array(
-		'#type' => 'textfield',
-		'#title' => 'Path to access bootstrap',
-		'#description' => t('Do not include the starting and trailing back-slash'),
-		'#default_value' => variable_get('url_bootstrap_path'),
 		'#size' => 50,
 	);
 
@@ -80,9 +70,4 @@ function get_path(){
 	}
 
 	return $url_path;
-}
-
-function get_bootstrap_path(){
-	$drupal_path = variable_get('url_bootstrap_path') || '';
-	return $drupal_path;
 }

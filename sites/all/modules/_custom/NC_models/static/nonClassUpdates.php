@@ -1,9 +1,12 @@
 <?php
 //define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
-define('DRUPAL_ROOT', get_bootstrap_path());
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
+$drp_root_handle=fopen("drupal_root","r");
+$drupal_root = fgets($drp_root_handle);
+fclose($drp_root_handle);
+define('DRUPAL_ROOT', trim($drupal_root));
+require_once "".DRUPAL_ROOT . "/includes/bootstrap.inc";
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-
+echo get_bootstrap_path();
     $request_type = $_REQUEST["req_type"];
     takeAction($request_type);
     //All take actions require a working db connection
@@ -216,4 +219,3 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
         print_r($del_folders);
         print_r($del_models);
     }
-
