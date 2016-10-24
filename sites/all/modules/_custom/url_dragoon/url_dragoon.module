@@ -42,7 +42,9 @@ function create_html(){
 	$input_html = "<input type = 'hidden' id = '%s' value = '%s'></input>";
 	$path = get_path();
 
-	return sprintf($input_html, 'dragoon_url', $path['url'])."<br/>".sprintf($input_html, 'dragoon_path', $path['path']);
+	return sprintf($input_html, 'dragoon_url', $path['url']."/")."<br/>".
+		sprintf($input_html, 'dragoon_path', $path['path'])."<br/>".
+		sprintf($input_html, 'server_url', $path['serverURL']);
 }
 
 function url_dragoon_admin_page(){
@@ -63,10 +65,11 @@ function get_path(){
 	$url_path = &drupal_static(__FUNCTION__);
 	if(!isset($url_path)){
 		$path = variable_get('url_dragoon_path');
+		$protocol = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://";
 		$url_path = array(
-			"url" => (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].
-					($path != "" ? ("/".$path) : "")."/",
-			"path" => $path
+			"url" => $protocol.$_SERVER['SERVER_NAME'].($path != "" ? ("/".$path) : ""),
+			"path" => $path,
+			"serverURL" => $protocol.$_SERVER['SERVER_NAME'] 
 		);
 	}
 

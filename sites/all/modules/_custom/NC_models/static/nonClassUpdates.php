@@ -3,7 +3,6 @@ define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
 //define('DRUPAL_ROOT', '/home/laits/public_html/');
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-
 	$request_type = $_REQUEST["req_type"];
 	takeAction($request_type);
 	//All take actions require a working db connection
@@ -228,4 +227,3 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 		print_r($del_folders);
 		print_r($del_models);
 	}
-
