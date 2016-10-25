@@ -6,8 +6,8 @@ function model_library_block_info(){
 		'info' => 'Block for published problems'
 	);
     $blocks['non_class_models'] = array(
-      'info' => 'Block lists non class models',
-	  'cache' => 'DRUPAL_CACHE_PER_USER'
+		'info' => 'Block lists non class models',
+		'cache' => DRUPAL_CACHE_PER_USER
     );
     return $blocks;
 }
@@ -29,7 +29,7 @@ function model_library_block_view($delta = ""){
 				'otherTags' => 'class = "dragoon_problem" data-toggle = "modal" data-target = "#dragoon_problem_wrapper"',
 			);
 			$dragoon_path = get_path();
-			$json = file_get_contents($dragoon_path['url'].'public_problem_index.json');
+			$json = file_get_contents($dragoon_path['url'].'/public_problem_index.json');
 			//$json = file_get_contents((array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'].'/code/public_problem_index.json');
 			$block['content'] = array(
 				'#markup' => getHTMLStructure($json, $parameters),

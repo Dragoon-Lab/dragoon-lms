@@ -198,11 +198,33 @@ echo get_bootstrap_path();
                     echo $userName."-".$usermail.",";
                 }
                 break;
+            case "renameFolder":
+                $old_folder_id = $_REQUEST["old_folder_id"];
+                $new_folder_id = $_REQUEST["new_folder_id"];
+                $new_folder_name = $_REQUEST["new_folder_name"];
+
+                $query =  db_update('folders')
+                    ->fields(array(
+                        'folder_id' => $new_folder_id,
+                        'folder_name' => $new_folder_name,
+                    ))
+                    ->condition('folder_id',$old_folder_id)
+                    ->execute();
+
+                $query2 =  db_update('shared_members')
+                    ->fields(array(
+                        'folder_id' => $old_folder_id,
+                    ))
+                    ->condition('folder_id',$new_folder_id)
+                    ->execute();
+                if($query && $query2)
+                    echo "success";
+                break;
         }
     }
 
     function deleteModels($del_models,$del_folders){
-        $url = get_path()['url'].'global.php';
+        $url = get_path()['url'].'/global.php';
         $data = array('t' => 'deleteNonClassProblems', 'dm' => $del_models, 'df' => $del_folders);
         $options = array(
             'http' => array(

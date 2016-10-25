@@ -34,7 +34,7 @@ jQuery(document).ready(function($) {
 		form.setAttribute("action", $("#dragoon_url").val()+"index.php");
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
-
+        console.log(form);
         form.submit();
 	};
 
@@ -75,13 +75,31 @@ jQuery(document).ready(function($) {
             else{
                 //group name might contain by keyword which indicates the actual owner
                 //if there is no by key word user himself is the owner
+                var local_shared_store = $('#local_shared_store').val();
+                console.log("lss",local_shared_store);
+                var local_shared_arr = local_shared_store.split("&");
+                //console.log(local_shared_arr);
+                var get_group_owner = [];
+                local_shared_arr.forEach(function(local_grp){
+                    //console.log(local_grp);
+                    if(local_grp!=""){
+                        console.log(local_grp);
+                        var local_grp_ar = local_grp.split("=");
+                        get_group_owner[local_grp_ar[0].trim()] = local_grp_ar[1].trim();
+                    }
+                });
+                /*
                 var group_owner = group_name.split('by');
+                //console.log(get_group_owner,group_name);
                 if(group_owner.length>1){
                     group_name = group_owner[0].trim()+"-"+group_owner[1].trim();
                 }
                 else{
                     group_name = group_name + "-" + user;
                 }
+                */
+                group_name = get_group_owner[group_name].trim();
+                //console.log(group_name,our_ans);
             }
         }
 
