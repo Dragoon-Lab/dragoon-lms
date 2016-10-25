@@ -206,6 +206,29 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 				echo $count;
 				//echo "count is".$count;
 				break;
+
+            case "renameFolder":
+                $old_folder_id = $_REQUEST["old_folder_id"];
+                $new_folder_id = $_REQUEST["new_folder_id"];
+                $new_folder_name = $_REQUEST["new_folder_name"];
+
+                $query =  db_update('folders')
+                    ->fields(array(
+                        'folder_id' => $new_folder_id,
+                        'folder_name' => $new_folder_name,
+                    ))
+                    ->condition('folder_id',$old_folder_id)
+                    ->execute();
+
+                $query2 =  db_update('shared_members')
+                    ->fields(array(
+                        'folder_id' => $old_folder_id,
+                    ))
+                    ->condition('folder_id',$new_folder_id)
+                    ->execute();
+                if($query && $query2)
+                    echo "success";
+                break;   
 		}
 	}
 

@@ -156,6 +156,7 @@ jQuery(document).ready(function($) {
                     console.log(typeof share_check, share_check);
                     if(share_check == '0'){
                         console.log("indicate lack of sharing");
+                        $('#alertDisabledSharing').modal('show');
                         return;
                     } 
                     modelAction("copyModel");
