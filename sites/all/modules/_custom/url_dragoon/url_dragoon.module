@@ -45,6 +45,7 @@ function create_html(){
 	return sprintf($input_html, 'dragoon_url', $path['url']."/")."<br/>".
 		sprintf($input_html, 'dragoon_path', $path['path'])."<br/>".
 		sprintf($input_html, 'server_url', $path['serverURL']);
+
 }
 
 function url_dragoon_admin_page(){

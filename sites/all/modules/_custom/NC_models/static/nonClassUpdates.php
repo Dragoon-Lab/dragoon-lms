@@ -1,8 +1,12 @@
 <?php
-define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
-//define('DRUPAL_ROOT', '/home/laits/public_html/');
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
+//define('DRUPAL_ROOT', '/Applications/XAMPP/htdocs/dragoon-lms');
+$drp_root_handle=fopen("drupal_root","r");
+$drupal_root = fgets($drp_root_handle);
+fclose($drp_root_handle);
+define('DRUPAL_ROOT', trim($drupal_root));
+require_once "".DRUPAL_ROOT . "/includes/bootstrap.inc";
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+
 	$request_type = $_REQUEST["req_type"];
 	takeAction($request_type);
 	//All take actions require a working db connection
@@ -30,6 +34,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 				))->execute();
 				return $q_res;
 				break;
+				
 			case "delete Folder":
 				$owner = $_REQUEST["owner"];
 				$del_folders = array();
@@ -135,6 +140,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 						->execute();
 				}
 				break;
+
 			case "validateSharedHolder":
 				$user_email = $_REQUEST["user_email"];
 				$folder_id = $_REQUEST["folder_id"];
@@ -194,6 +200,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 					echo $userName."-".$usermail.",";
 				}
 				break;
+
 			case "checkSharing":
 				$folder_id = $_REQUEST["folder_id"];
 				$user_name = $_REQUEST["user"];
@@ -228,25 +235,25 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
                     ->execute();
                 if($query && $query2)
                     echo "success";
-                break;   
-		}
-	}
+                break;
+        }
+    }
 
-	function deleteModels($del_models,$del_folders){
-		$url = get_path()['url'].'global.php';
-		$data = array('t' => 'deleteNonClassProblems', 'dm' => $del_models, 'df' => $del_folders);
-		$options = array(
-			'http' => array(
-				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-				'method'  => 'POST',
-				'content' => http_build_query($data)
-			)
-		);
-		$context  = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);
-		if ($result === FALSE) { /* Handle error */
-			echo "something failed";
-		}
-		print_r($del_folders);
-		print_r($del_models);
-	}
+    function deleteModels($del_models,$del_folders){
+        $url = get_path()['url'].'/global.php';
+        $data = array('t' => 'deleteNonClassProblems', 'dm' => $del_models, 'df' => $del_folders);
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        if ($result === FALSE) { /* Handle error */
+            echo "something failed";
+        }
+        print_r($del_folders);
+        print_r($del_models);
+    }

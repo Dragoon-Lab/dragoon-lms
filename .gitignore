@@ -1,5 +1,6 @@
 # Ignore configuration files that may contain sensitive information.
 sites/*/*settings*.php
+sites/all/modules/_custom/NC_models/static/drupal_root
 
 # Ignore paths that contain generated content.
 sites/*/private
