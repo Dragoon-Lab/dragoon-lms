@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
             },
             success: function (data) {
                 console.log("moved", data);
-                location.reload();
+                //location.reload();
             },
             error: function (data) {
                 console.log("move failed", data);
@@ -141,6 +141,41 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         $('#confirmModelCopy').modal('show');
         $('#confirmModelCopy .modal-body').html('<p>Are you sure you want to copy model <b style="color: #000011">'+model_select.val()+'</b> from <b style="color: #000011">'+ src_select.val()+ '</b> to <b style="color: #000011">'+ dest_select.val() +'</b> ?</p>');
-        $('#copyModelConfirmed').on("click", function(){ modelAction("copyModel"); });
+        $('#copyModelConfirmed').on("click", function(){ 
+            //final checks have to be performed to confirm if the user is still shared the folder 
+            //from which he wants to copy the folder
+            var form = document.forms['dragoon_nc_move_models'];
+            var user = form["u"].value;
+            var owner = src_select.val().split("-");
+            console.log("owner is",owner);    
+            if(owner[1] == user || owner[0] == "private")
+                modelAction("copyModel");
+            else{
+                console.log("contacting check sharing");
+                $.when(checkSharing(src_select.val(),user)).done(function(share_check){
+                    console.log(typeof share_check, share_check);
+                    if(share_check == '0'){
+                        console.log("indicate lack of sharing");
+                        $('#alertDisabledSharing').modal('show');
+                        return;
+                    } 
+                    modelAction("copyModel");
+                });
+            }
+            //modelAction("copyModel"); 
+        });
     });
+    var checkSharing = function(folder_id,user){
+        return $.ajax({
+            type: "POST",
+            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            data: {'folder_id': folder_id, 'req_type': 'checkSharing', 'user': user},
+            success: function (data) {
+                console.log("success");
+            },
+            error: function (data) {
+                console.log("fail");
+            }
+        });
+    };
 });

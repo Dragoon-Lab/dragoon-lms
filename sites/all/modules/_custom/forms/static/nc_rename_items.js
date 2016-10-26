@@ -126,7 +126,7 @@ jQuery(document).ready(function($) {
             $.ajax({
                 type: "POST",
                 url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
-                data: {'old_folder_id': orig_fol_name, 'new_folder_id': new_val+"-"+user_name, new_folder_name: new_val, 'req_type': 'renameFolder'},
+                data: {'old_folder_id': orig_fol_name, 'new_folder_id': new_val+"-"+user_name, 'new_folder_name': new_val, 'req_type': 'renameFolder'},
                 success: function (data) {
                     console.log(data);
                     renameAction("Folder");
@@ -139,10 +139,23 @@ jQuery(document).ready(function($) {
         }
         else if(to_change == "Model"){
             //update only problem names on dragoon where folder name is the given
-            renameAction("Model");
+            //a check has to be performed if any last minute sharing has been disabled for the folder to the user
+            //who is trying to rename the model inside it
+            var check_owner = orig_fol_name.split("-");
+            if(check_owner[1].trim() != user_name.trim()){
+                //if the owner is not the one who is renaming the model then we need to check if sharing has been disabled
+                //in the last minute
+                $.when(checkSharing(orig_fol_name,user_name)).done(function(share_check){
+                //console.log(typeof share_check, share_check);
+                if(share_check == '0'){
+                    console.log("indicate lack of sharing");
+                    $('#alertDisabledSharing').modal('show');
+                    return;
+                } 
+                renameAction("Model");
+            });
+            }
         }
-
-
     });
 
     var renameAction = function(action){
@@ -169,6 +182,20 @@ jQuery(document).ready(function($) {
             },
             error: function (data) {
                 console.log("rename failed", data);
+            }
+        });
+    };
+
+    var checkSharing = function(folder_id,user){
+        return $.ajax({
+            type: "POST",
+            url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.php",
+            data: {'folder_id': folder_id, 'req_type': 'checkSharing', 'user': user},
+            success: function (data) {
+                console.log("success");
+            },
+            error: function (data) {
+                console.log("fail");
             }
         });
     };
