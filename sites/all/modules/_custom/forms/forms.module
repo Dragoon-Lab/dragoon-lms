@@ -291,9 +291,21 @@ function forms_form_alter(&$form, &$form_state, $form_id){
 				'data-dismiss' => 'modal',
 			);
 			break;
+		case "user_register_form":
+			$form['#validate'][] = 'forms_user_validation_reg';
+			break;
+				
 	}
 }
 
 function forms_user_login(&$edit, $action){
 	$edit['redirect'] = $GLOBALS['base_url'];
+}
+
+function forms_user_validation_reg(&$form, &$form_state) {
+	$is_teacher = $form_state['values']['field_request_teacher_account']['und'][0]['value'];
+	$acad_inst = $form_state['values']['field_academic_institution']['und'][0]['value'];
+	if($is_teacher && $acad_inst == ""){
+		form_set_error('field_academic_institution', t('Please enter your academic institution.'));
+	}
 }
