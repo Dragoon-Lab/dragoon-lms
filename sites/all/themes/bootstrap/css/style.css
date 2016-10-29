@@ -105,6 +105,9 @@
 #confirmModelCopy{
     z-index: 9999;
 }
+#alertDisabledSharing{
+    z-index: 9999;   
+}
 #copy_model, #move_model{
     color: #ffffff;
     background-color: #5cb85c;
@@ -114,3 +117,5 @@
 .left{float: left;}
 .clear{clear: both;}
 .block-title{margin-top:20px !important;}
+.element-hide{ display: none; }
+#rename_label,#ren_model_label,#ren_folder_label{ display: none; }
