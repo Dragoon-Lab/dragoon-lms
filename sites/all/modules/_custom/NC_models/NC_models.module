@@ -79,7 +79,7 @@
 
     function sendGroup($g){
         $url = get_path();
-		$url = $url['url'].'global.php';
+		$url = $url['url'].'/global.php';
         $data = array('t' => 'reqNonClassProblems', 'g' => $g);
 
         $options = array(

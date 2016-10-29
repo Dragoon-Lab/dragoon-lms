@@ -4,9 +4,11 @@ function classes_block_info(){
 	$blocks = array();
 	$blocks['created_classes'] = array(
 		'info' => 'Table for created classes',
+		'cache' => DRUPAL_CACHE_PER_USER
 	);
 	$blocks['enrolled_classes'] = array(
 		'info' =>'Table for enrolled classes',
+		'cache' => DRUPAL_CACHE_PER_USER
 	);
 
 	return $blocks;
@@ -90,7 +92,7 @@ function get_classes_table_html($delta = '', $params){
 		$a = '';
 		//$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
 		$serverURL = get_path();
-		$serverURL = $serverURL['url'];
+		$serverURL = $serverURL['url']."/";
 		if($copyCode){
 			//give href to teacher class page
 			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
