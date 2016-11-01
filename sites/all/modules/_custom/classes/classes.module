@@ -29,9 +29,9 @@ function classes_block_view($delta = ''){
 					$params = array($user->uid);
 					$block['content'] = array(
 						'#markup' => get_classes_table_html($delta, $params),
-						'#attached' => array(
-							'css' => array($path.'/static/table.css')
-						)
+						//'#attached' => array(
+						//	'css' => array($path.'/static/table.css')
+						//)
 					);
 				} else {
 					$block['content'] = "";
@@ -44,9 +44,9 @@ function classes_block_view($delta = ''){
 				$params = array($user->uid);
 				$block['content'] = array(
 					'#markup' => get_classes_table_html($delta, $params),
-					'#attached' => array(
-						'css' => array($path.'/static/table.css')
-					)
+					//'#attached' => array(
+					//	'css' => array($path.'/static/table.css')
+					//)
 				);
 			} else {
 				$query = drupal_get_destination();
@@ -73,9 +73,9 @@ function get_classes_table_html($delta = '', $params){
 			$copyCode = TRUE;
 			break;
 		case 'enrolled_classes':
-			$query = 'SELECT c.name, u.code, c.section FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
+			$query = 'SELECT c.name, u.code, c.section, c.created_by FROM {enrolled_users} AS u JOIN {classes} AS c ON u.code = c.code WHERE uid = :uid';
 			$args = array(':uid' => $params[0]);
-			$titles = array("Class Name", "Class Join Code");
+			$titles = array("Class Name", "Teacher's email", "Check Progress");
 			$returnEmpty = 'Please enroll in a class to see your classes here.';
 			break;
 	}
@@ -93,16 +93,23 @@ function get_classes_table_html($delta = '', $params){
 		//$serverURL = (array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] == 'on'?"https":"http")."://".$_SERVER['SERVER_NAME'];
 		$serverURL = get_path();
 		$serverURL = $serverURL['url']."/";
+		$created_users = array();
 		if($copyCode){
 			//give href to teacher class page
 			$a = '<a href = "?q=class/'.$row['code'].'" title = "Open Class page" style = "cursor: hand; cursor: pointer;">'.t($row['name']).'</a>';
 			$c = '<a href = "'.$serverURL.'log/dashboard.php?t=lms-dashboard&s='.$row['section'].'" title = "Open Dashboard" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
+			$data[$index++] = array($a, $c);
 		} else {
 			//give href to student class page
+			if(!array_key_exists($row['created_by'], $created_users)){
+				$u = user_load($row['created_by']);
+				$created_users[$row['created_by']] = $u->mail;
+			}
 			$a = t($row['name']);
-			$c = '<a href = "'.$serverURL.'log/dashboard.php?t=lms-leader&s='.$row['section'].'" title = "Check Your Progress" target="_blank" style = "cursor: hand; cursor: pointer">'.t($row['code']).'</a>';
+			$b = $created_users[$row['created_by']];
+			$c = '<a href = "'.$serverURL.'log/dashboard.php?t=lms-leader&s='.$row['section'].'" title = "Check Your Progress" target="_blank" style = "cursor: hand; cursor: pointer">Check</a>';
+			$data[$index++] = array($a, $b, $c);
 		}
-		$data[$index++] = array($a, $c);
 	}
 	
 	return create_table_html($titles, $data);
