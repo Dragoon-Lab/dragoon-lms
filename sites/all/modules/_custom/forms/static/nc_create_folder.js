@@ -21,6 +21,16 @@ jQuery(document).ready(function($) {
             return 0;
         }
 
+        //special characters case
+        var pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+        if (pattern.test(folder_name)) {
+            $('#create_folder_fname').val('');
+            $('#create_folder_fname').addClass('focusedtextselect');
+            $('#create_folder_fname').attr("placeholder","please use alphanumerics only");
+            //alert("Please only use standard alphanumerics");
+            return false;
+        }
+
         //duplicate folder case
 
         var folder_id = folder_name+"-"+owner;
