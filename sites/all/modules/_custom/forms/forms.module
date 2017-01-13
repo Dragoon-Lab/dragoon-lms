@@ -22,25 +22,31 @@ function forms_block_info(){
 		'info' => 'Enroll in a class form'
 	);
 	$block_forms['create_non_class_folder'] = array(
-		'info' => 'Creates a non class folder'
+		'info' => 'Creates a non class folder',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	$block_forms['delete_non_class_folder'] = array(
-		'info' => 'Deletes a non class folder'
+		'info' => 'Deletes a non class folder',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	$block_forms['create_non_class_model'] = array(
-		'info' => 'Creates a Model in user folders'
+		'info' => 'Creates a Model in user folders',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	$block_forms['manage_sharing'] = array(
-		'info' => 'Enables sharing non class folders to the system users'
+		'info' => 'Enables sharing non class folders to the system users',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	$block_forms['move_models'] = array(
-		'info' => 'Enables moving models between user folders'
+		'info' => 'Enables moving models between user folders',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	$block_forms['create_assignment'] = array(
 		'info' => 'Creates an assignment for a teacher'
 	);
 	$block_forms['rename_items'] = array(
-		'info' => 'renames a model or a folder'
+		'info' => 'renames a model or a folder',
+		'cache' => DRUPAL_NO_CACHE
 	);
 	return $block_forms;
 }
