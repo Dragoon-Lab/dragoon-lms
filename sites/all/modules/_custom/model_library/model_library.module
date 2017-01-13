@@ -7,7 +7,7 @@ function model_library_block_info(){
 	);
     $blocks['non_class_models'] = array(
 		'info' => 'Block lists non class models',
-		'cache' => DRUPAL_CACHE_PER_USER
+		'cache' => DRUPAL_NO_CACHE
     );
     return $blocks;
 }
