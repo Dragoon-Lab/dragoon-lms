@@ -27,7 +27,6 @@ jQuery(document).ready(function($) {
 			var new_group = $('select[name=authorAssignSave]').val();
 			var prob = form["p"].value;
 			var user = form["u"].value;
-			var copy_sec = form["s"].value;
 			//copy a model to the new group before opening it
 			//send an ajax request to the dragoon API to perform this copy
 
@@ -41,7 +40,7 @@ jQuery(document).ready(function($) {
 				"mod": prob,
 				"dest": new_group,
 				"user": user,
-				"section": copy_sec
+				"section": "non-class-models"
 			},
 			success: function (data) {
 				console.log("copied", data);
@@ -55,6 +54,7 @@ jQuery(document).ready(function($) {
 		});	
 		}
 		form["g"].value = $('select[name=authorAssignSave]').val();
+		form["s"].value = "non-class-models";
 		console.log(form);
 		form.submit();
 	});
