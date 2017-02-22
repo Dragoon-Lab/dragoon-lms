@@ -2,11 +2,11 @@
  * Created by RiteshSamala on 9/12/16.
  */
 jQuery(document).ready(function($) {
-    var action = $('#cardReader').text();
-    var form = document.forms['nonAuthData'];
+	var action = $('#cardReader').text();
+	var form = document.forms['nonAuthData'];
 	if(form){
-        var url = $("#dragoon_url").val()+"index.php";
-        form.setAttribute("action", url);
+		var url = $("#dragoon_url").val()+"index.php";
+		form.setAttribute("action", url);
 		form.setAttribute("target", "_blank");
 		form.setAttribute("method", "POST");
 		if(action == "nonAuthor"){
@@ -22,7 +22,39 @@ jQuery(document).ready(function($) {
 	}
 	$('#openAuthorAssign').on("click",function(){
 		console.log($('#authorDest').val());
-		form["g"].value = $('select[name=authorAssignSave]').val()
+		var original_group = form["g"].value;
+		if(original_group != null){
+			var new_group = $('select[name=authorAssignSave]').val();
+			var prob = form["p"].value;
+			var user = form["u"].value;
+			//copy a model to the new group before opening it
+			//send an ajax request to the dragoon API to perform this copy
+
+			$.ajax({
+			type: "POST",
+			url: $("#dragoon_url").val()+"global.php",
+			data: {
+				"t": "modelAction",
+				"action": "copyModel",
+				"src": original_group,
+				"mod": prob,
+				"dest": new_group,
+				"user": user,
+				"section": "non-class-models"
+			},
+			success: function (data) {
+				console.log("copied", data);
+				//location.reload();
+			},
+			error: function (data) {
+				console.log("move failed", data);
+				alert('something failed, please contact site admin');
+				return;
+			}
+		});	
+		}
+		form["g"].value = $('select[name=authorAssignSave]').val();
+		form["s"].value = "non-class-models";
 		console.log(form);
 		form.submit();
 	});

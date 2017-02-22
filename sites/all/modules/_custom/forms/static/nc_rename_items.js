@@ -121,6 +121,15 @@ jQuery(document).ready(function($) {
         var to_change = $("input[name='choose_item_rename']:checked").val();
 
         if(to_change == "Folder"){
+            var pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+            if (pattern.test(new_val)) {
+                $('#rename_label').append('<b style="color: red">  New Folder name cannot contain special characters !</b>');
+                //alert("Please only use standard alphanumerics");
+                return;
+            }
+        }
+
+        if(to_change == "Folder"){
             //step 1 : update local folder names
             console.log(new_val,orig_fol_name);
             $.ajax({
