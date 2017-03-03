@@ -104,9 +104,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 				}
 
 				//models and folder deletion from dragoon
-				if($del_models && $del_folders){
-					deleteModels($del_models,$del_folders);	
-				}
+				deleteModels($del_models,$del_folders);	
 				
 				break;
 			/* This case is not used now. TODO : Remove */
