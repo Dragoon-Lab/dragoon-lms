@@ -88,7 +88,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 								->execute();
 					$shared_membersCount = $query1->rowCount();
 					
-					if($shared_membersCount >=1){
+					if($shared_membersCount == 1){
 						$query2 = db_update('folders')
 								->fields(array(
 											'current_status' => 0,
