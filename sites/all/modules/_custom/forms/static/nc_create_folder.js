@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
     $('#create_nc_folder').click(function(e){
         e.preventDefault();
         // make sure folder name is not empty and also the folder with same name exists
-        var folder_name = $('#create_folder_fname').val();
+        var folder_name = $('#create_folder_fname').val().trim();
         var owner=$('#dragoon_ncCFolder_form input[name=owner]').val();
         console.log("form check parameters", folder_name, owner);
         checkValidity(folder_name,owner);
