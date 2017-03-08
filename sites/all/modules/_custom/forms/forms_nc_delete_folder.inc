@@ -104,6 +104,7 @@ function forms_show_del_tree($data, &$form, $parent, $showFolders){
                         '#suffix' => '</p>',
                         '#tree' =>true
                     );
+                break;
             }
         }
     }
