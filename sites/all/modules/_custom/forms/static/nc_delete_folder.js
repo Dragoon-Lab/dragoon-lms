@@ -7,10 +7,10 @@ jQuery(document).ready(function($) {
         console.log("now I can show the expanded private and shared list");
         $("h2[data-folder='private']").next().slideDown();
         $("h2[data-folder='private']").addClass("current");
-        $("h2[data-folder='shared_by_me']").next().slideDown();
-        $("h2[data-folder='shared_by_me']").addClass("current");
-        $("h2[data-folder='shared_with_me']").next().slideDown();
-        $("h2[data-folder='shared_with_me']").addClass("current");
+        $("h2[data-folder='Shared By Me']").next().slideDown();
+        $("h2[data-folder='Shared By Me']").addClass("current");
+        $("h2[data-folder='Shared With Me']").next().slideDown();
+        $("h2[data-folder='Shared With Me']").addClass("current");
     });
 
 

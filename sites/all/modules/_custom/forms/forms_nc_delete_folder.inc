@@ -12,7 +12,7 @@ function forms_nc_delete_folder_form($form, &$form_state){
     forms_show_del_tree($data,$form, 'none', true);
 
     //following element separates out delete button
-    if(isset($data["shared_with_me"])){
+    if(isset($data["Shared With Me"])){
         $form['finish'] = array(
             '#markup' => '</div>'
         );
@@ -45,7 +45,7 @@ function forms_show_del_tree($data, &$form, $parent, $showFolders){
     foreach ($data as $a => $b) {
         
         if (is_array($b)) {
-            if (!($a == "private" || $a == "shared_with_me" || $a == "shared_by_me")) {
+            if (!($a == "private" || $a == "Shared With Me" || $a == "Shared By Me")) {
                 $form['fo'.'-'.$a .'-'. uniqid()] = array(
                     '#prefix' => '<div class="accordion"><h2>',
                     '#type' => "checkbox",
@@ -54,20 +54,20 @@ function forms_show_del_tree($data, &$form, $parent, $showFolders){
                     '#tree' =>true
                 );
             } else {
-                if($a == "shared_with_me"){
+                if($a == "Shared With Me"){
                     $showFolders = false;
                 }else{
                     $showFolders = true;
                 }
                 $form[$a .'-'. uniqid()] = array(
-                    '#prefix' => '<div class="accordion"><h2 data-folder='.$a.'>',
+                    '#prefix' => '<div class="accordion"><h2 data-folder="'.$a.'">',
                     '#markup' => t($a),
                     '#suffix' => '</h2><div class="pane">',
                     '#tree' => true
                 );
             }
             forms_show_del_tree($b, $form,$a,$showFolders);
-            if (!($a == "private" || $a == "shared_with_me" || $a == "shared_by_me")) {
+            if (!($a == "private" || $a == "Shared With Me" || $a == "Shared By Me")) {
                 $form['fo'.'-'.$a .'-'. uniqid()] = array(
                     '#suffix' => '</div></div>'
                 );
