@@ -118,6 +118,7 @@ jQuery(document).ready(function($) {
 			else{
 				//group name might contain by keyword which indicates the actual owner
 				//if there is no by key word user himself is the owner
+				
 				var local_shared_store = $('#local_shared_store').val();
 				//console.log("lss",local_shared_store);
 				var local_shared_arr = local_shared_store.split("&");

@@ -47,7 +47,7 @@
 			$ret = sendGroup($res_sh['folder_id']);
 			$ret = json_decode($ret);
 			foreach($ret as $temp){
-				$string["shared"][$sh_grp_name . " by " . $sh_grp[1]][$temp] = $temp;
+				$string["Shared With Me"][$sh_grp_name . " by " . $sh_grp[1]][$temp] = $temp;
 				$local_shared_store = $local_shared_store.$sh_grp_name . " by " . $sh_grp[1]."=".$sh_grp_name."-".$sh_grp[1]."&";
 			}
 		}
@@ -68,7 +68,7 @@
 			$ret2 = sendGroup($group2);
 			$ret2 = json_decode($ret2);
 			foreach($ret2 as $temp2){
-				$string["shared"][$grp_name2][$temp2]=$temp2;
+				$string["Shared By Me"][$grp_name2][$temp2]=$temp2;
 				$local_shared_store = $local_shared_store.$grp_name2."=".$grp_name2."-".$user_name."&";
 			}
 		}
@@ -294,7 +294,3 @@ function loadShareHolders($folder_name,$owner){
 	}
 	return $shared_holders;
 }
-
-
-
-
