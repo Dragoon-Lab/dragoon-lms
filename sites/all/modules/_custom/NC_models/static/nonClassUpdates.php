@@ -4,6 +4,7 @@ $drp_root_handle=fopen("drupal_root","r");
 $drupal_root = fgets($drp_root_handle);
 fclose($drp_root_handle);
 define('DRUPAL_ROOT', trim($drupal_root));
+
 require_once "".DRUPAL_ROOT . "/includes/bootstrap.inc";
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
@@ -45,6 +46,10 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 				if(isset($_REQUEST["models"])){
 					$del_models = $_REQUEST["models"];
 				}
+				$del_shared = array();
+				if(isset($_REQUEST["sharedFolders"])){
+					$del_shared_models = $_REQUEST["sharedFolders"];
+				}
 				//folder deletion
 				foreach($del_folders as $folder_id){
 					//delete from folders table
@@ -67,10 +72,42 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 				}
 
-				//models and folder deletion from dragoon
-				deleteModels($del_models,$del_folders);
+				$username = $_REQUEST["owner"];
+				
+				foreach ($del_shared_models as $del_shared_folder_id) {
+					//process the shared folderid. 
 
+					//Update in folders
+					$sharedFolderWithOwner = explode("-", $del_shared_folder_id);
+					$shared_folder_id = $sharedFolderWithOwner[0];
+					$sharedFolderOwner = $sharedFolderWithOwner[1];
+					
+					$query1 = db_select('shared_members', 'sh')
+								->fields('sh',array('folder_id'))
+								->condition('folder_id',t($del_shared_folder_id))
+								->execute();
+					$shared_membersCount = $query1->rowCount();
+					
+					if($shared_membersCount == 1){
+						$query2 = db_update('folders')
+								->fields(array(
+											'current_status' => 0,
+										))
+								->condition('folder_id',t($del_shared_folder_id))
+								->execute();
+
+					}
+					$query3 = db_delete('shared_members')
+								->condition('folder_id',t($del_shared_folder_id))
+								->condition('member_name',$username)
+								->execute();
+				}
+
+				//models and folder deletion from dragoon
+				deleteModels($del_models,$del_folders);	
+				
 				break;
+			/* This case is not used now. TODO : Remove */
 			case "Share Folder":
 				$owner = $_REQUEST["owner"];
 				$folder = $_REQUEST["select_folder"];
@@ -238,7 +275,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 				break;
 		}
 	}
-
+	
 	function deleteModels($del_models,$del_folders){
 		$get_path_ar = get_path();
 		$url = $get_path_ar['url'].'/global.php';
