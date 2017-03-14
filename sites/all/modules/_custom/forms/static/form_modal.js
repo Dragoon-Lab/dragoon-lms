@@ -56,13 +56,21 @@ jQuery(document).ready(function($) {
 	var doSubmit = function(){
 		var form = document.forms['dragoon_problem_form'];
 		var date = Math.round(new Date().getTime()/1000);
-			if(form.u && form.u.value.indexOf("anon") >= 0)
-				form.u.value = "anon-"+ date.toString();
-			form.setAttribute("action", $("#dragoon_url").val()+"index.php");
-			form.setAttribute("target", "_blank");
-			form.setAttribute("method", "POST");
-			console.log(form);
-			form.submit();
+
+		if(sessionStorage.user){
+			form.u.value = sessionStorage.user;
+		}
+		else{
+			if(form.u && form.u.value.indexOf("anon") >= 0){
+				sessionStorage.user = "anon-"+ date.toString();
+				form.u.value = sessionStorage.user;
+				}
+		}
+		form.setAttribute("action", $("#dragoon_url").val()+"index.php");
+		form.setAttribute("target", "_blank");
+		form.setAttribute("method", "POST");
+		console.log(form);
+		form.submit();
 	};
 
 	var updateProblemsForm = function(/* object */ event){
