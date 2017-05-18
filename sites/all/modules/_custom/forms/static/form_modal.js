@@ -9,9 +9,9 @@ jQuery(document).ready(function($) {
 		var id = '#' + event.data.id;
 		should_check_share = false;
 		//hide the author mode radio and by default check student mode/immediate feedback mode
-		$('input[type=radio]#edit-m-authoraconstruction').closest('div').show();
+		$('input[type=radio]#edit-m-authoraconstruction').closest('div').hide();
 		//by default check the student mode
-		//$('input[type=radio]#edit-m-coachedaconstruction').prop('checked',true);
+		$('input[type=radio]#edit-m-coachedaconstruction').prop('checked',true);
 
 		//model library problems should not have group "g" set, so remove the element from the form
 		var form = document.forms['dragoon_problem_form'];
@@ -56,20 +56,21 @@ jQuery(document).ready(function($) {
 	var doSubmit = function(){
 		var form = document.forms['dragoon_problem_form'];
 		var date = Math.round(new Date().getTime()/1000);
-			if(sessionStorage.user){
+
+		if(sessionStorage.user){
+			form.u.value = sessionStorage.user;
+		}
+		else{
+			if(form.u && form.u.value.indexOf("anon") >= 0){
+				sessionStorage.user = "anon-"+ date.toString();
 				form.u.value = sessionStorage.user;
-			}
-			else{
-				if(form.u && form.u.value.indexOf("anon") >= 0){
-					sessionStorage.user = "anon-"+ date.toString();
-					form.u.value = sessionStorage.user;
 				}
-			}
-			form.setAttribute("action", $("#dragoon_url").val()+"index.php");
-			form.setAttribute("target", "_blank");
-			form.setAttribute("method", "POST");
-			console.log(form);
-			form.submit();
+		}
+		form.setAttribute("action", $("#dragoon_url").val()+"index.php");
+		form.setAttribute("target", "_blank");
+		form.setAttribute("method", "POST");
+		console.log(form);
+		form.submit();
 	};
 
 	var updateProblemsForm = function(/* object */ event){
@@ -152,8 +153,8 @@ jQuery(document).ready(function($) {
 					should_check_share = true;
 			}
 		}
-		form["pname"].value = prob_name;
-		form["p"].value = prob_name;
+		form["pname"].value = prob_name.trim();
+		form["p"].value = prob_name.trim();
 		form["s"].value = "non-class-models";
 		$('input[type=radio]#edit-m-authoraconstruction').closest('div').show();
 		// add "g" to the form as the public library models wont have a g in the form them selves, g indicates group
@@ -173,170 +174,5 @@ jQuery(document).ready(function($) {
 		submit: true,
 		func: submitProblemsForm
 	}, hideForm);
-
-	//additional TopoMath code
-
-	//handle descriptions button
-
-	$('#open_sysdescmodal').on("click",function(e){
-
-		//avert the button submit
-		e.preventDefault();
-		
-		//step 1: open the modal
-		$('#handleSystemDesc').modal('show');
-			//show descriptions for the problem as a list
-			//each description should be viewable and have edit/delete options as well.
-
-			//AJAX request 1: call topoMath API to revert back with desc links if any
-			//call listSystemDescriptions with problem name and group nam
-		
-
-		//body of the handleSystemDesc modal are dynamic
-
-
-	});
-
-	// list system descriptions function
-	function listSystemDescriptions(prob_name,group_name){
-
-            /*
-            $.ajax({
-                type: "POST",
-                url: "sites/all/modules/_custom/NC_models/static/nonClassUpdates.ph",
-                data: {
-                    "req_type": "deleteShareHolder",
-                    "folder_id": form["select_folder"].value,
-                    "user_id": $(current_glyph.closest('tr')).find('td span:first').text()
-                },
-                success: function (data) {
-                    console.log(data);
-                    //location.reload();
-                },
-                error: function (data) {
-
-                    console.log("fail");
-                }
-
-            });
-            */
-
-	}
-
-	//file upload ajax handler
-
-
-	$('.upload-btn').on('click', function (){
-    	$('#upload-input').click();
-    	$('.progress-bar').text('0%');
-    	$('.progress-bar').width('0%');
-	});
-
-$('#upload-input').on('change', function(){
-
-  var files = $(this).get(0).files;
-  if (files.length > 0){
-    // create a FormData object which will be sent as the data payload in the
-    // AJAX request
-    var formData = new FormData();
-
-    // loop through all the selected files and add them to the formData object
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      console.log("file details",file);
-      // add the files to formData object for the data payload
-      console.log("file size is",file.size);
-      console.log("file type is", file.type);
-      
-
-      if( (file.size/(1024*1024)) > 25 )
-      	{
-      		console.error("please limit file upload size");
-      		return;
-      	} 
-      formData.append('uploads[]', file, file.name);
-    }
-
-    $.ajax({
-      url: '/upload',
-      type: 'POST',
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(data){
-          console.log('upload successful!\n' + data);
-      },
-      xhr: function() {
-        // create an XMLHttpRequest
-        var xhr = new XMLHttpRequest();
-
-        // listen to the 'progress' event
-        xhr.upload.addEventListener('progress', function(evt) {
-
-          if (evt.lengthComputable) {
-            // calculate the percentage of upload completed
-            var percentComplete = evt.loaded / evt.total;
-            percentComplete = parseInt(percentComplete * 100);
-
-            // update the Bootstrap progress bar with the new percentage
-            $('.progress-bar').text(percentComplete + '%');
-            $('.progress-bar').width(percentComplete + '%');
-
-            // once the upload reaches 100%, set the progress bar text to done
-            if (percentComplete === 100) {
-              $('.progress-bar').html('Done');
-              //$('.progress-bar').hide();
-              $('#list-sys-descriptions').append("<a style='cursor: pointer'>"+file.name+"</a><span class='upload_glyph glyphicon glyphicon-edit'></span><span class='upload_glyph glyphicon glyphicon-remove'></span><br/>");
-              console.log(formData);
-            }
-
-          }
-
-        }, false);
-
-        return xhr;
-      }
-    });
-
-  }
-});
-
-
-
-$('#add-desc-text').on('click',function(){
-		var form = document.forms['dragoon_problem_form'];
-		var user = form["u"].value;
-		var prob_name = form["p"].value;
-	window.open('http://localhost/cke?p='+prob_name, '_blank');
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 });
